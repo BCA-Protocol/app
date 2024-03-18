@@ -10,6 +10,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import SignInForm from "@/components/SignInForm";
+import Loader from "@/components/loader";
 
 const Home = () => {
   const [user, loading] = useAuthState(auth);
@@ -52,9 +53,9 @@ const Home = () => {
 
   return (
     <div className="">
-      {loading ? (
-        <IconFidgetSpinner className="animate-spin w-12 h-12 mx-auto" />
-      ) : !user && (
+       {loading ? (
+        <Loader show ={loading} />
+      ): !user && (
         <>
           <SignInForm
             formData={formData}

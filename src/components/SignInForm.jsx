@@ -29,10 +29,9 @@ const SignIn = ({ formData, onChange, onSubmit, onForgotPasswordSubmit }) => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();  // Ensure that 'e' is defined and preventDefault is called
+    e.preventDefault();  
 
     if (validateForm()) {
-      // If validation passes, submit the form
       if (forgotPasswordView) {
         onForgotPasswordSubmit();
       } else {
@@ -47,65 +46,46 @@ const SignIn = ({ formData, onChange, onSubmit, onForgotPasswordSubmit }) => {
         <form
           action="#"
           className="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
-          onSubmit={handleSubmit}  // Corrected to call handleSubmit with the event object
+          onSubmit={handleSubmit}
         >
           <p className="text-center text-lg font-medium">
             {forgotPasswordView ? 'Forgot Password' : 'Sign in to your account'}
           </p>
 
-          {forgotPasswordView ? (
+          <div>
+            <label htmlFor="email" className="sr-only">
+              Email
+            </label>
+            <div className="relative">
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={onChange}
+                className="w-full rounded-lg border-gray-200 p-4 text-sm shadow-sm"
+                placeholder="Enter email"
+              />
+            </div>
+            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+          </div>
+
+          {!forgotPasswordView && (
             <div>
-              <label htmlFor="email" className="sr-only">
-                Email
+              <label htmlFor="password" className="sr-only">
+                Password
               </label>
               <div className="relative">
                 <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
+                  type="password"
+                  name="password"
+                  value={formData.password}
                   onChange={onChange}
-                  className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
-                  placeholder="Enter email"
+                  className="w-full rounded-lg border-gray-200 p-4 text-sm shadow-sm"
+                  placeholder="Enter password"
                 />
               </div>
-              {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+              {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
             </div>
-          ) : (
-            <>
-              <div>
-                <label htmlFor="email" className="sr-only">
-                  Email
-                </label>
-                <div className="relative">
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={onChange}
-                    className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
-                    placeholder="Enter email"
-                  />
-                </div>
-                {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
-              </div>
-
-              <div>
-                <label htmlFor="password" className="sr-only">
-                  Password
-                </label>
-                <div className="relative">
-                  <input
-                    type="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={onChange}
-                    className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
-                    placeholder="Enter password"
-                  />
-                </div>
-                {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
-              </div>
-            </>
           )}
 
           <button

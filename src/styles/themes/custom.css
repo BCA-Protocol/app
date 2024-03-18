@@ -1,0 +1,29 @@
+html[data-theme="custom"] {
+    --color-primary: #f4cc70;
+
+    --color-bg-sidebar: #272727;
+    --color-bg-prim: #000000;
+    --color-bg-card: #404040;
+
+    --color-tabs: #404040;
+    --color-secondary: #6ab187;
+    --color-buttons: #2a1e13;
+    --color-buttons-hover: #de7a22;
+    --color-typography: #ffffff;
+
+    --secondary: rgba(173, 104, 243, .72);
+    --text-color: #2b2b2b;
+    --primary: #dcacff;
+    --light-grey: #fafafa;
+    --white-color: #fff;
+    --misty-rose: #ffdede;
+    --light-blue-bg: #f8f8fa;
+    --dim-grey: #c5c5c5;
+    --link-bg-grey: #f1f1f1;
+    --notification-bg: #001b38;
+    --bg-grey: #d4d4d4;
+    --background-box-color: #292b2c;
+
+    --border-primary: rgba(173, 104, 243, .72);;
+    
+    }

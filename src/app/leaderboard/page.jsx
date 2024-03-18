@@ -18,11 +18,11 @@ export default function Page() {
   }, []);
   return (
     <>
-      <div className="relative p-4">
+      <div className="relative p-4 bg-bgprim">
         <div className="w-full divide-y divide-slate-400/20 rounded-lg bg-white text-[0.8125rem] leading-5 text-slate-900 shadow-xl shadow-black/5 ring-1 ring-slate-700/10">
           {users && (
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-              <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+              <table className="bg-bgprim border border-borderprimary w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase dark:text-gray-400">
                   <tr>
                     <th scope="col" className="px-6 py-3">
@@ -39,17 +39,16 @@ export default function Page() {
                 <tbody>
                   {users &&
                     users.length > 0 &&
-                    users.map((user) => (
+                    users.map((user, index) => (
                       <tr
-                        key={user.userId}
-                        className="border-b border-gray-200 hover:bg-gray-50"
+                        key={index}
+                        className="border-b border-borderprimary hover:bg-bgcard"
                       >
                         <th
                           scope="row"
                           className="px-6 font-medium text-gray-900 whitespace-nowrap "
                         >
                           <div
-                            key={user.userId}
                             className="flex items-center p-4"
                           >
                             <div className="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">

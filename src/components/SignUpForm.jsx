@@ -1,15 +1,13 @@
-import Image from "next/image";
-import Link from "next/link";
 import { useState, useEffect } from "react";
 import { getUserByUUID } from "@/utils/utils";
-
+import Link from "next/link";
 export default function SignUpForm({ onSignUp, refCode }) {
   const [formData, setFormData] = useState({
     userName: "",
     email: "",
     password: "",
     confirmPassword: "",
-    referalCode: refCode||""
+    referalCode: refCode || ""
   });
 
   const [errors, setErrors] = useState({});
@@ -26,10 +24,10 @@ export default function SignUpForm({ onSignUp, refCode }) {
       [name]: "",
     }));
   };
+
   useEffect(() => {
     if (refCode) {
-        handleReferalBlur()
-
+      handleReferalBlur();
     }
   }, [refCode]);
 
@@ -48,12 +46,10 @@ export default function SignUpForm({ onSignUp, refCode }) {
       validationErrors.referalCode = "Invalid Referral Code! Add new or remove the current";
     }
     setErrors(validationErrors);
-
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
 
     const validationErrors = {};
     if (!formData.userName.trim()) {
@@ -69,9 +65,9 @@ export default function SignUpForm({ onSignUp, refCode }) {
       validationErrors.confirmPassword = "Passwords do not match";
     }
 
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-    } else {
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length === 0) {
       onSignUp(formData);
     }
   };
@@ -180,10 +176,12 @@ export default function SignUpForm({ onSignUp, refCode }) {
                 value={formData.referalCode}
                 onChange={handleChange}
                 onBlur={handleReferalBlur}
-                className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
+                className={`w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm ${
+                  errors.referalCode ? "border-red-500" : ""
+                }`}
                 placeholder="Referral code"
               />
-               {errors.referalCode && (
+              {errors.referalCode && (
                 <p className="text-red-500 text-sm">{errors.referalCode}</p>
               )}
             </div>

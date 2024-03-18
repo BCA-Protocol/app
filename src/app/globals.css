@@ -20,3 +20,36 @@ h2 {
   margin-bottom: 1.5rem;
   margin-top: 1rem;
 }
+
+@layer base {
+  html {
+  --color-primary: #4285f4;
+  --color-secondary: #34a853;
+  --color-tabs: #F2FED1;
+  --color-buttons: #F2FED1;
+  --color-toggle: blue;
+  --color-typography: #000000;
+  --color-bg-sidebar: #F3F3F3;
+  --color-bg-prim: #ffffff;
+  --color-bg-card: #F2FED1;
+
+  --secondary: rgba(0, 0, 0, 0.72);
+  --text-color: #2b2b2b;
+  --primary: #dcacff;
+  --light-grey: #fafafa;
+  --white-color: #fff;
+  --misty-rose: #ffdede;
+  --light-blue-bg: #f8f8fa;
+  --dim-grey: #c5c5c5;
+  --link-bg-grey: #f1f1f1;
+  --notification-bg: #001b38;
+  --bg-grey: #d4d4d4;
+  --background-box-color: #292b2c;
+
+  --border-primary: rgba(168, 255, 37, 0.72);
+
+
+  }
+  @import "../styles//themes/custom.css";
+
+}

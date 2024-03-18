@@ -380,7 +380,6 @@ export async function verifyEmail(verificationCode) {
         oobCode: verificationCode,
       }),
     });
-    debugger;
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
