@@ -81,9 +81,7 @@ export default function Page() {
 
   return (
     <>
-    {loading && (
-        <Loader show={loading} />
-      )}
+      {loading && <Loader show={loading} />}
       {notification && notification.show && (
         <div className="fixed top-0 left-1/2 w-[500px]">
           <Notification
@@ -118,7 +116,11 @@ export default function Page() {
                 </div>
 
                 <div className="mt-4 col-span-3 min-h-[250] h-[250]">
-                  <TaskList sendEmailVerification={handleTask} user={user} />
+                  <TaskList
+                    sendEmailVerification={handleTask}
+                    user={user}
+                    userData={userData}
+                  />
                 </div>
               </div>
             </div>

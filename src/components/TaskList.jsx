@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 
-const TaskList = ({ user, sendEmailVerification }) => {
-
+const TaskList = ({ user, userData, sendEmailVerification }) => {
   return (
     <div className=" h-full items-center justify-center w-full">
       <ul className=" border border-borderprimary bg-bgcard p-4 rounded-lg h-full">
         <li className="border-gray-400 flex flex-row mb-2">
           <button
+            disabled={
+              user?.emailVerified ||
+              userData?.completedTasks?.includes("verifyEmail")
+            }
             onClick={() => {
               sendEmailVerification(user);
             }}

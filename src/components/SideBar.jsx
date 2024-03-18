@@ -101,7 +101,10 @@ export default function SideBar({ currentPath }) {
               </ul>
             </div>
           </div>
-          <div className="p-2 border border-borderprimary rounded-xl bg-bgcard cursor-pointer text-secondaryx" onClick={signOut}>
+          <div
+            className="p-2 border border-borderprimary rounded-xl bg-bgcard cursor-pointer text-secondaryx"
+            onClick={signOut}
+          >
             <button
               type="button"
               className="inline-flex items-center justify-center h-9 px-4 rounded-xl bg-prim  hover:text-white text-sm font-semibold transition"
