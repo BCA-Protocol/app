@@ -15,7 +15,7 @@ const SuccessMessage = ({ message }) => {
 
   return (
     <div
-      className={`fixed bottom-4 right-4 p-4 bg-green-500 text-white rounded-md ${
+      className={`fixed bottom-4 right-4 p-4 bg-green-500 text-white rounded-md z-40 ${
         showToast ? 'opacity-100' : 'opacity-0'
       } transition-opacity duration-500 ease-in-out`}
     >

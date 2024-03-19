@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import Link from "next/link";
-
+import Image from "next/image";
+import logo from "/public/logo.png";
 import { useSignOut } from "react-firebase-hooks/auth";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
@@ -63,15 +64,14 @@ export default function SideBar({ currentPath }) {
         <div className="flex flex-col justify-between h-full">
           <CloseIcon
             onClick={toggleSidebar}
-            className="absolute right-0 top-0 cursor-pointer ml-28 border-borderprimary border text-secondaryx w-10 h-10 md:hidden "
+            className="absolute right-0 top-0 cursor-pointer ml-28 border-borderprimary border text-secondaryx w-10 h-10 lg:hidden z-40 "
           />
 
           <div className="flex-grow">
-            <div className=" px-4 py-6 text-center border-b">
-              <h1 className="text-xl font-bold leading-none text-primaryx">
-                <span className="text-secondaryx">BCA Protocol</span> App
-              </h1>
+            <div className="flex justify-center items-center w-full mb-8 mt-2">
+              <Image src={logo} alt="Logo" width={200} height={200} />
             </div>
+
             <div className="p-4">
               <ul className="space-y-1">
                 {menuItems &&

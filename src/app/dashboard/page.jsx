@@ -96,7 +96,7 @@ export default function Page() {
             <div className=" px-2">
               <div className="lg:grid lg:grid-cols-12  gap-2 ">
                 <div className="col-span-9 mt-4 ">
-                  <div className="flex flex-col align-items-center border shadow-sm rounded-xl p-4 border-borderprimary bg-bgcard">
+                  <div className="flex flex-col align-items-center border shadow-sm rounded-2xl p-4 border-borderprimary  bg-gradient-to-l from-violet-700 to-violet-700">
                     <div className="text-center">
                       <h2 className=" font-semibold  text-secondaryx">
                         Welcome {userData?.username}

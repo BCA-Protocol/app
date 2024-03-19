@@ -26,6 +26,9 @@ export default function Page() {
                 <thead className="text-xs text-gray-700 uppercase dark:text-gray-400">
                   <tr>
                     <th scope="col" className="px-6 py-3">
+                      Rank
+                    </th>
+                    <th scope="col" className="px-6 py-3">
                       User
                     </th>
                     <th scope="col" className="px-6 py-3">
@@ -44,13 +47,13 @@ export default function Page() {
                         key={index}
                         className="border-b border-borderprimary hover:bg-bgcard"
                       >
+                        <td className="px-6 py-4">{index}</td>
+
                         <th
                           scope="row"
                           className="px-6 font-medium text-gray-900 whitespace-nowrap "
                         >
-                          <div
-                            className="flex items-center p-4"
-                          >
+                          <div className="flex items-center p-4">
                             <div className="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
                               <svg
                                 className="absolute w-12 h-12 text-gray-400 -left-1"

@@ -42,18 +42,16 @@ export default function Header() {
     }, 5000);
   };
 
-  
   return (
     <header className=" lg:ml-60 py-3 px-4 h-16 w-full xs:mb-[65px]">
       <div className="ml-32 flex text-typography md:absolute right-4 top-4">
-        <ToggleButton />
         <span className="text-sm">{`Welcome ${
           userData && userData.username
         }`}</span>
       </div>
       <div className="flex justify-between items-center h-16 px-4">
-        <div className="md:flex md:mt-10 xs:mt-10  align-items-center text-secondaryx border shadow-sm  lg:rounded-full py-1 px-4 border-borderprimary bg-bgcard xs:w-full lg:w-auto sm:rounded-xl" >
-          <span className="inline-flex items-center mr-4">
+        <div className="md:flex md:mt-10 xs:mt-10  align-items-center text-secondaryx border shadow-sm  bg-gradient-to-l from-violet-700 to-violet-700   lg:rounded-full py-1 px-4 border-borderprimary  xs:w-full lg:w-auto sm:rounded-2xl">
+          <span className="inline-flex items-center mr-4 ">
             <svg viewBox="0 0 24 25" fill="none" className="w-6 h-6">
               <path
                 d="M19 21.5v-6m-3 3h6m-10-3H8c-1.864 0-2.796 0-3.53.305a4 4 0 00-2.166 2.164C2 18.704 2 19.636 2 21.5M15.5 3.79a4.001 4.001 0 010 7.42m-2-3.71a4 4 0 11-8 0 4 4 0 018 0z"
