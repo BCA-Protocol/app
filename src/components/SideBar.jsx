@@ -6,39 +6,23 @@ import { useSignOut } from "react-firebase-hooks/auth";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import { auth } from "@/firebase";
+import {
+  Squares2X2Icon,
+  TrophyIcon,
+  ArrowRightOnRectangleIcon,
+} from "@heroicons/react/24/outline";
+import { classNames } from "@/utils/css-utils";
 
 const menuItems = [
   {
     href: "/dashboard",
     title: "Dashboard",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="1em"
-        height="1em"
-        fill="currentColor"
-        className="mr-4 text-lg"
-        viewBox="0 0 16 16"
-      >
-        <path d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4V.5zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2zm-3.5-7h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5z" />
-      </svg>
-    ),
+    icon: Squares2X2Icon,
   },
   {
     href: "/leaderboard",
     title: "Leaderboard",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="1em"
-        height="1em"
-        fill="currentColor"
-        className="mr-4 text-lg"
-        viewBox="0 0 16 16"
-      >
-        <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zm-3.5-7h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5z" />
-      </svg>
-    ),
+    icon: TrophyIcon,
   },
 ];
 
@@ -52,14 +36,15 @@ export default function SideBar({ currentPath }) {
 
   return (
     <div>
-      <MenuIcon
+      {/* <MenuIcon
         className="absolute w-10 h-10 border left-2 top-2 border-borderprimary text-secondaryx"
         onClick={toggleSidebar}
-      />
+      /> */}
       <aside
-        className={`fixed inset-y-0 left-0 bg-bgSidebar shadow-md w-60 z-40  ${
+        className={classNames(
+          "fixed inset-y-0 left-0 bg-[#131313] shadow-md w-60 z-40 lg:block",
           sidebarVisible ? "" : "hidden"
-        } lg:block`}
+        )}
       >
         <div className="flex flex-col justify-between h-full">
           <CloseIcon
@@ -68,59 +53,54 @@ export default function SideBar({ currentPath }) {
           />
 
           <div className="flex-grow">
-            <div className="flex items-center justify-center w-full mt-2 mb-8">
+            <div className="flex items-center justify-center w-full mt-8 mb-8">
               <Image src={logo} alt="Logo" width={200} height={200} />
             </div>
 
             <div className="p-4">
-              <ul className="space-y-1">
+              <ul className="space-y-2">
                 {menuItems &&
                   menuItems.length > 0 &&
-                  menuItems.map((item, index) => (
-                    <li key={index}>
-                      <Link
-                        href={item.href}
-                        className={`${
-                          currentPath === item.href ? "bg-tabs" : ""
-                        } flex items-center rounded-xl font-bold text-sm text-secondaryx py-3 px-4 border border-borderprimary`}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="1em"
-                          height="1em"
-                          fill="currentColor"
-                          className="mr-4 text-lg"
-                          viewBox="0 0 16 16"
+                  menuItems.map((item, index) => {
+                    const IconElement = item.icon || null;
+
+                    return (
+                      <li key={index}>
+                        <Link
+                          href={item.href}
+                          className={classNames(
+                            currentPath === item.href ? "bg-purple-900" : "",
+                            "group flex items-center rounded-xl font-semibold text-sm text-fuchsia-600 hover:text-fuchsia-400 py-3 px-4 hover:bg-purple-800 border-fuchsia-900 gap-x-2"
+                          )}
                         >
-                          <path d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4V.5zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2zm-3.5-7h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5z" />
-                        </svg>
-                        {item.title}
-                      </Link>
-                    </li>
-                  ))}
+                          {IconElement && (
+                            <IconElement
+                              className={classNames(
+                                currentPath === item.href
+                                  ? "bg-purple-900"
+                                  : "",
+                                "w-5 h-5 text-fuchsia-600 group-hover:text-fuchsia-400 shrink-0"
+                              )}
+                              aria-hidden="true"
+                            />
+                          )}
+                          {item.title}
+                        </Link>
+                      </li>
+                    );
+                  })}
               </ul>
             </div>
           </div>
-          <div
-            className="p-2 border cursor-pointer border-borderprimary rounded-xl bg-bgcard text-secondaryx"
-            onClick={signOut}
-          >
+          <div className="w-full p-4 border-t cursor-pointer border-[#272727] group">
             <button
+              onClick={signOut}
               type="button"
-              className="inline-flex items-center justify-center px-4 text-sm font-semibold transition h-9 rounded-xl bg-prim hover:text-white"
+              className="inline-flex items-center justify-start w-full px-4 py-3 space-x-3 text-base font-normal text-gray-500 transition cursor-pointer rounded-x-2 hover:text-fuchsia-400"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="2em"
-                height="2em"
-                fill="currentColor"
-                className=""
-                viewBox="0 0 16 16"
-              >
-                <path d="M12 1a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V2a1 1 0 0 1 1-1h8zm-2 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
-              </svg>
+              <ArrowRightOnRectangleIcon className="w-6 h-6 shrink-0" />
+              <span>Logout</span>
             </button>{" "}
-            <span className="ml-2 text-sm font-bold">Logout</span>
           </div>
         </div>
       </aside>
