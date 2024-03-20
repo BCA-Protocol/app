@@ -92,7 +92,7 @@ export default function SideBar({ currentPath }) {
               </ul>
             </div>
           </div>
-          <div className="w-full p-4 border-t cursor-pointer border-[#272727] group">
+          <div className="w-full p-4 cursor-pointer border-[#272727] group">
             <button
               onClick={signOut}
               type="button"
