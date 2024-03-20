@@ -53,7 +53,7 @@ const ApexChart = () => {
       <div id="chart">
         {/* {typeof window !== "undefined" && ( */}
         <ReactApexCharts
-          className=" bg-gradient-to-l from-blue-700 to-black border border-borderprimary"
+          className="px-2 py-6 bg-gradient-to-l from-purple-900 to-black border-borderprimary rounded-xl"
           options={chartData.options}
           series={chartData.series}
           type="line"

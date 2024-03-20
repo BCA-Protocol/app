@@ -92,36 +92,34 @@ export default function Page() {
       )}
       {userData && (
         <>
-          <div className="bg-bgprim">
-            <div className="px-2">
-              <div className="gap-2 lg:grid lg:grid-cols-12">
-                <div className="col-span-9 mt-4">
-                  <div className="flex flex-col p-4 border shadow-sm align-items-center rounded-2xl border-borderprimary bg-gradient-to-l from-violet-700 to-violet-700">
-                    <div className="text-center">
-                      <h2 className="font-semibold text-secondaryx">
-                        Welcome {userData?.username}
-                      </h2>
-                      <p className="mt-2 text-4xl font-bold text-blue-500">
-                        you have got {userData.totalPoints || 0} Total Points
-                      </p>
-                    </div>
-                    <p className="max-w-2xl mt-6 text-lg text-center text-secondaryx">
-                      Complete below tasks to get more points
+          <div className="px-2">
+            <div className="gap-2 lg:grid lg:grid-cols-12">
+              <div className="col-span-9 mt-4">
+                <div className="flex flex-col p-4 shadow-sm align-items-center rounded-xl bg-gradient-to-l from-fuchsia-700 to-purple-900">
+                  <div className="text-center">
+                    <h2 className="font-semibold text-purple-400">
+                      Welcome {userData?.username}
+                    </h2>
+                    <p className="mt-2 text-4xl font-bold text-black">
+                      you have got {userData.totalPoints || 0} points
                     </p>
                   </div>
-
-                  <div className="mt-4">
-                    <ReferalChart />
-                  </div>
+                  <p className="mt-6 text-lg text-center text-purple-400">
+                    Complete tasks, earn points &rarr;
+                  </p>
                 </div>
 
-                <div className="mt-4 col-span-3 min-h-[250] h-[250]">
-                  <TaskList
-                    sendEmailVerification={handleTask}
-                    user={user}
-                    userData={userData}
-                  />
+                <div className="mt-2">
+                  <ReferalChart />
                 </div>
+              </div>
+
+              <div className="mt-4 col-span-3 min-h-[250] h-[250]">
+                <TaskList
+                  sendEmailVerification={handleTask}
+                  user={user}
+                  userData={userData}
+                />
               </div>
             </div>
           </div>
