@@ -1,12 +1,33 @@
 import React, { useState, useEffect } from "react";
+import { Web3Provider } from "@/providers/Web3Provider";
+import { ConnectKitButton } from "connectkit";
+import { useAccount } from "wagmi";
 
 const TaskList = ({ user, userData, sendEmailVerification }) => {
-  return (
-    <div className=" h-full items-center justify-center w-full text-center">
-      <ul className=" border border-borderprimary bg-black p-4 rounded-2xl h-full">
-      <h4 className="mb-2">Available Tasks</h4>
+  // const { address, isConnecting, isDisconnected } = useAccount();
+  // if (isConnecting) return <div>Connecting...</div>;
+  // if (isDisconnected) return <div>Disconnected</div>;
+  // return <div>Connected Wallet: {address}</div>;
 
-        <li className="border-gray-400 flex flex-row mb-2">
+  return (
+    <div className="items-center justify-center w-full h-full text-center">
+      <ul className="h-full p-4 space-y-2 bg-black border border-fuchsia-700 rounded-xl text-fuchsia-700">
+        <li className="mb-4 font-bold">Available tasks</li>
+
+        {/* Connect Wallet */}
+        <li className="flex flex-row items-center justify-between p-2 border border-fuchsia-600 rounded-xl hover:bg-fuchsia-950">
+          <Web3Provider className="w-2/3 cursor-pointer hover:-translate-y-1">
+            <ConnectKitButton
+              theme="auto"
+              mode="dark"
+              className="hover:-translate-y-1"
+            />
+          </Web3Provider>
+          <span className="text-sm text-gray-100">50 Points</span>
+        </li>
+
+        {/* Verify email */}
+        <li className="flex flex-row items-center justify-between p-2 border border-fuchsia-600 rounded-xl hover:bg-fuchsia-950">
           <button
             disabled={
               user?.emailVerified ||
@@ -15,15 +36,15 @@ const TaskList = ({ user, userData, sendEmailVerification }) => {
             onClick={() => {
               sendEmailVerification(user);
             }}
-            className="disabled:opacity-40 select-none cursor-pointer  bg-gradient-to-l from-violet-700 to-violet-700 border border-borderprimary text-secondaryx rounded-md flex flex-1 items-center p-4  transition duration-500 ease-in-out transform hover:-translate-y-1 hover:shadow-lg disabled:bg-green-400 bg-green"
+            className="flex items-center p-2 transition duration-500 ease-in-out transform cursor-pointer select-none rounded-xl text-white disabled:opacity-40 bg-[#383838] hover:bg-green-700 to-violet-700 hover:-translate-y-1 hover:shadow-lg disabled:bg-green-400 bg-green"
           >
             <div className="flex pl-1 ">
               <div className="font-medium">
                 {user?.emailVerified ? "Email Verified" : "Verify Email"}
               </div>
-              <div className="text-typography text-sm ml-10">10 Points</div>
             </div>
           </button>
+          <span className="text-sm text-gray-100">10 Points</span>
         </li>
       </ul>
     </div>
