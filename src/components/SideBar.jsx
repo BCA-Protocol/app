@@ -96,7 +96,7 @@ export default function SideBar({ currentPath }) {
             <button
               onClick={signOut}
               type="button"
-              className="inline-flex items-center justify-start w-full px-4 py-3 space-x-3 text-base font-normal text-gray-500 transition cursor-pointer rounded-x-2 hover:text-fuchsia-400"
+              className="inline-flex items-center justify-start w-full px-4 py-3 space-x-3 text-base font-normal text-gray-500 transition cursor-pointer rounded-x-2 hover:text-fuchsia-600"
             >
               <ArrowRightOnRectangleIcon className="w-6 h-6 shrink-0" />
               <span>Logout</span>
