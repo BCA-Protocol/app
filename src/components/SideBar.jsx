@@ -47,10 +47,10 @@ export default function SideBar({ currentPath }) {
         )}
       >
         <div className="flex flex-col justify-between h-full">
-          <CloseIcon
+          {/* <CloseIcon
             onClick={toggleSidebar}
             className="absolute top-0 right-0 z-40 w-10 h-10 border cursor-pointer ml-28 border-borderprimary text-secondaryx lg:hidden "
-          />
+          /> */}
 
           <div className="flex-grow">
             <div className="flex items-center justify-center w-full mt-8 mb-8">
