@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import Link from 'next/link';
+import React, { useState } from "react";
+import Link from "next/link";
 
 const SignIn = ({ formData, onChange, onSubmit, onForgotPasswordSubmit }) => {
   const [forgotPasswordView, setForgotPasswordView] = useState(false);
@@ -13,13 +13,16 @@ const SignIn = ({ formData, onChange, onSubmit, onForgotPasswordSubmit }) => {
     const errors = {};
 
     if (!formData.email || !formData.email.trim()) {
-      errors.email = 'Email is required';
+      errors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      errors.email = 'Invalid email address';
+      errors.email = "Invalid email address";
     }
 
-    if (!forgotPasswordView && (!formData.password || !formData.password.trim())) {
-      errors.password = 'Password is required';
+    if (
+      !forgotPasswordView &&
+      (!formData.password || !formData.password.trim())
+    ) {
+      errors.password = "Password is required";
     }
 
     setErrors(errors);
@@ -29,11 +32,11 @@ const SignIn = ({ formData, onChange, onSubmit, onForgotPasswordSubmit }) => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();  
+    e.preventDefault();
 
     if (validateForm()) {
       if (forgotPasswordView) {
-        onForgotPasswordSubmit();
+        onForgotPasswordSubmit(e);
       } else {
         onSubmit();
       }
@@ -49,7 +52,7 @@ const SignIn = ({ formData, onChange, onSubmit, onForgotPasswordSubmit }) => {
           onSubmit={handleSubmit}
         >
           <p className="text-center text-lg font-medium">
-            {forgotPasswordView ? 'Forgot Password' : 'Sign in to your account'}
+            {forgotPasswordView ? "Forgot Password" : "Sign in to your account"}
           </p>
 
           <div>
@@ -66,7 +69,9 @@ const SignIn = ({ formData, onChange, onSubmit, onForgotPasswordSubmit }) => {
                 placeholder="Enter email"
               />
             </div>
-            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+            {errors.email && (
+              <p className="text-red-500 text-sm">{errors.email}</p>
+            )}
           </div>
 
           {!forgotPasswordView && (
@@ -84,7 +89,9 @@ const SignIn = ({ formData, onChange, onSubmit, onForgotPasswordSubmit }) => {
                   placeholder="Enter password"
                 />
               </div>
-              {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+              {errors.password && (
+                <p className="text-red-500 text-sm">{errors.password}</p>
+              )}
             </div>
           )}
 
@@ -92,12 +99,12 @@ const SignIn = ({ formData, onChange, onSubmit, onForgotPasswordSubmit }) => {
             type="submit"
             className="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white"
           >
-            {forgotPasswordView ? 'Submit' : 'Sign in'}
+            {forgotPasswordView ? "Submit" : "Sign in"}
           </button>
 
           {forgotPasswordView ? (
             <p className="text-center text-sm text-gray-500">
-              Remember your password?{' '}
+              Remember your password?{" "}
               <button
                 type="button"
                 className="underline focus:outline-none"
@@ -122,8 +129,8 @@ const SignIn = ({ formData, onChange, onSubmit, onForgotPasswordSubmit }) => {
             <p className="text-center text-sm text-gray-500">
               No account?
               <Link className="underline" href="/signup">
-                {' '}
-                Sign up{' '}
+                {" "}
+                Sign up{" "}
               </Link>
             </p>
           )}

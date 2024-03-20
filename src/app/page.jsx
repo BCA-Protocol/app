@@ -53,17 +53,19 @@ const Home = () => {
 
   return (
     <div className="">
-       {loading ? (
-        <Loader show ={loading} />
-      ): !user && (
-        <>
-          <SignInForm
-            formData={formData}
-            onChange={handleChange}
-            onSubmit={handleSubmit}
-            onForgotPasswordSubmit={handleForgotPasswordSubmit}
-          />
-        </>
+      {loading ? (
+        <Loader show={loading} />
+      ) : (
+        !user && (
+          <>
+            <SignInForm
+              formData={formData}
+              onChange={handleChange}
+              onSubmit={handleSubmit}
+              onForgotPasswordSubmit={handleForgotPasswordSubmit}
+            />
+          </>
+        )
       )}
     </div>
   );
