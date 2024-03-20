@@ -43,22 +43,25 @@ module.exports = {
         backgroundBoxColor: "var(--background-box-color)",
         borderprimary: "var(--border-primary)",
       },
+      fontFamily: {
+        sans: ["var(--font-open-sans)"],
+        mono: ["var(--font-roboto-mono)"],
+      },
     },
     screens: {
-      'xs': '360px',
-      'sm': '640px',
+      xs: "360px",
+      sm: "640px",
 
-      'md': '768px',
+      md: "768px",
 
-      'lg': '1024px',
+      lg: "1024px",
 
-      'xl': '1280px',
+      xl: "1280px",
 
-      '2xl': '1536px',
-
-    }
+      "2xl": "1536px",
+    },
   },
   plugins: [],
   darkMode: "class",
-  plugins: [ ],
+  plugins: [],
 };
