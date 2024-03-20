@@ -15,45 +15,54 @@ const ApexChart = () => {
       {
         name: "Referrals",
         data: [35, 41, 36, 26, 45, 48, 52, 53, 41],
-      }
+      },
     ],
     options: {
       chart: {
         height: 350,
-        type: 'line',
+        type: "line",
         zoom: {
-          enabled: false
-        }
+          enabled: false,
+        },
       },
       dataLabels: {
-        enabled: false
+        enabled: false,
       },
       stroke: {
-        curve: 'straight'
+        curve: "straight",
       },
       title: {
-        text: 'Earnings',
-        align: 'left'
+        text: "Earnings",
+        align: "left",
       },
       grid: {
         row: {
-          colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-          opacity: 0.5
+          colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+          opacity: 0.5,
         },
       },
       xaxis: {
-        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
-      }
+        categories: [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+        ],
+      },
     },
   });
-
 
   return (
     <div>
       <div id="chart">
         {/* {typeof window !== "undefined" && ( */}
         <ReactApexCharts
-          className="px-2 py-6 bg-gradient-to-l from-purple-900 to-black border-borderprimary rounded-xl"
+          className="px-2 py-6 bg-gradient-to-l from-purple-900 to-black rounded-xl"
           options={chartData.options}
           series={chartData.series}
           type="line"
