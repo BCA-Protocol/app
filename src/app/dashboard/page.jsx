@@ -92,7 +92,7 @@ export default function Page() {
       )}
       {userData && (
         <>
-          <div className="px-2">
+          <div className="px-2 pt-12">
             <div className="gap-2 lg:grid lg:grid-cols-12">
               <div className="col-span-9 mt-4">
                 <div className="flex flex-col p-4 shadow-sm align-items-center rounded-xl bg-gradient-to-l from-fuchsia-700 to-purple-900">
