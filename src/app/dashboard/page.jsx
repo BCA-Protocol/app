@@ -92,20 +92,20 @@ export default function Page() {
       )}
       {userData && (
         <>
-          <div className="bg-bgprim ">
-            <div className=" px-2">
-              <div className="lg:grid lg:grid-cols-12  gap-2 ">
-                <div className="col-span-9 mt-4 ">
-                  <div className="flex flex-col align-items-center border shadow-sm rounded-2xl p-4 border-borderprimary  bg-gradient-to-l from-violet-700 to-violet-700">
+          <div className="bg-bgprim">
+            <div className="px-2">
+              <div className="gap-2 lg:grid lg:grid-cols-12">
+                <div className="col-span-9 mt-4">
+                  <div className="flex flex-col p-4 border shadow-sm align-items-center rounded-2xl border-borderprimary bg-gradient-to-l from-violet-700 to-violet-700">
                     <div className="text-center">
-                      <h2 className=" font-semibold  text-secondaryx">
+                      <h2 className="font-semibold text-secondaryx">
                         Welcome {userData?.username}
                       </h2>
                       <p className="mt-2 text-4xl font-bold text-blue-500">
                         you have got {userData.totalPoints || 0} Total Points
                       </p>
                     </div>
-                    <p className="mt-6 max-w-2xl text-center text-lg text-secondaryx">
+                    <p className="max-w-2xl mt-6 text-lg text-center text-secondaryx">
                       Complete below tasks to get more points
                     </p>
                   </div>
