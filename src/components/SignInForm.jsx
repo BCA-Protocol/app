@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import logo from "/public/logo.png";
 
 const SignIn = ({ formData, onChange, onSubmit, onForgotPasswordSubmit }) => {
   const [forgotPasswordView, setForgotPasswordView] = useState(false);
@@ -44,14 +46,17 @@ const SignIn = ({ formData, onChange, onSubmit, onForgotPasswordSubmit }) => {
   };
 
   return (
-    <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-lg">
+    <div className="max-w-screen-xl px-4 py-16 mx-auto sm:px-6 lg:px-8">
+      <div className="flex items-center justify-center w-full mt-8 mb-8">
+        <Image src={logo} alt="Logo" width={200} height={200} />
+      </div>
+      <div className="max-w-lg mx-auto">
         <form
           action="#"
-          className="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
+          className="p-4 mt-6 mb-0 space-y-4 rounded-lg shadow-lg sm:p-6 lg:p-8"
           onSubmit={handleSubmit}
         >
-          <p className="text-center text-lg font-medium">
+          <p className="text-lg font-medium text-center">
             {forgotPasswordView ? "Forgot Password" : "Sign in to your account"}
           </p>
 
@@ -65,12 +70,12 @@ const SignIn = ({ formData, onChange, onSubmit, onForgotPasswordSubmit }) => {
                 name="email"
                 value={formData.email}
                 onChange={onChange}
-                className="w-full rounded-lg border-gray-200 p-4 text-sm shadow-sm"
+                className="w-full p-4 text-sm border-gray-200 rounded-lg shadow-sm"
                 placeholder="Enter email"
               />
             </div>
             {errors.email && (
-              <p className="text-red-500 text-sm">{errors.email}</p>
+              <p className="text-sm text-red-500">{errors.email}</p>
             )}
           </div>
 
@@ -85,39 +90,39 @@ const SignIn = ({ formData, onChange, onSubmit, onForgotPasswordSubmit }) => {
                   name="password"
                   value={formData.password}
                   onChange={onChange}
-                  className="w-full rounded-lg border-gray-200 p-4 text-sm shadow-sm"
+                  className="w-full p-4 text-sm border-gray-200 rounded-lg shadow-sm"
                   placeholder="Enter password"
                 />
               </div>
               {errors.password && (
-                <p className="text-red-500 text-sm">{errors.password}</p>
+                <p className="text-sm text-red-500">{errors.password}</p>
               )}
             </div>
           )}
 
           <button
             type="submit"
-            className="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white"
+            className="block w-full px-5 py-3 text-sm font-medium text-white rounded-lg bg-gradient-to-r from-purple-950 to-fuchsia-700 hover:bg-gradient-to-l"
           >
             {forgotPasswordView ? "Submit" : "Sign in"}
           </button>
 
           {forgotPasswordView ? (
-            <p className="text-center text-sm text-gray-500">
+            <p className="text-sm text-center text-gray-500">
               Remember your password?{" "}
               <button
                 type="button"
-                className="underline focus:outline-none"
+                className="underline focus:outline-none hover:text-fuchsia-700"
                 onClick={handleToggleForgotPassword}
               >
                 Sign in
               </button>
             </p>
           ) : (
-            <p className="text-center text-sm text-gray-500">
+            <p className="text-sm text-center text-gray-500">
               <button
                 type="button"
-                className="underline focus:outline-none"
+                className="underline focus:outline-none hover:text-fuchsia-700"
                 onClick={handleToggleForgotPassword}
               >
                 Forgot your password?
@@ -126,9 +131,9 @@ const SignIn = ({ formData, onChange, onSubmit, onForgotPasswordSubmit }) => {
           )}
 
           {!forgotPasswordView && (
-            <p className="text-center text-sm text-gray-500">
+            <p className="text-sm text-center text-gray-500">
               No account?
-              <Link className="underline" href="/signup">
+              <Link className="underline hover:text-fuchsia-700" href="/signup">
                 {" "}
                 Sign up{" "}
               </Link>

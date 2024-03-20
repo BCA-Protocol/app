@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import { getUserByUUID } from "@/utils/utils";
 import Link from "next/link";
+import Image from "next/image";
+import logo from "/public/logo.png";
+
 export default function SignUpForm({ onSignUp, refCode }) {
   const [formData, setFormData] = useState({
     userName: "",
     email: "",
     password: "",
     confirmPassword: "",
-    referalCode: refCode || ""
+    referalCode: refCode || "",
   });
 
   const [errors, setErrors] = useState({});
@@ -43,7 +46,8 @@ export default function SignUpForm({ onSignUp, refCode }) {
     if (userdata?.userId) {
       setSignupDisable(false);
     } else {
-      validationErrors.referalCode = "Invalid Referral Code! Add new or remove the current";
+      validationErrors.referalCode =
+        "Invalid Referral Code! Add new or remove the current";
     }
     setErrors(validationErrors);
   };
@@ -73,13 +77,16 @@ export default function SignUpForm({ onSignUp, refCode }) {
   };
 
   return (
-    <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-lg">
+    <div className="max-w-screen-xl px-4 py-16 mx-auto sm:px-6 lg:px-8">
+      <div className="flex items-center justify-center w-full mt-8 mb-8">
+        <Image src={logo} alt="Logo" width={200} height={200} />
+      </div>
+      <div className="max-w-lg mx-auto">
         <form
-          className="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
+          className="p-4 mt-6 mb-0 space-y-4 rounded-lg shadow-lg sm:p-6 lg:p-8"
           onSubmit={handleSubmit}
         >
-          <p className="text-center text-lg font-medium">Sign Up</p>
+          <p className="text-lg font-medium text-center">Sign Up</p>
 
           <div>
             <label htmlFor="userName" className="sr-only">
@@ -97,7 +104,7 @@ export default function SignUpForm({ onSignUp, refCode }) {
                 placeholder="Enter user name"
               />
               {errors.userName && (
-                <p className="text-red-500 text-sm">{errors.userName}</p>
+                <p className="text-sm text-red-500">{errors.userName}</p>
               )}
             </div>
           </div>
@@ -118,7 +125,7 @@ export default function SignUpForm({ onSignUp, refCode }) {
                 placeholder="Enter email"
               />
               {errors.email && (
-                <p className="text-red-500 text-sm">{errors.email}</p>
+                <p className="text-sm text-red-500">{errors.email}</p>
               )}
             </div>
           </div>
@@ -139,7 +146,7 @@ export default function SignUpForm({ onSignUp, refCode }) {
                 placeholder="Enter password"
               />
               {errors.password && (
-                <p className="text-red-500 text-sm">{errors.password}</p>
+                <p className="text-sm text-red-500">{errors.password}</p>
               )}
             </div>
           </div>
@@ -160,7 +167,7 @@ export default function SignUpForm({ onSignUp, refCode }) {
                 placeholder="Confirm password"
               />
               {errors.confirmPassword && (
-                <p className="text-red-500 text-sm">{errors.confirmPassword}</p>
+                <p className="text-sm text-red-500">{errors.confirmPassword}</p>
               )}
             </div>
           </div>
@@ -182,14 +189,14 @@ export default function SignUpForm({ onSignUp, refCode }) {
                 placeholder="Referral code"
               />
               {errors.referalCode && (
-                <p className="text-red-500 text-sm">{errors.referalCode}</p>
+                <p className="text-sm text-red-500">{errors.referalCode}</p>
               )}
             </div>
           </div>
 
-          <p className="text-center text-sm text-gray-500">
+          <p className="text-sm text-center text-gray-500">
             Already have an account?
-            <Link className="underline" href="/">
+            <Link className="underline hover:text-fuchsia-700" href="/">
               {" "}
               Sign In{" "}
             </Link>
@@ -201,7 +208,7 @@ export default function SignUpForm({ onSignUp, refCode }) {
             className={`block w-full rounded-lg px-5 py-3 text-sm font-medium ${
               signupDisabled
                 ? "bg-gray-400 text-gray-600 cursor-not-allowed"
-                : "bg-indigo-600 text-white"
+                : "text-white bg-gradient-to-r from-purple-950 to-fuchsia-700 hover:bg-gradient-to-l"
             }`}
           >
             Sign up
