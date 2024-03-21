@@ -69,17 +69,17 @@ export default function SideBar({ currentPath }) {
                         <Link
                           href={item.href}
                           className={classNames(
-                            currentPath === item.href ? "bg-purple-900" : "",
-                            "group flex items-center rounded-xl font-semibold text-sm text-fuchsia-600 hover:text-fuchsia-400 py-3 px-4 hover:bg-purple-800 border-fuchsia-900 gap-x-2"
+                            currentPath === item.href ? "bg-purple-900 text-white" : "",
+                            "group flex items-center rounded-xl font-semibold text-sm text-fuchsia-600 hover:text-white py-3 px-4 hover:bg-purple-800 border-fuchsia-900 gap-x-2"
                           )}
                         >
                           {IconElement && (
                             <IconElement
                               className={classNames(
                                 currentPath === item.href
-                                  ? "bg-purple-900"
+                                  ? ""
                                   : "",
-                                "w-5 h-5 text-fuchsia-600 group-hover:text-fuchsia-400 shrink-0"
+                                "w-5 h-5 text-fuchsia-600 group-hover:text-white-400 shrink-0"
                               )}
                               aria-hidden="true"
                             />

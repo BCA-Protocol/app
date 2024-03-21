@@ -95,12 +95,12 @@ export default function Page() {
           <div className="px-2 pt-12">
             <div className="gap-2 lg:grid lg:grid-cols-12">
               <div className="col-span-9 mt-4">
-                <div className="flex flex-col p-4 shadow-sm align-items-center rounded-xl bg-gradient-to-l from-fuchsia-700 to-purple-900">
+                <div className="flex flex-col p-4 shadow-sm align-items-center rounded-xl bg-gradient-to-l from-purple-800 to-indigo-900">
                   <div className="text-center">
-                    <h2 className="font-semibold text-purple-400">
+                    <h2 className="font-semibold text-white">
                       Welcome {userData?.username}
                     </h2>
-                    <p className="mt-2 text-4xl font-bold text-black">
+                    <p className="mt-2 text-4xl font-bold text-white">
                       you have got {userData.totalPoints || 0} points
                     </p>
                   </div>
