@@ -1,7 +1,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import logo from "/public/logo.png";
+import logo from "/public/bca-left.png";
+
 import { useSignOut } from "react-firebase-hooks/auth";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";

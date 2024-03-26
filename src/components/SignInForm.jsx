@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import logo from "/public/logo.png";
+import logo from "/public/bca-left.png";
 
 const SignIn = ({ formData, onChange, onSubmit, onForgotPasswordSubmit }) => {
   const [forgotPasswordView, setForgotPasswordView] = useState(false);
@@ -47,13 +47,13 @@ const SignIn = ({ formData, onChange, onSubmit, onForgotPasswordSubmit }) => {
 
   return (
     <div className="max-w-screen-xl px-4 py-16 mx-auto sm:px-6 lg:px-8">
-      <div className="flex items-center justify-center w-full mt-8 mb-8">
-        <Image src={logo} alt="Logo" width={200} height={200} />
+      <div className="flex items-center justify-center w-full mt-8">
+        <Image src={logo} alt="Logo" width={320} />
       </div>
       <div className="max-w-lg mx-auto">
         <form
           action="#"
-          className="p-4 mt-6 mb-0 space-y-4 rounded-lg shadow-lg sm:p-6 lg:p-8"
+          className="p-2 mt-6 mb-0 space-y-4 rounded-lg shadow-lg sm:p-4 lg:p-6"
           onSubmit={handleSubmit}
         >
           <p className="text-lg font-medium text-center">
