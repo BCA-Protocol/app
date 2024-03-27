@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "/public/bca-left.png";
+import mascotHappy from "/public/m/4-small.png";
+import mascotLove from "/public/m/8-small.png";
 
 import { useSignOut } from "react-firebase-hooks/auth";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -32,6 +34,7 @@ export default function SideBar({ currentPath }) {
   const router = useRouter();
   const [signOut] = useSignOut(auth);
   const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [activeMascot, setActiveMascot] = useState(mascotHappy);
 
   const handleSignOut = async () => {
     try {
@@ -81,16 +84,16 @@ export default function SideBar({ currentPath }) {
                         <Link
                           href={item.href}
                           className={classNames(
-                            currentPath === item.href ? "bg-purple-900 text-white" : "",
+                            currentPath === item.href
+                              ? "bg-purple-900 text-white"
+                              : "",
                             "group flex items-center rounded-xl font-semibold text-sm text-fuchsia-600 hover:text-white py-3 px-4 hover:bg-purple-800 border-fuchsia-900 gap-x-2"
                           )}
                         >
                           {IconElement && (
                             <IconElement
                               className={classNames(
-                                currentPath === item.href
-                                  ? ""
-                                  : "",
+                                currentPath === item.href ? "" : "",
                                 "w-5 h-5 text-fuchsia-600 group-hover:text-white-400 shrink-0"
                               )}
                               aria-hidden="true"
@@ -103,6 +106,21 @@ export default function SideBar({ currentPath }) {
                   })}
               </ul>
             </div>
+          </div>
+          <div className="flex items-center justify-center w-full mt-8">
+            <Image
+              src={activeMascot}
+              onClick={() => {
+                if (activeMascot == mascotHappy) {
+                  setActiveMascot(mascotLove);
+                } else {
+                  setActiveMascot(mascotHappy);
+                }
+              }}
+              alt="Mascot"
+              width={320}
+              className="cursor-pointer opacity-30 hover:opacity-100"
+            />
           </div>
           <div className="w-full p-4 cursor-pointer border-[#272727] group">
             <button
