@@ -7,7 +7,13 @@ import { useAccount, useWriteContract } from "wagmi";
 
 const ConnectAndCollectButton = ({ userData }) => {
   const [address, setAddress] = useState(null);
-  const { isConnected } = useAccount();
+  const {
+    address: accountAddress,
+    chain,
+    chainId,
+    connector,
+    isConnected,
+  } = useAccount();
   const contractAddress = process.env.NEXT_PUBLIC_SMART_CONTRACT_ADDRESS;
   const { writeContract, isLoading, isSuccess, error } = useWriteContract();
 
@@ -21,8 +27,6 @@ const ConnectAndCollectButton = ({ userData }) => {
   //   functionName: "getUserPoints",
   //   args: ["0x5B38Da6a701c568545dCfcB03FcB875f56beddC4"],
   // });
-
-  console.log(userData);
 
   const doWrite = () => {
     writeContract({
@@ -49,7 +53,14 @@ const ConnectAndCollectButton = ({ userData }) => {
         try {
           const taskCompletion = await handleTaskCompletion(
             userData.userId,
-            "generateCookie"
+            "generateCookie",
+            {
+              walletData: {
+                address: accountAddress,
+                chain: chain?.name ?? "unknown",
+                chainId: chainId ?? "unknown",
+              },
+            }
           );
           if (taskCompletion) {
             const maxAge = new Date(
