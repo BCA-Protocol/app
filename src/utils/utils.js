@@ -384,7 +384,7 @@ export async function getUserIncompleteTasksv2(userId) {
   }
 }
 
-export const handleTaskCompletion = async (userId, taskId) => {
+export const handleTaskCompletion = async (userId, taskId, socialUserData) => {
   try {
     const usersCollection = collection(db, "users");
     const userQuery = query(usersCollection, where("userId", "==", userId));
@@ -411,6 +411,15 @@ export const handleTaskCompletion = async (userId, taskId) => {
       console.log("Task document does not exist.");
       return;
     }
+let additionalUserData = {};
+    // Check if the task is related to Discord
+    if (taskId === "connectDiscord") {
+      additionalUserData = { discordUser: socialUserData };
+    }
+    // Check if the task is related to Twitter
+    else if (taskId === "connectTwitter") {
+      additionalUserData = { twitterUser: socialUserData };
+    }
 
     // Assuming there's only one task document with the specified taskId
     const taskDoc = taskSnapshot.docs[0];
@@ -429,14 +438,16 @@ export const handleTaskCompletion = async (userId, taskId) => {
               created: Timestamp.now(),
             },
           }, // Add the completed task to the list
+          ...additionalUserData
         });
         await addPointsToUser(userId, taskPoints, taskData.name);
+        if (referedBy){
         await addPointsToUser(
           referedBy,
-          taskPoints * 0.07,
+          (taskPoints * 0.07).toFixed(2),
           taskData.name + " (Referral)",
           "Referral"
-        );
+        );}
         // await addReferralPointsToUser(referedBy, taskPoints * 0.07);
         console.log("Task completed. Points added.");
       } else {
@@ -451,7 +462,7 @@ export const handleTaskCompletion = async (userId, taskId) => {
 };
 
 export async function verifyEmail(verificationCode) {
-  const apiKey = process.env.NEXT_PUBLIC_APIKEY; // Replace with your actual API key
+  const apiKey = process.env.FIREBAASE_APIKEY; // Replace with your actual API key
 
   const endpoint = `https://identitytoolkit.googleapis.com/v1/accounts:update?key=${apiKey}`;
 
