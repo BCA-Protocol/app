@@ -1,10 +1,15 @@
 "use client";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { handleResetPassword } from "@/utils/utils";
 import { IconFidgetSpinner } from "@tabler/icons-react";
+import mascot from "/public/m/1-small.png";
+import Image from "next/image";
 
-const ResetPasswordForm = ({ oobCode }) => {
+const ResetPasswordForm = () => {
+  const searchParams = useSearchParams();
+  const oobCode = searchParams.get("oobCode");
+
   const [formData, setFormData] = useState({
     newPassword: "",
     confirmPassword: "",
@@ -49,7 +54,8 @@ const ResetPasswordForm = ({ oobCode }) => {
           alert(result.message);
           router.replace("/");
         } else {
-          alert(result.message);        }
+          alert(result.message);
+        }
         setLoading(false);
       } catch (error) {
         alert(error);
@@ -61,72 +67,77 @@ const ResetPasswordForm = ({ oobCode }) => {
   };
 
   return (
-    <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
+    <div className="max-w-screen-xl px-4 py-16 mx-auto sm:px-6 lg:px-8">
       {loading ? (
-        <div className="flex justify-center items-center flex-col">
-          <IconFidgetSpinner className="animate-spin w-8 h-8" />
+        <div className="flex flex-col items-center justify-center">
+          <IconFidgetSpinner className="w-8 h-8 animate-spin" />
         </div>
       ) : (
-        <div className="mx-auto max-w-lg">
-          <form
-            action="#"
-            className="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
-            onSubmit={onSubmit}
-          >
-            <p className="text-center text-lg font-medium">Reset Password</p>
-
-            <div>
-              <label htmlFor="newPassword" className="sr-only">
-                New Password
-              </label>
-              <div className="relative">
-                <input
-                  type="password"
-                  name="newPassword"
-                  value={formData.newPassword}
-                  onChange={onChange}
-                  className={`w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm ${
-                    errors.newPassword ? "border-red-500" : ""
-                  }`}
-                  placeholder="Enter new password"
-                />
-                {errors.newPassword && (
-                  <p className="text-red-500 text-sm">{errors.newPassword}</p>
-                )}
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="confirmPassword" className="sr-only">
-                Confirm Password
-              </label>
-              <div className="relative">
-                <input
-                  type="password"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={onChange}
-                  className={`w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm ${
-                    errors.confirmPassword ? "border-red-500" : ""
-                  }`}
-                  placeholder="Confirm new password"
-                />
-                {errors.confirmPassword && (
-                  <p className="text-red-500 text-sm">
-                    {errors.confirmPassword}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              className="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white"
+        <>
+          <div className="flex items-center justify-center w-full mt-8">
+            <Image src={mascot} alt="Logo" width={320} />
+          </div>
+          <div className="max-w-lg mx-auto">
+            <form
+              action="#"
+              className="px-4 mb-0 space-y-4 rounded-lg shadow-lg sm:px-6 lg:px-8"
+              onSubmit={onSubmit}
             >
-              Reset Password
-            </button>
-          </form>
-        </div>
+              <p className="text-lg font-medium text-center">Reset Password</p>
+
+              <div>
+                <label htmlFor="newPassword" className="sr-only">
+                  New Password
+                </label>
+                <div className="relative">
+                  <input
+                    type="password"
+                    name="newPassword"
+                    value={formData.newPassword}
+                    onChange={onChange}
+                    className={`w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm ${
+                      errors.newPassword ? "border-red-500" : ""
+                    }`}
+                    placeholder="Enter new password"
+                  />
+                  {errors.newPassword && (
+                    <p className="text-sm text-red-500">{errors.newPassword}</p>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="confirmPassword" className="sr-only">
+                  Confirm Password
+                </label>
+                <div className="relative">
+                  <input
+                    type="password"
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={onChange}
+                    className={`w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm ${
+                      errors.confirmPassword ? "border-red-500" : ""
+                    }`}
+                    placeholder="Confirm new password"
+                  />
+                  {errors.confirmPassword && (
+                    <p className="text-sm text-red-500">
+                      {errors.confirmPassword}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className="block w-full px-5 py-3 text-sm font-medium text-white rounded-lg bg-gradient-to-r from-purple-950 to-fuchsia-700 hover:bg-gradient-to-l"
+              >
+                Reset Password
+              </button>
+            </form>
+          </div>
+        </>
       )}
     </div>
   );

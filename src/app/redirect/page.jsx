@@ -5,7 +5,6 @@ import { IconFidgetSpinner } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 
 import { verifyEmail, handleTaskCompletion } from "@/utils/utils";
-import ResetPasswordForm from "@/components/ResetPasswordForm";
 const Home = () => {
   const searchParams = useSearchParams();
   const oobCode = searchParams.get("oobCode");
@@ -15,6 +14,12 @@ const Home = () => {
   const router = useRouter();
 
   useEffect(() => {
+    if (oobCode !== null && mode == "resetPassword") {
+      // Initialize an instance of URLSearchParams from the current search params
+      const params = new URLSearchParams(window.location.search);
+      params.delete("mode");
+      window.location.href = `/reset-password?${params.toString()}`;
+    }
     if (oobCode !== null && mode == "verifyEmail") {
       const handleVerification = async () => {
         setLoading(true);
@@ -46,12 +51,8 @@ const Home = () => {
 
   return (
     <>
-      {mode == "resetPassword" ? (
-        <ResetPasswordForm oobCode={oobCode} />
-      ) : (
-        loading && (
-          <IconFidgetSpinner className="w-12 h-12 mx-auto animate-spin" />
-        )
+      {loading && (
+        <IconFidgetSpinner className="w-12 h-12 mx-auto animate-spin" />
       )}
     </>
   );
