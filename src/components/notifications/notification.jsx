@@ -8,7 +8,7 @@ const Notification = ({ message, type }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowToast(false);
-    }, 30000);
+    }, 6000);
 
     return () => {
       clearTimeout(timer);
@@ -33,7 +33,7 @@ const Notification = ({ message, type }) => {
       notificationClass = "bg-green-600";
       break;
   }
-  
+
   return (
     <div
       className={classNames(

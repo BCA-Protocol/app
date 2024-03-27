@@ -13,7 +13,7 @@ import { sendEmailVerification } from "firebase/auth";
 import ReferalChart from "@/components/ReferalChart";
 import TaskList from "@/components/TaskList";
 import Loader from "@/components/loader";
-import Notification from "@/components/notifications/Notification";
+import Notification from "@/components/notifications/notification";
 
 export default function Page() {
   const [user] = useAuthState(auth);
