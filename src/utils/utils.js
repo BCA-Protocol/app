@@ -384,7 +384,7 @@ export async function getUserIncompleteTasksv2(userId) {
   }
 }
 
-export const handleTaskCompletion = async (userId, taskId) => {
+export const handleTaskCompletion = async (userId, taskId, additionalUserData = {}) => {
   try {
     const usersCollection = collection(db, "users");
     const userQuery = query(usersCollection, where("userId", "==", userId));
@@ -429,6 +429,7 @@ export const handleTaskCompletion = async (userId, taskId) => {
               created: Timestamp.now(),
             },
           }, // Add the completed task to the list
+          ...additionalUserData
         });
         await addPointsToUser(userId, taskPoints, taskData.name);
         await addPointsToUser(
