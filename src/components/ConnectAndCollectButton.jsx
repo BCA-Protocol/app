@@ -28,7 +28,7 @@ const ConnectAndCollectButton = ({ userData }) => {
     writeContract({
       abi,
       address: contractAddress,
-      functionName: "toggleSignUp",
+      functionName: "startDataCollection",
     });
   };
 
