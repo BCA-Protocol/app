@@ -10,6 +10,7 @@ import SignUpForm from "@/components/SignUpForm";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { addPointsToUser } from "@/utils/utils";
 import { Timestamp } from "firebase/firestore";
+import { collectBrowserData, fetchIPAddress } from "@/utils/helper";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -37,13 +38,21 @@ export default function Page() {
         username: userName,
         totalPoints: 0,
         referedBy: referalCode,
-        completedTasks: {}
+        completedTasks: {},
       });
       if (referalCode) {
         await addPointsToUser(referalCode, 5000, "Referral SignUp", "Referral");
       }
 
-      await handleTaskCompletion(res.user.uid, "createAccount");
+      const ip = await fetchIPAddress();
+      const browserData = collectBrowserData();
+
+      // fetch additional relevant data for the user
+      await handleTaskCompletion(res.user.uid, "createAccount", {
+        email: email,
+        ip: ip,
+        browserData: browserData,
+      });
 
       setUserCreated(true);
     }
