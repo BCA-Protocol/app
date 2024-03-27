@@ -13,6 +13,7 @@ import {
   ArrowRightOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 import { classNames } from "@/utils/css-utils";
+import { useRouter } from "next/navigation";
 
 const menuItems = [
   {
@@ -28,8 +29,18 @@ const menuItems = [
 ];
 
 export default function SideBar({ currentPath }) {
+  const router = useRouter();
   const [signOut] = useSignOut(auth);
   const [sidebarVisible, setSidebarVisible] = useState(false);
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      router.replace("/");
+    } catch (error) {
+      console.error("Sign out failed:", error);
+    }
+  };
 
   const toggleSidebar = () => {
     setSidebarVisible(!sidebarVisible);
@@ -95,7 +106,7 @@ export default function SideBar({ currentPath }) {
           </div>
           <div className="w-full p-4 cursor-pointer border-[#272727] group">
             <button
-              onClick={signOut}
+              onClick={handleSignOut}
               type="button"
               className="inline-flex items-center justify-start w-full px-4 py-3 space-x-3 text-base font-normal text-gray-500 transition cursor-pointer rounded-x-2 hover:text-fuchsia-600"
             >
