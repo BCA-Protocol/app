@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-// import ReactApexCharts from "react-apexcharts";
 import dynamic from "next/dynamic";
 const ReactApexCharts = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
 const EarningsChart = ({ userActivity }) => {
-
   const [chartData, setChartData] = useState({
     series: [],
     options: {},
