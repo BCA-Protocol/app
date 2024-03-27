@@ -1,19 +1,20 @@
 import {
   collection,
   query,
+  doc,
   where,
+  startAt,
   getDocs,
+  getDoc,
   addDoc,
   orderBy,
   limit,
-  doc,
   runTransaction,
-  increment,
   updateDoc,
-  getDoc,
+  increment,
 } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
 import { confirmPasswordReset } from "firebase/auth";
-
 import { db, auth } from "../firebase";
 
 export async function handleResetPassword(actionCode, newPassword) {
@@ -32,36 +33,15 @@ export async function handleResetPassword(actionCode, newPassword) {
 
 export async function addData(collectionName, data) {
   try {
-    const docRef = await addDoc(collection(db, collectionName), data);
+    const theCollection = collection(db, collectionName);
+    const docRef = await addDoc(theCollection, {
+      ...data,
+      created: Timestamp.now(),
+    });
     console.log("Document written with ID:", docRef.id);
     return { success: true, docId: docRef.id };
   } catch (error) {
     console.error("Error adding document:", error);
-    throw error;
-  }
-}
-
-export async function markTaskCompleted(userId, taskId) {
-  try {
-    // Check if the user has already completed this task
-    const existingTasksQuery = query(
-      collection(db, "userTasks"),
-      where("userId", "==", userId),
-      where("taskId", "==", taskId)
-    );
-    const existingTasksSnapshot = await getDocs(existingTasksQuery);
-
-    if (existingTasksSnapshot.empty) {
-      // Add user-task document if not completed before
-      await addDoc(collection(db, "userTasks"), { userId, taskId });
-      // Update user points based on task points (separate function or logic)
-      updateUserPoints(userId, getTaskPoints(taskId)); // Replace with your logic
-    } else {
-      console.log("Task already completed by user."); // Handle already completed scenario (optional)
-    }
-  } catch (error) {
-    console.error("Error marking task completed:", error);
-    // Handle errors (throw an error, display a message to the user)
     throw error;
   }
 }
@@ -196,10 +176,30 @@ export async function getUserByUUID(uuid) {
   }
 }
 
+export async function getGlobalSettings() {
+  try {
+    const settingsDocRef = doc(db, "general", "settings");
+
+    const settingsSnapshot = await getDoc(settingsDocRef);
+
+    if (!settingsSnapshot.exists()) {
+      console.log("No settings found.");
+      return null;
+    }
+
+    const settings = settingsSnapshot.data();
+    return settings;
+  } catch (error) {
+    console.error("Error getting general settings:", error);
+    throw error;
+  }
+}
+
 export async function addPointsToUser(uuid, pointsToAdd, description, type) {
   try {
     const usersCollection = collection(db, "users");
     const usersPointsCollection = collection(db, "usersPoints");
+    const settingsDocRef = doc(db, "general", "settings"); // Reference to the settings document
 
     // Get the user document reference
     const userQuery = query(usersCollection, where("userId", "==", uuid));
@@ -215,14 +215,14 @@ export async function addPointsToUser(uuid, pointsToAdd, description, type) {
     if (type == "Referral") {
       await updateDoc(userDoc, {
         referralPoints:
-          (userSnapshot.docs[0].data().referralPoints || 0.0) +
-          parseFloat(pointsToAdd),
+          (userSnapshot.docs[0].data().referralPoints || 0) +
+          parseInt(Math.floor(pointsToAdd)),
       });
     } else {
       await updateDoc(userDoc, {
         totalPoints:
-          (userSnapshot.docs[0].data().totalPoints || 0.0) +
-          parseFloat(pointsToAdd),
+          (userSnapshot.docs[0].data().totalPoints || 0) +
+          parseInt(Math.floor(pointsToAdd)),
       });
     }
 
@@ -231,6 +231,12 @@ export async function addPointsToUser(uuid, pointsToAdd, description, type) {
       userId: uuid,
       points: pointsToAdd,
       description: description,
+      created: Timestamp.now(),
+    });
+
+    // update global points here
+    updateDoc(settingsDocRef, {
+      protocolPoints: increment(parseInt(Math.floor(pointsToAdd))),
     });
 
     // Optionally, you can fetch and return the updated user data
@@ -259,6 +265,81 @@ export async function getReferralCount(userId) {
     return referralSnapshot.size;
   } catch (error) {
     console.error("Error getting referral count:", error);
+    throw error;
+  }
+}
+
+export async function calculateTotalProtocolPoints() {
+  try {
+    const usersCollection = collection(db, "users");
+
+    // First, query users with the given userId as referedBy
+    const referralQuery = query(usersCollection);
+    const referralSnapshot = await getDocs(referralQuery);
+
+    // Return the count of users with the given userId as referedBy
+    return referralSnapshot.size;
+  } catch (error) {
+    console.error("Error getting referral count:", error);
+    throw error;
+  }
+}
+
+export async function getUserActivity(userId) {
+  try {
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30); // 30 days from today
+
+    // Query for activities in the last 30 days for the given userId
+    const theQuery = query(
+      collection(db, "usersPoints"),
+      where("userId", "==", userId),
+      orderBy("created"),
+      startAt(thirtyDaysAgo)
+    );
+
+    const theSnapshot = await getDocs(theQuery);
+    const dailySummary = {};
+
+    theSnapshot.forEach((doc) => {
+      const data = doc.data();
+
+      if (!data.created) return;
+
+      const { created, description, points } = data;
+      const activityDate = created.toDate();
+      const dateString = activityDate.toLocaleDateString("en-US");
+
+      if (!dailySummary[dateString]) {
+        dailySummary[dateString] = { referral: 0, points: 0 };
+      }
+
+      if (description.toLowerCase().includes("referral")) {
+        dailySummary[dateString].referral += points;
+      } else {
+        dailySummary[dateString].points += points;
+      }
+    });
+
+    // Initialize the result object
+    let result = {
+      days: [],
+      totals: [],
+      referrals: [],
+    };
+
+    // Populate the result object
+    Object.keys(dailySummary).forEach((date) => {
+      result.days.push(date); // Add the date
+      const totalPoints =
+        dailySummary[date].points + dailySummary[date].referral;
+      result.totals.push(totalPoints);
+      result.referrals.push(dailySummary[date].referral);
+    });
+
+    return result;
+  } catch (error) {
+    console.error("Error getting activity for user:", error);
     throw error;
   }
 }
@@ -318,7 +399,6 @@ export const handleTaskCompletion = async (userId, taskId) => {
 
     // Assume there is only one user with a specific localId (or handle multiple results as needed)
     const userDoc = userSnapshot.docs[0];
-    console.log("user doc", userDoc.data());
     const userRef = userDoc.ref;
     const completedTasks = userDoc.data().completedTasks;
     const referedBy = userDoc.data().referedBy;
@@ -339,17 +419,22 @@ export const handleTaskCompletion = async (userId, taskId) => {
 
     await runTransaction(db, async (transaction) => {
       // Check if the task has already been completed
-
-      if (!completedTasks.includes(taskId)) {
+      if (!completedTasks?.hasOwnProperty(taskId)) {
         // Update user document
         transaction.update(userRef, {
-          completedTasks: [...completedTasks, taskId], // Add the completed task to the list
+          completedTasks: {
+            ...completedTasks,
+            [taskId]: {
+              taskId: taskId,
+              created: Timestamp.now(),
+            },
+          }, // Add the completed task to the list
         });
-        await addPointsToUser(userId, taskPoints, "Email verification");
+        await addPointsToUser(userId, taskPoints, taskData.name);
         await addPointsToUser(
           referedBy,
           taskPoints * 0.07,
-          "Refferal email verification",
+          taskData.name + " (Referral)",
           "Referral"
         );
         // await addReferralPointsToUser(referedBy, taskPoints * 0.07);

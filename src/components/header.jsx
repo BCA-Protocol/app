@@ -44,33 +44,35 @@ export default function Header() {
 
   return (
     <header className="flex items-center justify-between px-4 py-3 pt-8 lg:ml-60 h-18">
-      <div className="items-center justify-between px-2 py-2 space-x-4 text-white border shadow-sm md:flex align-items-center rounded-xl border-fuchsia-700 text-fuchsia-800">
-        <span className="inline-flex items-center space-x-2">
-          <UserPlusIcon className="w-6 h-6" />
-          <p className="font-medium">
-            Referrals <strong>{refsCount}</strong>
-          </p>
-        </span>
+      <div className="flex items-center justify-start space-x-4">
+        <div className="items-center justify-center px-2 py-2 text-white border shadow-sm lg:justify-between lg:items-center lg:space-x-4 md:flex align-items-center rounded-xl border-fuchsia-700 text-fuchsia-800">
+          <span className="inline-flex items-center space-x-2">
+            <UserPlusIcon className="w-6 h-6" />
+            <p className="font-medium">
+              Referrals <strong>{refsCount}</strong>
+            </p>
+          </span>
 
-        <div className="text-white flex-1 px-2 py-1.5 text-center rounded-md shadow-sm cursor-pointer align-items-center bg-gradient-to-l from-fuchsia-700 to-violet-700 hover:bg-gradient-to-r transition">
-          <p
-            className="max-w-2xl px-2 mx-auto text-sm"
-            onClick={() => handleCopy()}
-          >
-            Copy referal code
-          </p>
+          <div className="text-white flex-1 px-2 py-1.5 text-center rounded-md shadow-sm cursor-pointer align-items-center bg-gradient-to-l from-fuchsia-700 to-violet-700 hover:bg-gradient-to-r transition">
+            <p
+              className="max-w-2xl px-2 mx-auto text-sm"
+              onClick={() => handleCopy()}
+            >
+              Copy referal code
+            </p>
+          </div>
         </div>
+        <p className="hidden text-transparent lg:inline-block bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 bg-clip-text">
+          &larr; Refer and earn up to 1,000,000 Points
+        </p>
       </div>
 
-      <div className="flex text-fuchsia-600">
-        <span className="text-base">{`Welcome ${
-          userData && userData.username
-        }`}</span>
+      <div className="flex flex-col items-center text-base text-fuchsia-600">
+        <span className="text-xs">welcome </span>
+        {userData && <span>{userData.username}</span>}
       </div>
 
-      {copiedRefCode && (
-        <SuccessMessage message={`Referral link copied`} />
-      )}
+      {copiedRefCode && <SuccessMessage message={`Referral link copied`} />}
     </header>
   );
 }

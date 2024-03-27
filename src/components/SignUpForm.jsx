@@ -73,6 +73,10 @@ export default function SignUpForm({ onSignUp, refCode }) {
 
     if (Object.keys(validationErrors).length === 0) {
       onSignUp(formData);
+      formData.userName = "";
+      formData.email = "";
+      formData.password = "";
+      formData.paconfirmPasswordssword = "";
     }
   };
 

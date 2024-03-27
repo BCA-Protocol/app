@@ -5,10 +5,11 @@ import { useRouter } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { addData } from "@/utils/utils";
+import { addData, handleTaskCompletion } from "@/utils/utils";
 import SignUpForm from "@/components/SignUpForm";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { addPointsToUser } from "@/utils/utils";
+import { Timestamp } from "firebase/firestore";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -19,11 +20,12 @@ export default function Page() {
 
   const [createUser] = useCreateUserWithEmailAndPassword(auth);
 
+  const [userCreated, setUserCreated] = useState(false);
   useEffect(() => {
-    if (user) {
+    if (user && userCreated) {
       router.replace("/dashboard");
     }
-  }, [router, user]);
+  }, [router, user, userCreated]);
 
   const handleSignUp = async (formData) => {
     setLoading(true);
@@ -35,10 +37,15 @@ export default function Page() {
         username: userName,
         totalPoints: 0,
         referedBy: referalCode,
-        completedTasks: [],
+        completedTasks: {}
       });
-      if (referalCode)
-        await addPointsToUser(referalCode, 1000, "Referral SignUp", "Referral");
+      if (referalCode) {
+        await addPointsToUser(referalCode, 5000, "Referral SignUp", "Referral");
+      }
+
+      await handleTaskCompletion(res.user.uid, "createAccount");
+
+      setUserCreated(true);
     }
     setLoading(false);
   };
@@ -46,8 +53,8 @@ export default function Page() {
   return (
     <>
       {loading ? (
-        <div className="flex justify-center items-center flex-col">
-          <IconFidgetSpinner className="animate-spin w-8 h-8" />
+        <div className="flex flex-col items-center justify-center">
+          <IconFidgetSpinner className="w-8 h-8 animate-spin" />
         </div>
       ) : (
         <SignUpForm refCode={refCode} onSignUp={handleSignUp} />

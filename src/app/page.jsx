@@ -1,8 +1,6 @@
 "use client";
 import { auth } from "@/firebase";
 import { sendPasswordResetEmail } from "firebase/auth";
-import { IconFidgetSpinner } from "@tabler/icons-react";
-import Link from "next/link";
 import {
   useAuthState,
   useSignInWithEmailAndPassword,
@@ -39,7 +37,6 @@ const Home = () => {
         formData.email,
         formData.password
       );
-      console.log({ res });
     } catch (error) {
       console.error("API call failed:", error);
     }
