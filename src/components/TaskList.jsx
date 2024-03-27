@@ -2,8 +2,11 @@ import { Web3Provider } from "@/providers/Web3Provider";
 import { classNames } from "@/utils/css-utils";
 import ConnectAndCollectButton from "./ConnectAndCollectButton";
 import { formatTimestamp } from "@/utils/datetime";
+import { getTwitterOauthUrl } from "@/providers/TwitterOauthUrl";
 
 const TaskList = ({ user, userData, sendEmailVerification }) => {
+  const discordOauthUrl =`https://discord.com/oauth2/authorize?client_id=${process.env.DISCORD_APP_ID}&response_type=code&redirect_uri=${process.env.DISCORD_REDIRECT_URI}&scope=identify+email` 
+  console.log('temo', getTwitterOauthUrl());
   return (
     <div className="items-center justify-center w-full h-full text-center">
       <ul className="h-full p-4 space-y-2 bg-black border border-fuchsia-700 rounded-xl text-fuchsia-700">
@@ -42,8 +45,72 @@ const TaskList = ({ user, userData, sendEmailVerification }) => {
           )}
         </li>
         {/* End of Connect Wallet */}
-
-        {/* Verify email */}
+        <li
+          className={classNames(
+            "flex flex-row items-center justify-between p-2 border border-fuchsia-600 rounded-xl",
+            userData.completedTasks?.hasOwnProperty("connectTwitter")
+              ? "bg-fuchsia-950"
+              : "hover:bg-fuchsia-950 hover:shadow-cyan-500/60 hover:shadow-lg"
+          )}
+        >
+          {userData.completedTasks?.hasOwnProperty("connectTwitter") ? (
+            <>
+              <div className="flex flex-col items-start justify-center">
+                <div className="font-bold">✓ Twitter Connected ⭐⭐⭐</div>
+                <div className="pl-4 text-xs">
+                  {formatTimestamp(
+                    userData.completedTasks?.connectTwitter?.created || null
+                  )}
+                </div>
+              </div>
+              <span className="w-1/5 text-sm font-bold text-fuchsia-600">
+                50,000 Points
+              </span>
+            </>
+          ) : (
+            <>
+              <div className="w-2/3 cursor-pointer text-white hover:-translate-y-1">
+                <a href={getTwitterOauthUrl()}>Connect Twitter</a>
+              </div>
+              <span className="w-1/5 text-sm text-gray-100">50,000 Points</span>
+            </>
+          )}
+        </li>
+        {/* End Of Connect Twitter */}
+        <li
+          className={classNames(
+            "flex flex-row items-center justify-between p-2 border border-fuchsia-600 rounded-xl",
+            userData.completedTasks?.hasOwnProperty("connectDiscord")
+              ? "bg-fuchsia-950"
+              : "hover:bg-fuchsia-950 hover:shadow-cyan-500/60 hover:shadow-lg"
+          )}
+        >
+          {userData.completedTasks?.hasOwnProperty("connectDiscord") ? (
+            <>
+              <div className="flex flex-col items-start justify-center">
+                <div className="font-bold">✓ Discord Connected ⭐⭐⭐</div>
+                <div className="pl-4 text-xs">
+                  {formatTimestamp(
+                    userData.completedTasks?.connectDiscord?.created || null
+                  )}
+                </div>
+              </div>
+              <span className="w-1/5 text-sm font-bold text-fuchsia-600">
+                50,000 Points
+              </span>
+            </>
+          ) : (
+            <>
+              <div className="w-2/3 cursor-pointer text-white hover:-translate-y-1">
+                <a href={discordOauthUrl}>
+                  Connect Discord
+                </a>
+              </div>
+              <span className="w-1/5 text-sm text-gray-100">50,000 Points</span>
+            </>
+          )}
+        </li>
+        {/* End Of Connect Discord */}
         <li
           className={classNames(
             "flex flex-row items-center justify-between p-2 border border-fuchsia-600 rounded-xl",
