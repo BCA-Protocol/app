@@ -32,8 +32,7 @@ const Home = () => {
             );
             if (taskCOmRes) {
               setLoading(false);
-              router.replace("/dashboard");
-              window.location.reload();
+              window.location.href = `/dashboard`;
             } else {
               setLoading(false);
             }
