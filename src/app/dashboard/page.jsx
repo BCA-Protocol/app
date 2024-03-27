@@ -2,7 +2,7 @@
 import { auth } from "@/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   getUserByUUID,
   getUserActivity,
@@ -23,7 +23,46 @@ export default function Page() {
   const [notification, setNotification] = useState(null);
   const [userActivity, setUserActivity] = useState([]);
 
+  const actualNumber = globalSettings?.protocolPoints || 324902;
+  const startNumber = Math.max(actualNumber - 100000, 0);
+  const [displayNumber, setDisplayNumber] = useState(startNumber);
+  const displayNumberRef = useRef(startNumber);
+
   const router = useRouter();
+
+  useEffect(() => {
+    const updateNumber = () => {
+      // Stop if we've reached or exceeded the actual number
+      if (displayNumberRef.current >= actualNumber) {
+        return;
+      }
+
+      // Generate a random increment amount between 1000 and 5000
+      const incrementAmount =
+        Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
+      const newNumber = Math.min(
+        displayNumberRef.current + incrementAmount,
+        actualNumber
+      );
+
+      // Update state and ref
+      setDisplayNumber(newNumber);
+      displayNumberRef.current = newNumber;
+
+      // Generate a random interval duration between 1000ms (1 second) and 10000ms (9 seconds)
+      const timeoutDuration =
+        Math.floor(Math.random() * (10000 - 1000 + 1)) + 1000;
+
+      // Schedule the next update
+      setTimeout(updateNumber, timeoutDuration);
+    };
+
+    // Start the animation
+    updateNumber();
+
+    // Because we're using setTimeout recursively, there's no direct cleanup required here.
+    // If needed, you could return a cleanup function to cancel the timeout if the component unmounts.
+  }, [actualNumber]);
 
   useEffect(() => {
     const fetchIncompleteTasks = async () => {
@@ -94,15 +133,16 @@ export default function Page() {
                     <h2 className="text-4xl font-bold text-white">
                       Protocol Growth{" "}
                       <p className="text-transparent lg:inline-block bg-gradient-to-r from-red-600 via-yellow-500 to-red-600 bg-clip-text">
-                        {formatLargeNumber(
-                          globalSettings?.protocolPoints || 324902
-                        )}{" "}
-                        🔥
+                        {formatLargeNumber(displayNumber)} 🔥
                       </p>
                     </h2>
                     <p className="mt-2 text-2xl font-bold text-white">
                       you have got{" "}
-                      {formatLargeNumber((userData.totalPoints || 0) + (userData.referralPoints || 0))} points
+                      {formatLargeNumber(
+                        (userData.totalPoints || 0) +
+                          (userData.referralPoints || 0)
+                      )}{" "}
+                      points
                     </p>
                   </div>
                   <p className="mt-6 text-lg text-center text-purple-200">
