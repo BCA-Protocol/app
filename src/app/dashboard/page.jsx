@@ -102,7 +102,7 @@ export default function Page() {
                     </h2>
                     <p className="mt-2 text-4xl font-bold text-white">
                       you have got{" "}
-                      {formatLargeNumber(userData.totalPoints || 0)} points
+                      {formatLargeNumber((userData.totalPoints || 0) + (userData.referralPoints || 0))} points
                     </p>
                   </div>
                   <p className="mt-6 text-lg text-center text-purple-200">
