@@ -58,7 +58,7 @@ export default function Header() {
               className="max-w-2xl px-2 mx-auto text-sm"
               onClick={() => handleCopy()}
             >
-              Copy referal code
+              Copy referral code
             </p>
           </div>
         </div>
