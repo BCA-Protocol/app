@@ -34,6 +34,13 @@ export default function RootLayout({ children }) {
         roboto_mono.variable
       )}
     >
+      <head>
+        <title>BCA Protocol app</title>
+        <meta name="description" content="BCA Protocol app" />
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180I hax180" href="/favicon.png" />
+        <meta name="theme-color" content="#ffffff" />
+      </head>
       <body className="flex flex-col h-full bg-black">
         {!isPublicPage && (
           <>
