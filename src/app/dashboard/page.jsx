@@ -23,7 +23,7 @@ export default function Page() {
   const [notification, setNotification] = useState(null);
   const [userActivity, setUserActivity] = useState([]);
 
-  const actualNumber = globalSettings?.protocolPoints || 324902;
+  const actualNumber = globalSettings?.protocolPoints || 1234567;
   const startNumber = Math.max(actualNumber - 100000, 0);
   const [displayNumber, setDisplayNumber] = useState(startNumber);
   const displayNumberRef = useRef(startNumber);
