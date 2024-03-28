@@ -2,7 +2,7 @@ import { abi } from "@/resources/abi";
 import { handleTaskCompletion } from "@/utils/utils";
 import { ConnectKitButton } from "connectkit";
 import { ConnectKitProvider } from "connectkit";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useAccount, useWriteContract } from "wagmi";
 
 const ConnectAndCollectButton = ({ userData }) => {
@@ -15,7 +15,11 @@ const ConnectAndCollectButton = ({ userData }) => {
     isConnected,
   } = useAccount();
   const contractAddress = process.env.NEXT_PUBLIC_SMART_CONTRACT_ADDRESS;
-  const { writeContract, isLoading, isSuccess, error } = useWriteContract();
+  const { writeContract, isLoading, isSuccess, error, isPending } =
+    useWriteContract();
+  const prevAccountAddressRef = useRef();
+
+  const [pendingTransaction, setPendingTransaction] = useState(false);
 
   // const {
   //   data: result,
@@ -29,6 +33,7 @@ const ConnectAndCollectButton = ({ userData }) => {
   // });
 
   const doWrite = () => {
+    setPendingTransaction(true);
     writeContract({
       abi,
       address: contractAddress,
@@ -37,15 +42,28 @@ const ConnectAndCollectButton = ({ userData }) => {
   };
 
   useEffect(() => {
-    if (address) {
-      if (userData.completedTasks?.hasOwnProperty("generateCookie") == false) {
-        console.log(
-          "Wallet connected, attempting to generate cookie and register on the blockchain"
-        );
-        doWrite();
+    if (
+      (prevAccountAddressRef.current === null ||
+        prevAccountAddressRef.current === undefined) &&
+      accountAddress
+    ) {
+      if (pendingTransaction !== true) {
+        if (
+          userData.completedTasks?.hasOwnProperty("generateCookie") === false
+        ) {
+          console.log(
+            "Wallet connected, attempting to generate cookie and register on the blockchain"
+          );
+          if (pendingTransaction !== true) {
+            setPendingTransaction(true);
+            console.log("Processing cookie generation...");
+            setTimeout(() => doWrite(), 500);
+          }
+        }
       }
     }
-  }, [address]);
+    prevAccountAddressRef.current = accountAddress;
+  }, [accountAddress]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -56,7 +74,7 @@ const ConnectAndCollectButton = ({ userData }) => {
             "generateCookie",
             {
               walletData: {
-                address: accountAddress,
+                address: accountAddress ?? address ?? "unknown",
                 chain: chain?.name ?? "unknown",
                 chainId: chainId ?? "unknown",
               },
@@ -81,8 +99,9 @@ const ConnectAndCollectButton = ({ userData }) => {
       handlePostCookieGeneration();
     }
 
-    if (error !== undefined) {
+    if (error !== undefined && error !== null) {
       console.log("Cookie generation rejected by user", error);
+      setPendingTransaction(false);
     }
   }, [isSuccess, error]);
 
@@ -91,28 +110,35 @@ const ConnectAndCollectButton = ({ userData }) => {
       {isLoading ? (
         <div className="text-lg text-white">Completing task...</div>
       ) : (
-        <div className="inline-flex items-center justify-between space-x-2">
+        <div className="flex flex-col items-start justify-start w-2/3 space-y-2">
           {isConnected &&
             userData.completedTasks?.hasOwnProperty("generateCookie") ==
               false && (
-              <div
-                className="py-1 text-xs text-white transition duration-500 ease-in-out transform shadow-lg cursor-pointer bg-fuchsia-700 rounded-xl"
+              <button
+                disabled={pendingTransaction === true}
+                className="min-h-10 py-1 text-base px-2 text-white transition w-full duration-500 ease-in-out transform shadow-lg cursor-pointer disabled:bg-[#383838] disabled:text-[#686868] bg-fuchsia-700 rounded-lg"
                 onClick={doWrite}
               >
                 Generate AI-smart cookie
-              </div>
+              </button>
             )}
-          <ConnectKitProvider
-            onConnect={({ address }) => setAddress(address)}
-            onDisconnect={() => setAddress(null)}
-          >
-            <ConnectKitButton
-              theme="auto"
-              mode="dark"
-              label="Generate AI-smart cookie"
-              className="hover:-translate-y-1"
-            />
-          </ConnectKitProvider>
+          {pendingTransaction ? (
+            <div>Pending...</div>
+          ) : (
+            <div disabled={pendingTransaction}>
+              <ConnectKitProvider
+                onConnect={({ address }) => setAddress(address)}
+                onDisconnect={() => setAddress(null)}
+              >
+                <ConnectKitButton
+                  theme="auto"
+                  mode="dark"
+                  label="Generate AI-smart cookie"
+                  className="hover:-translate-y-1"
+                />
+              </ConnectKitProvider>
+            </div>
+          )}
         </div>
       )}
     </>

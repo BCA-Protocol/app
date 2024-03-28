@@ -34,7 +34,7 @@ const TaskList = ({ user, userData, sendEmailVerification }) => {
             </>
           ) : (
             <>
-              <Web3Provider className="w-2/3 cursor-pointer hover:-translate-y-1">
+              <Web3Provider className="w-full cursor-pointer hover:-translate-y-1">
                 <ConnectAndCollectButton userData={userData} />
               </Web3Provider>
               <span className="w-1/5 text-sm text-gray-100">50,000 Points</span>
@@ -72,7 +72,7 @@ const TaskList = ({ user, userData, sendEmailVerification }) => {
                 onClick={() => {
                   sendEmailVerification(user);
                 }}
-                className="flex items-center p-2 transition duration-500 ease-in-out transform cursor-pointer select-none rounded-xl text-white disabled:opacity-40 bg-[#383838] to-violet-700 hover:-translate-y-1 hover:shadow-lg disabled:bg-green-400 bg-green"
+                className="flex items-center p-2 transition duration-500 ease-in-out transform cursor-pointer select-none rounded-lg text-white disabled:opacity-40 bg-[#383838] to-violet-700 hover:-translate-y-1 hover:shadow-lg disabled:bg-green-400 bg-green"
               >
                 <div className="flex pl-1">
                   <div className="font-medium">Verify Email</div>
