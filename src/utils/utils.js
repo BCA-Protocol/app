@@ -452,7 +452,7 @@ export const handleTaskCompletion = async (userId, taskId, additionalUserData = 
 };
 
 export async function verifyEmail(verificationCode) {
-  const apiKey = process.env.NEXT_PUBLIC_APIKEY; // Replace with your actual API key
+  const apiKey = process.env.FIREBASE_APIKEY; // Replace with your actual API key
 
   const endpoint = `https://identitytoolkit.googleapis.com/v1/accounts:update?key=${apiKey}`;
 

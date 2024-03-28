@@ -1,14 +1,14 @@
 "use client";
 import { WagmiProvider, createConfig, http } from "wagmi";
-import { baseSepolia } from "wagmi/chains";
+import { base } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { getDefaultConfig } from "connectkit";
 
 const config = createConfig(
   getDefaultConfig({
-    chains: [baseSepolia],
+    chains: [base],
     transports: {
-      [baseSepolia.id]: http(),
+      [base.id]: http(),
     },
     walletConnectProjectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID,
     appName: "BCAProtocol",
