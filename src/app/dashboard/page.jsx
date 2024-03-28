@@ -126,8 +126,20 @@ export default function Page() {
       {userData && (
         <>
           <div className="px-2 pt-12">
+            <div className="text-center text-gray-100/35">
+              BCA Token coming soon! Start earning points and get Exclusive
+              Access.
+            </div>
             <div className="gap-6 lg:grid lg:grid-cols-12">
-              <div className="col-span-8 mt-4">
+              <div className="mt-4 col-span-4 min-h-[250] h-[250]">
+                <TaskList
+                  sendEmailVerification={handleTask}
+                  user={user}
+                  userData={userData}
+                />
+              </div>
+
+              <div className="order-first col-span-8 mt-4">
                 <div className="flex flex-col p-4 shadow-sm align-items-center rounded-xl bg-gradient-to-l from-purple-800 to-indigo-900">
                   <div className="text-center">
                     <h2 className="text-4xl font-bold text-white">
@@ -153,14 +165,6 @@ export default function Page() {
                 <div className="mt-2">
                   <ReferalChart userActivity={userActivity} />
                 </div>
-              </div>
-
-              <div className="mt-4 col-span-4 min-h-[250] h-[250]">
-                <TaskList
-                  sendEmailVerification={handleTask}
-                  user={user}
-                  userData={userData}
-                />
               </div>
             </div>
           </div>

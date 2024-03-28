@@ -6,7 +6,7 @@ import { formatTimestamp } from "@/utils/datetime";
 const TaskList = ({ user, userData, sendEmailVerification }) => {
   return (
     <div className="items-center justify-center w-full h-full text-center">
-      <ul className="h-full p-4 space-y-2 bg-black border border-fuchsia-700 rounded-xl text-fuchsia-700">
+      <ul className="relative h-full p-4 space-y-2 bg-black border border-fuchsia-700 rounded-xl text-fuchsia-700">
         <li className="mb-4 font-bold">Available tasks</li>
 
         {/* Connect Wallet */}
@@ -95,6 +95,18 @@ const TaskList = ({ user, userData, sendEmailVerification }) => {
             </div>
           </div>
           <span className="w-1/5 text-sm font-bold">10,000 Points</span>
+        </li>
+        <li className="text-sm lg:absolute text-gray-100/35 bottom-2">
+          <div class="flex flex-col group">
+            <span className="hidden group-hover:block text-fuchsia-100/60">
+              A snapshot will be made from the AI-cookie smart contract.
+            </span>
+            <span className="">BCA Token pre-sale access</span>{" "}
+            <span className="cursor-pointer">
+              ONLY for the Top <strong>500 Contributors</strong> and their
+              referral network{" "}
+            </span>
+          </div>
         </li>
         {/* End of Signup */}
       </ul>
