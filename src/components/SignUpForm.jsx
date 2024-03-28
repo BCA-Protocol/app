@@ -20,7 +20,7 @@ export default function SignUpForm({ onSignUp, refCode }) {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name==='email'?'userName':name==='userName'?'email':name]: value,
     }));
     setErrors((prevErrors) => ({
       ...prevErrors,
@@ -99,7 +99,7 @@ export default function SignUpForm({ onSignUp, refCode }) {
             <div className="relative">
               <input
                 type="text"
-                name="userName"
+                name="email"
                 value={formData.userName}
                 onChange={handleChange}
                 className={`w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm ${
@@ -120,7 +120,7 @@ export default function SignUpForm({ onSignUp, refCode }) {
             <div className="relative">
               <input
                 type="email"
-                name="email"
+                name="userName"
                 value={formData.email}
                 onChange={handleChange}
                 className={`w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm ${

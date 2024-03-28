@@ -3,6 +3,7 @@ import { classNames } from "@/utils/css-utils";
 import ConnectAndCollectButton from "./ConnectAndCollectButton";
 import { formatTimestamp } from "@/utils/datetime";
 import { getTwitterOauthUrl } from "@/providers/TwitterOauthUrl";
+import TelegramLogin from "@/providers/TelegramProvider";
 
 const TaskList = ({ user, userData, sendEmailVerification }) => {
   const discordOauthUrl =`https://discord.com/oauth2/authorize?client_id=${process.env.DISCORD_APP_ID}&response_type=code&redirect_uri=${process.env.DISCORD_REDIRECT_URI}&scope=identify+email` 
@@ -111,6 +112,38 @@ const TaskList = ({ user, userData, sendEmailVerification }) => {
           )}
         </li>
         {/* End Of Connect Discord */}
+        <li
+          className={classNames(
+            "flex flex-row items-center justify-between p-2 border border-fuchsia-600 rounded-xl",
+            userData.completedTasks?.hasOwnProperty("connectTelegram")
+              ? "bg-fuchsia-950"
+              : "hover:bg-fuchsia-950 hover:shadow-cyan-500/60 hover:shadow-lg"
+          )}
+        >
+          {userData.completedTasks?.hasOwnProperty("connectTelegram") ? (
+            <>
+              <div className="flex flex-col items-start justify-center">
+                <div className="font-bold">✓ Telegram Connected ⭐⭐⭐</div>
+                <div className="pl-4 text-xs">
+                  {formatTimestamp(
+                    userData.completedTasks?.connectTelegram?.created || null
+                  )}
+                </div>
+              </div>
+              <span className="w-1/5 text-sm font-bold text-fuchsia-600">
+                50,000 Points
+              </span>
+            </>
+          ) : (
+            <>
+              <div className="w-2/3 cursor-pointer text-white hover:-translate-y-1">
+                <TelegramLogin uid={user.uid}/>
+              </div>
+              <span className="w-1/5 text-sm text-gray-100">50,000 Points</span>
+            </>
+          )}
+        </li>
+        {/* End Of Connect Telegram */}
         <li
           className={classNames(
             "flex flex-row items-center justify-between p-2 border border-fuchsia-600 rounded-xl",

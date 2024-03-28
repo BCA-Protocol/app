@@ -17,6 +17,7 @@ const nextConfig = {
     DISCORD_APP_ID: process.env.DISCORD_APP_ID,
     DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
     DISCORD_REDIRECT_URI: process.env.DISCORD_REDIRECT_URI,
+    TELEGRAM_BOT_ID: process.env.TELEGRAM_BOT_ID,
   },
 };
 

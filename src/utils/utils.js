@@ -419,6 +419,9 @@ let additionalUserData = {};
     // Check if the task is related to Twitter
     else if (taskId === "connectTwitter") {
       additionalUserData = { twitterUser: socialUserData };
+    } // Check if the task is related to Twitter
+    else if (taskId === "connectTelegram") {
+      additionalUserData = { telegramUser: socialUserData };
     }
 
     // Assuming there's only one task document with the specified taskId
