@@ -68,6 +68,7 @@ const SignIn = ({ formData, onChange, onSubmit, onForgotPasswordSubmit }) => {
               <input
                 type="email"
                 name="email"
+                autoComplete="email"
                 value={formData.email}
                 onChange={onChange}
                 className="w-full p-4 text-sm border-gray-200 rounded-lg shadow-sm"

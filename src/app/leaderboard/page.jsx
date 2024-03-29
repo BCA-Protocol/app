@@ -69,10 +69,10 @@ export default function Page() {
                           </div>
                           <div className="ps-3">
                             <div className="text-base font-semibold text-fuchsia-700">
-                              {user.username}
+                              {user.displayName}
                             </div>
                             <div className="font-normal text-gray-600">
-                              @{user.username}
+                              @{user.displayName}
                             </div>
                           </div>
                         </div>

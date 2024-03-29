@@ -69,7 +69,7 @@ export default function Header() {
 
       <div className="flex flex-col items-center text-base text-fuchsia-600">
         <span className="text-xs">welcome </span>
-        {userData && <span>{userData.username}</span>}
+        {userData && <span>{userData.displayName}</span>}
       </div>
 
       {copiedRefCode && <SuccessMessage message={`Referral link copied`} />}

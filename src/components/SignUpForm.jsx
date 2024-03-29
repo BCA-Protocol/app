@@ -6,7 +6,7 @@ import logo from "/public/bca-left.png";
 
 export default function SignUpForm({ onSignUp, refCode }) {
   const [formData, setFormData] = useState({
-    userName: "",
+    displayName: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -56,8 +56,8 @@ export default function SignUpForm({ onSignUp, refCode }) {
     e.preventDefault();
 
     const validationErrors = {};
-    if (!formData.userName.trim()) {
-      validationErrors.userName = "User Name is required";
+    if (!formData.displayName.trim()) {
+      validationErrors.displayName = "Display name is required";
     }
     if (!formData.email.trim()) {
       validationErrors.email = "Email is required";
@@ -73,7 +73,7 @@ export default function SignUpForm({ onSignUp, refCode }) {
 
     if (Object.keys(validationErrors).length === 0) {
       onSignUp(formData);
-      formData.userName = "";
+      formData.displayName = "";
       formData.email = "";
       formData.password = "";
       formData.paconfirmPasswordssword = "";
@@ -93,22 +93,22 @@ export default function SignUpForm({ onSignUp, refCode }) {
           <p className="text-lg font-medium text-center">Sign Up</p>
 
           <div>
-            <label htmlFor="userName" className="sr-only">
-              User Name
+            <label htmlFor="displayName" className="sr-only">
+              Display name
             </label>
             <div className="relative">
               <input
                 type="text"
-                name="userName"
-                value={formData.userName}
+                name="displayName"
+                value={formData.displayName}
                 onChange={handleChange}
                 className={`w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm ${
-                  errors.userName ? "border-red-500" : ""
+                  errors.displayName ? "border-red-500" : ""
                 }`}
                 placeholder="Enter user name"
               />
-              {errors.userName && (
-                <p className="text-sm text-red-500">{errors.userName}</p>
+              {errors.displayName && (
+                <p className="text-sm text-red-500">{errors.displayName}</p>
               )}
             </div>
           </div>
@@ -122,6 +122,8 @@ export default function SignUpForm({ onSignUp, refCode }) {
                 type="email"
                 name="email"
                 value={formData.email}
+                autoComplete="email"
+                autoSave="email"
                 onChange={handleChange}
                 className={`w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm ${
                   errors.email ? "border-red-500" : ""
@@ -143,6 +145,7 @@ export default function SignUpForm({ onSignUp, refCode }) {
                 type="password"
                 name="password"
                 value={formData.password}
+                autoComplete="new-password"
                 onChange={handleChange}
                 className={`w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm ${
                   errors.password ? "border-red-500" : ""

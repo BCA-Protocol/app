@@ -30,12 +30,12 @@ export default function Page() {
 
   const handleSignUp = async (formData) => {
     setLoading(true);
-    const { email, password, userName, referalCode } = formData;
+    const { email, password, displayName, referalCode } = formData;
     let res = await createUser(email, password);
     if (res && res.user) {
       const userRes = await addData("users", {
         userId: res.user.uid,
-        username: userName,
+        displayName: displayName,
         totalPoints: 0,
         referedBy: referalCode,
         completedTasks: {},
