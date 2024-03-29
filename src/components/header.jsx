@@ -44,6 +44,8 @@ export default function Header() {
 
   return (
     <header className="flex items-center justify-between px-4 py-3 pt-8 lg:ml-60 h-18">
+      <div className="w-1/4 lg:hidden"></div>
+
       <div className="flex items-center justify-start space-x-4">
         <div className="items-center justify-center px-2 py-2 text-white border shadow-sm lg:justify-between lg:items-center lg:space-x-4 md:flex align-items-center rounded-xl border-fuchsia-700 text-fuchsia-800">
           <span className="inline-flex items-center space-x-2">
@@ -67,7 +69,7 @@ export default function Header() {
         </p>
       </div>
 
-      <div className="flex flex-col items-center text-base text-fuchsia-600">
+      <div className="flex flex-col items-end justify-end w-1/4 text-base text-fuchsia-600">
         <span className="text-xs">welcome </span>
         {userData && <span>{userData.displayName}</span>}
       </div>

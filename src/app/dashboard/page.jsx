@@ -131,6 +131,30 @@ export default function Page() {
               Access.
             </div>
             <div className="gap-6 lg:grid lg:grid-cols-12">
+              <div className="order-first col-span-8 mt-4 lg:hidden">
+                <div className="flex flex-col p-4 shadow-sm align-items-center rounded-xl bg-gradient-to-l from-purple-800 to-indigo-900">
+                  <div className="text-center">
+                    <h2 className="text-4xl font-bold text-white">
+                      Protocol Growth{" "}
+                      <p className="text-transparent lg:inline-block bg-gradient-to-r from-red-600 via-yellow-500 to-red-600 bg-clip-text">
+                        {formatLargeNumber(displayNumber)} 🔥
+                      </p>
+                    </h2>
+                    <p className="mt-2 text-2xl font-bold text-white">
+                      you have got{" "}
+                      {formatLargeNumber(
+                        (userData.totalPoints || 0) +
+                          (userData.referralPoints || 0)
+                      )}{" "}
+                      points
+                    </p>
+                  </div>
+                  <p className="mt-6 text-lg text-center text-purple-200">
+                    Verify your data, earn points &rarr;
+                  </p>
+                </div>
+              </div>
+
               <div className="mt-4 col-span-4 min-h-[250] h-[250]">
                 <TaskList
                   sendEmailVerification={handleTask}
@@ -140,7 +164,7 @@ export default function Page() {
               </div>
 
               <div className="order-first col-span-8 mt-4">
-                <div className="flex flex-col p-4 shadow-sm align-items-center rounded-xl bg-gradient-to-l from-purple-800 to-indigo-900">
+                <div className="flex-col hidden p-4 shadow-sm lg:flex align-items-center rounded-xl bg-gradient-to-l from-purple-800 to-indigo-900">
                   <div className="text-center">
                     <h2 className="text-4xl font-bold text-white">
                       Protocol Growth{" "}

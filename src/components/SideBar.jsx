@@ -51,10 +51,10 @@ export default function SideBar({ currentPath }) {
 
   return (
     <div>
-      {/* <MenuIcon
-        className="absolute w-10 h-10 border left-2 top-2 border-borderprimary text-secondaryx"
+      <MenuIcon
+        className="absolute w-10 h-10 text-fuchsia-700 left-8 top-14"
         onClick={toggleSidebar}
-      /> */}
+      />
       <aside
         className={classNames(
           "fixed inset-y-0 left-0 bg-[#131313] shadow-md w-60 z-40 lg:block",
@@ -62,10 +62,10 @@ export default function SideBar({ currentPath }) {
         )}
       >
         <div className="flex flex-col justify-between h-full">
-          {/* <CloseIcon
+          <CloseIcon
             onClick={toggleSidebar}
-            className="absolute top-0 right-0 z-40 w-10 h-10 border cursor-pointer ml-28 border-borderprimary text-secondaryx lg:hidden "
-          /> */}
+            className="absolute z-40 w-10 h-10 border rounded-lg cursor-pointer right-1 top-10 ml-28 border-fuchsia-700 text-fuchsia-700 lg:hidden"
+          />
 
           <div className="flex-grow">
             <div className="flex items-center justify-center w-full mt-8 mb-8">
