@@ -1,14 +1,17 @@
 "use client";
 import { WagmiProvider, createConfig, http } from "wagmi";
-import { base } from "wagmi/chains";
+import { arbitrum, base, bsc, optimism } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { getDefaultConfig } from "connectkit";
 
 const config = createConfig(
   getDefaultConfig({
-    chains: [base],
+    chains: [arbitrum, base, bsc, optimism],
     transports: {
+      [arbitrum.id]: http(),
       [base.id]: http(),
+      [bsc.id]: http(),
+      [optimism.id]: http(),
     },
     walletConnectProjectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID,
     appName: "BCAProtocol",
