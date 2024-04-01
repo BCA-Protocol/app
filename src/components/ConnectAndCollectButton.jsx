@@ -41,6 +41,10 @@ const ConnectAndCollectButton = ({ userData }) => {
     });
   };
 
+  const connectKitOptions = {
+    initialChainId: 0
+  }
+
   useEffect(() => {
     if (
       (prevAccountAddressRef.current === null ||
@@ -129,6 +133,7 @@ const ConnectAndCollectButton = ({ userData }) => {
               <ConnectKitProvider
                 onConnect={({ address }) => setAddress(address)}
                 onDisconnect={() => setAddress(null)}
+                options={connectKitOptions}
               >
                 <ConnectKitButton
                   theme="auto"
