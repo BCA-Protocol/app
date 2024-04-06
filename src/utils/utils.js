@@ -12,6 +12,7 @@ import {
   runTransaction,
   updateDoc,
   increment,
+  startAfter,
 } from "firebase/firestore";
 import { Timestamp } from "firebase/firestore";
 import { confirmPasswordReset } from "firebase/auth";
@@ -62,22 +63,85 @@ export async function getAllTasks() {
   }
 }
 
-export async function getTopUsers() {
+export async function getTopUsers(
+  lastVisible = null,
+  isInZeroPointsPhase = false
+) {
   try {
     const usersCollection = collection(db, "users");
-    const q = query(
-      usersCollection,
-      orderBy("totalPoints", "desc"),
-      limit(100)
-    );
+    let q;
+
+    // Determine if the query should start in the zero points phase or not
+    if (isInZeroPointsPhase) {
+      // For users with 0 points, order by 'displayName'
+      q = lastVisible
+        ? query(
+            usersCollection,
+            where("totalPoints", "==", 0), // Explicitly target users with 0 points
+            orderBy("displayName"),
+            startAfter(lastVisible),
+            limit(100)
+          )
+        : query(
+            usersCollection,
+            where("totalPoints", "==", 0), // Explicitly target users with 0 points
+            orderBy("displayName"),
+            limit(100)
+          );
+    } else {
+      // For users with > 0 points, order by 'totalPoints' and 'referralPoints'
+      q = lastVisible
+        ? query(
+            usersCollection,
+            orderBy("totalPoints", "desc"),
+            orderBy("referralPoints", "desc"),
+            startAfter(lastVisible),
+            limit(100)
+          )
+        : query(
+            usersCollection,
+            orderBy("totalPoints", "desc"),
+            orderBy("referralPoints", "desc"),
+            limit(100)
+          );
+    }
+
     const usersSnapshot = await getDocs(q);
 
-    const users = usersSnapshot.docs.map((doc) => ({
+    let users = usersSnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));
 
-    return users;
+    // If not initially in zero points phase and fetched users are less than 100, fetch additional users with 0 points
+    if (!isInZeroPointsPhase && users.length < 100) {
+      const additionalUsersNeeded = 100 - users.length;
+      const zeroPointsQuery = query(
+        usersCollection,
+        where("totalPoints", "==", 0),
+        orderBy("displayName"),
+        limit(additionalUsersNeeded)
+      );
+
+      const additionalSnapshot = await getDocs(zeroPointsQuery);
+      const additionalUsers = additionalSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      users = [...users, ...additionalUsers]; // Combine both sets of users
+      // Update lastVisible to the last fetched document, if any
+      lastVisible =
+        additionalUsers.length > 0
+          ? additionalSnapshot.docs[additionalSnapshot.docs.length - 1]
+          : lastVisible;
+      // Update isInZeroPointsPhase based on whether additional users were fetched
+      isInZeroPointsPhase = additionalUsers.length > 0;
+    }
+
+    const lastDoc =
+      usersSnapshot.docs[usersSnapshot.docs.length - 1] || lastVisible;
+    return { users, lastDoc, isInZeroPointsPhase };
   } catch (error) {
     console.error("Error getting top users:", error);
     throw error;
@@ -384,7 +448,11 @@ export async function getUserIncompleteTasksv2(userId) {
   }
 }
 
-export const handleTaskCompletion = async (userId, taskId, additionalUserData = {}) => {
+export const handleTaskCompletion = async (
+  userId,
+  taskId,
+  additionalUserData = {}
+) => {
   try {
     const usersCollection = collection(db, "users");
     const userQuery = query(usersCollection, where("userId", "==", userId));
@@ -429,7 +497,7 @@ export const handleTaskCompletion = async (userId, taskId, additionalUserData = 
               created: Timestamp.now(),
             },
           }, // Add the completed task to the list
-          ...additionalUserData
+          ...additionalUserData,
         });
         await addPointsToUser(userId, taskPoints, taskData.name);
         await addPointsToUser(
