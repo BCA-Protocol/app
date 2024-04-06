@@ -13,6 +13,7 @@ import {
   Squares2X2Icon,
   TrophyIcon,
   ArrowRightOnRectangleIcon,
+  BookOpenIcon,
 } from "@heroicons/react/24/outline";
 import { classNames } from "@/utils/css-utils";
 import { useRouter } from "next/navigation";
@@ -105,6 +106,22 @@ export default function SideBar({ currentPath }) {
                     );
                   })}
               </ul>
+            </div>
+            <div className="p-4">
+              <Link
+                target="_blank"
+                href="https://docs.bcaprotocol.org/get-started"
+                className="flex items-center px-4 py-3 text-sm group rounded-xl text-fuchsia-600 hover:text-white hover:bg-purple-800 border-fuchsia-900 gap-x-2"
+              >
+                <BookOpenIcon
+                  className="w-5 h-5 text-fuchsia-600 group-hover:text-white-400 shrink-0"
+                  aria-hidden="true"
+                />
+                <div className="flex flex-col">
+                  <p className="font-bold">Docs</p>
+                  <p>Get started</p>
+                </div>
+              </Link>
             </div>
           </div>
           <div className="flex items-center justify-center w-full mt-8">
