@@ -10,7 +10,7 @@ const TaskList = ({ user, userData, sendEmailVerification }) => {
         <li className="mb-4 font-bold">Available tasks</li>
 
         {/* Connect Wallet */}
-        <li
+        {/* <li
           className={classNames(
             "flex flex-row items-center justify-between p-2 border border-fuchsia-600 rounded-xl",
             userData.completedTasks?.hasOwnProperty("generateCookie")
@@ -40,7 +40,7 @@ const TaskList = ({ user, userData, sendEmailVerification }) => {
               <span className="w-1/5 text-sm text-gray-100">50,000 Points</span>
             </>
           )}
-        </li>
+        </li> */}
         {/* End of Connect Wallet */}
 
         {/* Verify email */}
@@ -99,12 +99,11 @@ const TaskList = ({ user, userData, sendEmailVerification }) => {
         <li className="w-full text-sm lg:absolute text-gray-100/35 bottom-2">
           <div class="flex flex-col group">
             <span className="hidden group-hover:block text-fuchsia-100/60">
-              A snapshot will be made from the AI-cookie smart contract.
+              A snapshot will be made from the<br /> AI-cookie smart contract.
             </span>
-            <span className="">BCA Token pre-sale access</span>{" "}
-            <span className="cursor-pointer">
-              ONLY for the Top <strong>500 Contributors</strong> and their
-              referral network{" "}
+            <span className="underline cursor-pointer">
+              <strong>Tier 3</strong> Contributors are eligible for{" "}
+              <strong>AIRDROP</strong>
             </span>
           </div>
         </li>
