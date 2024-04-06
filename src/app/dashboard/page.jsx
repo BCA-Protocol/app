@@ -3,66 +3,31 @@ import { auth } from "@/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import {
-  getUserByUUID,
-  getUserActivity,
-  getGlobalSettings,
-} from "@/utils/utils";
+import { getUserByUUID, getUserActivity } from "@/utils/utils";
 import { formatLargeNumber } from "@/utils/helper";
 import { sendEmailVerification } from "firebase/auth";
 import ReferalChart from "@/components/ReferalChart";
 import TaskList from "@/components/TaskList";
 import Loader from "@/components/loader";
+import logo from "/public/logo-small.png";
 import Notification from "@/components/notifications/notification";
+import Image from "next/image";
+import { Web3Provider } from "@/providers/Web3Provider";
+import ConnectAndCollectButton from "@/components/ConnectAndCollectButton";
+
+import baseLogo from "/public/chains/base.png";
+import arbitrumLogo from "/public/chains/arbitrum.png";
+import bnbLogo from "/public/chains/bnb.png";
+import optimismLogo from "/public/chains/optimism.png";
 
 export default function Page() {
   const [user] = useAuthState(auth);
   const [userData, setUserData] = useState(null);
-  const [globalSettings, setGlobalSettings] = useState(null);
   const [loading, setLoading] = useState(false);
   const [notification, setNotification] = useState(null);
   const [userActivity, setUserActivity] = useState([]);
 
-  const actualNumber = globalSettings?.protocolPoints || 1234567;
-  const startNumber = Math.max(actualNumber - 100000, 0);
-  const [displayNumber, setDisplayNumber] = useState(startNumber);
-  const displayNumberRef = useRef(startNumber);
-
   const router = useRouter();
-
-  useEffect(() => {
-    const updateNumber = () => {
-      // Stop if we've reached or exceeded the actual number
-      if (displayNumberRef.current >= actualNumber) {
-        return;
-      }
-
-      // Generate a random increment amount between 1000 and 5000
-      const incrementAmount =
-        Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
-      const newNumber = Math.min(
-        displayNumberRef.current + incrementAmount,
-        actualNumber
-      );
-
-      // Update state and ref
-      setDisplayNumber(newNumber);
-      displayNumberRef.current = newNumber;
-
-      // Generate a random interval duration between 1000ms (1 second) and 10000ms (9 seconds)
-      const timeoutDuration =
-        Math.floor(Math.random() * (10000 - 1000 + 1)) + 1000;
-
-      // Schedule the next update
-      setTimeout(updateNumber, timeoutDuration);
-    };
-
-    // Start the animation
-    updateNumber();
-
-    // Because we're using setTimeout recursively, there's no direct cleanup required here.
-    // If needed, you could return a cleanup function to cancel the timeout if the component unmounts.
-  }, [actualNumber]);
 
   useEffect(() => {
     const fetchIncompleteTasks = async () => {
@@ -75,9 +40,6 @@ export default function Page() {
         const userDataRes = await getUserByUUID(user.uid);
         // taskData && setIncompleteTasks(taskData);
         userDataRes && setUserData(userDataRes);
-
-        const globalSettingsData = await getGlobalSettings();
-        setGlobalSettings(globalSettingsData);
 
         const fullUserActivity = await getUserActivity(user.uid);
         setUserActivity(fullUserActivity);
@@ -126,35 +88,98 @@ export default function Page() {
       {userData && (
         <>
           <div className="px-2 pt-12">
-            <div className="text-center text-gray-100/35">
-              BCA Token coming soon! Start earning points and get Exclusive
-              Access.
-            </div>
-            <div className="gap-6 lg:grid lg:grid-cols-12">
-              <div className="order-first col-span-8 mt-4 lg:hidden">
-                <div className="flex flex-col p-4 shadow-sm align-items-center rounded-xl bg-gradient-to-l from-purple-800 to-indigo-900">
-                  <div className="text-center">
-                    <h2 className="text-4xl font-bold text-white">
-                      Protocol Growth{" "}
-                      <p className="text-transparent lg:inline-block bg-gradient-to-r from-red-600 via-yellow-500 to-red-600 bg-clip-text">
-                        {formatLargeNumber(displayNumber)} 🔥
-                      </p>
-                    </h2>
-                    <p className="mt-2 text-2xl font-bold text-white">
-                      you have got{" "}
-                      {formatLargeNumber(
-                        (userData.totalPoints || 0) +
-                          (userData.referralPoints || 0)
-                      )}{" "}
-                      points
-                    </p>
+            <div className="gap-4 lg:grid lg:grid-cols-3">
+              <div className="col-span-2 mb-4 lg:mb-0">
+                <div className="flex flex-col items-center justify-end w-full h-16 p-2 font-bold text-center text-gray-100/80">
+                  <span>Train AI with your own data</span>
+                  <span>Completely decentralized and in your control</span>
+                </div>
+                <div className="flex flex-col p-4 shadow-sm lg:h-48 align-items-center rounded-xl bg-gradient-to-l from-purple-800 to-indigo-900">
+                  <div className="py-2 mb-2 font-semibold text-white">
+                    Earnings
                   </div>
-                  <p className="mt-6 text-lg text-center text-purple-200">
-                    Verify your data, earn points &rarr;
-                  </p>
+                  <div class="lg:grid lg:grid-cols-2 gap-6">
+                    <div className="p-6 mb-4 bg-black/50 rounded-xl lg:mb-0 bca-retro">
+                      <div className="flex">
+                        <div className="flex flex-col items-start justify-center w-1/3 pr-8 text-xl font-bold text-white">
+                          <span>Total</span>
+                          <span>Earnings</span>
+                        </div>
+                        <div className="flex items-center justify-center w-2/3 space-x-2 text-3xl font-bold text-white">
+                          <span className="p-1 bg-black border rounded-full border-fuchsia-700 animate-pulse">
+                            <Image
+                              src={logo}
+                              alt="Logo"
+                              width={18}
+                              height={18}
+                            />
+                          </span>
+                          <p>
+                            {formatLargeNumber(
+                              (userData.totalPoints || 0) +
+                                (userData.referralPoints || 0)
+                            )}{" "}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="p-6 rounded-xl bg-fuchsia-900/50 bca-retro">
+                      <div className="flex">
+                        <div className="flex flex-col items-center justify-center w-1/3 pr-8 text-xl font-semibold text-white">
+                          <span>Referral</span>
+                          <span>Earnings</span>
+                        </div>
+                        <div className="flex items-center justify-center w-2/3 space-x-2 text-3xl font-bold text-white">
+                          <span className="p-1 bg-black border rounded-full border-fuchsia-700 animate-pulse">
+                            <Image
+                              src={logo}
+                              alt="Logo"
+                              width={18}
+                              height={18}
+                            />
+                          </span>
+                          <p>
+                            {formatLargeNumber(userData.referralPoints || 0)}{" "}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-2 ml-2 text-xs text-gray-400">
+                  * points will be converted into BCA tokens
                 </div>
               </div>
+              <div className="">
+                <div>
+                  <div className="flex flex-col items-center justify-end p-2 text-sm font-normal text-center lg:h-16 text-gray-500/80">
+                    <span>Audited by SecuryX 🔐</span>
+                  </div>
+                  <div className="flex flex-col h-48 p-4 shadow-sm align-items-center rounded-xl bg-gradient-to-l from-purple-800 to-indigo-900">
+                    <Web3Provider className="w-full cursor-pointer hover:-translate-y-1">
+                      <ConnectAndCollectButton userData={userData} />
+                    </Web3Provider>
+                  </div>
 
+                  <div className="inline-flex items-center justify-center w-full pt-2 space-x-2">
+                    <p className="text-xs text-gray-300">Supported on:</p>
+                    <Image
+                      src={arbitrumLogo}
+                      alt="Arbitrum"
+                      className="max-w-4"
+                    />
+                    <Image src={baseLogo} alt="Base" className="max-w-4" />
+                    <Image src={bnbLogo} alt="BNB" className="max-w-4" />
+                    <Image
+                      src={optimismLogo}
+                      alt="Optimism"
+                      className="max-w-4"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="gap-4 lg:grid lg:grid-cols-12">
               <div className="mt-4 col-span-4 min-h-[250] h-[250]">
                 <TaskList
                   sendEmailVerification={handleTask}
@@ -164,28 +189,6 @@ export default function Page() {
               </div>
 
               <div className="order-first col-span-8 mt-4">
-                <div className="flex-col hidden p-4 shadow-sm lg:flex align-items-center rounded-xl bg-gradient-to-l from-purple-800 to-indigo-900">
-                  <div className="text-center">
-                    <h2 className="text-4xl font-bold text-white">
-                      Protocol Growth{" "}
-                      <p className="text-transparent lg:inline-block bg-gradient-to-r from-red-600 via-yellow-500 to-red-600 bg-clip-text">
-                        {formatLargeNumber(displayNumber)} 🔥
-                      </p>
-                    </h2>
-                    <p className="mt-2 text-2xl font-bold text-white">
-                      you have got{" "}
-                      {formatLargeNumber(
-                        (userData.totalPoints || 0) +
-                          (userData.referralPoints || 0)
-                      )}{" "}
-                      points
-                    </p>
-                  </div>
-                  <p className="mt-6 text-lg text-center text-purple-200">
-                    Verify your data, earn points &rarr;
-                  </p>
-                </div>
-
                 <div className="mt-2">
                   <ReferalChart userActivity={userActivity} />
                 </div>
