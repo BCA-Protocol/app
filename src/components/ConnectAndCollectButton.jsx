@@ -4,6 +4,12 @@ import { ConnectKitButton } from "connectkit";
 import { ConnectKitProvider } from "connectkit";
 import { useEffect, useState, useRef } from "react";
 import { useAccount, useWriteContract } from "wagmi";
+import Image from "next/image";
+
+import baseLogo from "/public/chains/base.png";
+import arbitrumLogo from "/public/chains/arbitrum.png";
+import bnbLogo from "/public/chains/bnb.png";
+import optimismLogo from "/public/chains/optimism.png";
 
 const ConnectAndCollectButton = ({ userData }) => {
   const [address, setAddress] = useState(null);
@@ -42,8 +48,8 @@ const ConnectAndCollectButton = ({ userData }) => {
   };
 
   const connectKitOptions = {
-    initialChainId: 0
-  }
+    initialChainId: 0,
+  };
 
   useEffect(() => {
     if (
@@ -110,43 +116,55 @@ const ConnectAndCollectButton = ({ userData }) => {
   }, [isSuccess, error]);
 
   return (
-    <>
-      {isLoading ? (
-        <div className="text-lg text-white">Completing task...</div>
-      ) : (
-        <div className="flex flex-col items-start justify-start w-2/3 space-y-2">
-          {isConnected &&
-            userData.completedTasks?.hasOwnProperty("generateCookie") ==
-              false && (
-              <button
-                disabled={pendingTransaction === true}
-                className="min-h-10 py-1 text-base px-2 text-white transition w-full duration-500 ease-in-out transform shadow-lg cursor-pointer disabled:bg-[#383838] disabled:text-[#686868] bg-fuchsia-700 rounded-lg"
-                onClick={doWrite}
-              >
-                Generate AI-smart cookie
-              </button>
+    <div className="flex flex-col items-center justify-center h-full">
+      <div className="p-2 text-2xl font-light text-center text-white">
+        {isConnected ? <>🎉 You are earning</> : <>Connect and earn</>}
+      </div>
+      <div className="items-center justify-center text-center">
+        {isLoading ? (
+          <div className="text-lg text-white">Completing task...</div>
+        ) : (
+          <div className="flex flex-col items-center justify-center w-full space-y-2">
+            {isConnected &&
+              userData.completedTasks?.hasOwnProperty("generateCookie") ==
+                false && (
+                <button
+                  disabled={pendingTransaction === true}
+                  className="bca-retro min-h-10 py-1 text-base px-2 text-white transition duration-500 ease-in-out transform cursor-pointer disabled:bg-[#383838] disabled:text-[#686868] bg-fuchsia-700 rounded-lg"
+                  onClick={doWrite}
+                >
+                  Generate AI-smart cookie
+                </button>
+              )}
+            {pendingTransaction ? (
+              <div>Pending...</div>
+            ) : (
+              <div className="flex flex-col items-center justify-center space-y-4">
+                <div disabled={pendingTransaction}>
+                  <ConnectKitProvider
+                    onConnect={({ address }) => setAddress(address)}
+                    onDisconnect={() => setAddress(null)}
+                    options={connectKitOptions}
+                  >
+                    <ConnectKitButton
+                      theme="retro"
+                      mode="auto"
+                      label="Connect your wallet"
+                      className="hover:-translate-y-1"
+                    />
+                  </ConnectKitProvider>
+                </div>
+                {!isConnected && (
+                  <span className="text-xs text-gray-300">
+                    * when you connect your wallet no transaction is executed
+                  </span>
+                )}
+              </div>
             )}
-          {pendingTransaction ? (
-            <div>Pending...</div>
-          ) : (
-            <div disabled={pendingTransaction}>
-              <ConnectKitProvider
-                onConnect={({ address }) => setAddress(address)}
-                onDisconnect={() => setAddress(null)}
-                options={connectKitOptions}
-              >
-                <ConnectKitButton
-                  theme="auto"
-                  mode="dark"
-                  label="Generate AI-smart cookie"
-                  className="hover:-translate-y-1"
-                />
-              </ConnectKitProvider>
-            </div>
-          )}
-        </div>
-      )}
-    </>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 
