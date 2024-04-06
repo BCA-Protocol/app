@@ -27,3 +27,7 @@ html[data-theme="custom"] {
     --border-primary: rgba(173, 104, 243, .72);
     
     }
+
+.bca-retro {
+    box-shadow: rgb(0, 0, 0) -4px 4px 0px 0px;
+}
