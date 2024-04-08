@@ -1,15 +1,11 @@
 import { abi } from "@/resources/abi";
-import { handleTaskCompletion } from "@/utils/utils";
+import { handleTaskCompletion, toggleCollecting } from "@/utils/utils";
 import { ConnectKitButton } from "connectkit";
 import { ConnectKitProvider } from "connectkit";
 import { useEffect, useState, useRef } from "react";
-import { useAccount, useWriteContract } from "wagmi";
-import Image from "next/image";
-
-import baseLogo from "/public/chains/base.png";
-import arbitrumLogo from "/public/chains/arbitrum.png";
-import bnbLogo from "/public/chains/bnb.png";
-import optimismLogo from "/public/chains/optimism.png";
+import { useAccount, useReadContract, useWriteContract } from "wagmi";
+import { ArrowPathIcon } from "@heroicons/react/24/outline";
+import { formatLargeNumber } from "@/utils/helper";
 
 const ConnectAndCollectButton = ({ userData }) => {
   const [address, setAddress] = useState(null);
@@ -19,31 +15,74 @@ const ConnectAndCollectButton = ({ userData }) => {
     chainId,
     connector,
     isConnected,
+    isConnecting: walletIsConnecting,
   } = useAccount();
   const contractAddress = process.env.NEXT_PUBLIC_SMART_CONTRACT_ADDRESS;
-  const { writeContract, isLoading, isSuccess, error, isPending } =
-    useWriteContract();
+  const {
+    writeContract,
+    isLoading,
+    isSuccess,
+    error: theError,
+    isError,
+    isPending,
+  } = useWriteContract();
   const prevAccountAddressRef = useRef();
-
   const [pendingTransaction, setPendingTransaction] = useState(false);
+  const [blockPoints, setBlockPoints] = useState(0);
 
-  // const {
-  //   data: result,
-  //   isError,
-  //   isLoading,
-  // } = useReadContract({
-  //   abi: abi,
-  //   address: contractAddress,
-  //   functionName: "getUserPoints",
-  //   args: ["0x5B38Da6a701c568545dCfcB03FcB875f56beddC4"],
-  // });
+  const [methodStart, setMethodStart] = useState(false);
+  const [methodStop, setMethodStop] = useState(false);
+  const [userCollecting, setUserCollecting] = useState(userData.collecting);
 
-  const doWrite = () => {
+  const {
+    data: readData,
+    isSuccess: readSuccess,
+    isError: readError,
+    refetch: readRefetch,
+  } = useReadContract({
+    abi,
+    address: contractAddress,
+    functionName: "getUserPoints",
+    args: [accountAddress],
+    query: {
+      enabled: false,
+    },
+  });
+
+  useEffect(() => {
+    if (readData && readSuccess) {
+      setBlockPoints(readData);
+    }
+  }, [readData, readSuccess]);
+
+  setTimeout(() => {
+    // console.log("Refetching...");
+    readRefetch();
+  }, 20000);
+
+  console.log("Method stop", methodStop);
+  console.log("Method start", methodStart);
+
+  const doStartCollecting = () => {
+    console.log(methodStart, methodStop);
+    if (methodStart || methodStop) return;
+    setMethodStart(true);
     setPendingTransaction(true);
     writeContract({
       abi,
       address: contractAddress,
       functionName: "startDataCollection",
+    });
+  };
+
+  const doStopCollecting = () => {
+    if (methodStart || methodStop) return;
+    setMethodStop(true);
+    setPendingTransaction(true);
+    writeContract({
+      abi,
+      address: contractAddress,
+      functionName: "stopDataCollection",
     });
   };
 
@@ -58,89 +97,150 @@ const ConnectAndCollectButton = ({ userData }) => {
       accountAddress
     ) {
       if (pendingTransaction !== true) {
-        if (
-          userData.completedTasks?.hasOwnProperty("generateCookie") === false
-        ) {
+        if (userCollecting === false) {
           console.log(
             "Wallet connected, attempting to generate cookie and register on the blockchain"
           );
           if (pendingTransaction !== true) {
             setPendingTransaction(true);
             console.log("Processing cookie generation...");
-            setTimeout(() => doWrite(), 500);
+            setTimeout(() => doStartCollecting(), 500);
           }
         }
       }
     }
     prevAccountAddressRef.current = accountAddress;
+
+    if (!blockPoints && accountAddress) {
+      readRefetch();
+    }
+
+    // when the address is gone - user is disconnected, so set balance to 0
+    if (!accountAddress) {
+      setBlockPoints(0);
+    }
   }, [accountAddress]);
 
   useEffect(() => {
+    if (isPending) return;
+    console.log("Success, start, stop ", isSuccess, methodStart, methodStop);
     if (isSuccess) {
-      const handlePostCookieGeneration = async () => {
-        try {
-          const taskCompletion = await handleTaskCompletion(
-            userData.userId,
-            "generateCookie",
-            {
-              walletData: {
-                address: accountAddress ?? address ?? "unknown",
-                chain: chain?.name ?? "unknown",
-                chainId: chainId ?? "unknown",
-              },
+      if (methodStart) {
+        console.log("From starting");
+        // start collecting
+        const handlePostStartCollecting = async () => {
+          try {
+            // the user may have generated the cookie earlier we may wanna start it
+            console.log("Handling completion");
+            const taskCompletion = await handleTaskCompletion(
+              userData.userId,
+              "generateCookie",
+              {
+                collecting: true,
+                walletData: {
+                  address: accountAddress ?? address ?? "unknown",
+                  chain: chain?.name ?? "unknown",
+                  chainId: chainId ?? "unknown",
+                },
+              }
+            );
+            // force collecting
+            const { status, newUserData } = await toggleCollecting(
+              userData.userId,
+              true
+            );
+            if (status || taskCompletion) {
+              setUserCollecting(true);
+              const maxAge = new Date(
+                "Fri, 31 Dec 9999 23:59:59 GMT"
+              ).toUTCString();
+              document.cookie = `BCAID=${encodeURIComponent(
+                userData.userId
+              )}; expires=${maxAge}; path=/; Secure; SameSite=None`;
+            } else {
+              console.log("Error generating cookie");
             }
-          );
-          if (taskCompletion) {
-            const maxAge = new Date(
-              "Fri, 31 Dec 9999 23:59:59 GMT"
-            ).toUTCString();
-            document.cookie = `BCAID=${encodeURIComponent(
-              userData.userId
-            )}; expires=${maxAge}; path=/; Secure; SameSite=None`;
-            window.location.reload();
-          } else {
-            console.log("Error generating cookie");
+            setPendingTransaction(false);
+            setMethodStart(false);
+          } catch (error) {
+            console.error("Error generating cookie:", error);
           }
-        } catch (error) {
-          console.error("Error generating cookie:", error);
-        }
-      };
+        };
+        handlePostStartCollecting();
+      }
 
-      handlePostCookieGeneration();
+      if (methodStop) {
+        console.log("From Stopping");
+        // stop collecting
+        const handlePostStopCollecting = async () => {
+          // remove our cookie
+          const { status, newUserData } = await toggleCollecting(
+            userData.userId,
+            false
+          );
+          setUserCollecting(false);
+          document.cookie =
+            "BCAID=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; Secure; SameSite=None";
+          setPendingTransaction(false);
+          setMethodStop(false);
+        };
+        handlePostStopCollecting();
+      }
     }
 
-    if (error !== undefined && error !== null) {
-      console.log("Cookie generation rejected by user", error);
+    if (theError !== undefined && theError !== null) {
+      console.log("Cookie generation rejected by user", isError);
       setPendingTransaction(false);
+      setMethodStart(false);
+      setMethodStop(false);
+      console.log(theError);
     }
-  }, [isSuccess, error]);
+  }, [isSuccess, isError, theError, isPending]);
 
+  // console.log(blockPoints);
+  // console.log("pending", pendingTransaction);
   return (
     <div className="flex flex-col items-center justify-center h-full">
-      <div className="p-2 text-2xl font-light text-center text-white">
-        {isConnected ? <>🎉 You are earning</> : <>Connect and earn</>}
+      <div className="p-1 text-base font-light text-center text-white">
+        {isConnected && userCollecting ? (
+          <>🎉 You are earning</>
+        ) : (
+          <span className="text-lg font-bold">Connect and earn</span>
+        )}{" "}
       </div>
+      {blockPoints > 0 && userCollecting && (
+        <div className="pb-2 text-lg font-light text-center text-white">
+          You have <strong>{formatLargeNumber(blockPoints.toString())}</strong>{" "}
+          smart cookie points
+        </div>
+      )}
       <div className="items-center justify-center text-center">
         {isLoading ? (
           <div className="text-lg text-white">Completing task...</div>
         ) : (
-          <div className="flex flex-col items-center justify-center w-full space-y-2">
-            {isConnected &&
-              userData.completedTasks?.hasOwnProperty("generateCookie") ==
-                false && (
+          <div className="flex flex-col items-center justify-center w-full space-y-4">
+            {isConnected && !userCollecting && (
+              <div>
                 <button
                   disabled={pendingTransaction === true}
                   className="bca-retro min-h-10 py-1 text-base px-2 text-white transition duration-500 ease-in-out transform cursor-pointer disabled:bg-[#383838] disabled:text-[#686868] bg-fuchsia-700 rounded-lg"
-                  onClick={doWrite}
+                  onClick={doStartCollecting}
                 >
-                  Generate AI-smart cookie
+                  Generate Smart Cookie
                 </button>
-              )}
+                <p className="items-center justify-center py-1 text-xs text-center text-white">
+                  *this will initiate a transaction
+                </p>
+              </div>
+            )}
             {pendingTransaction ? (
-              <div>Pending...</div>
+              <div className="inline-flex items-center justify-center space-x-2 text-white">
+                <ArrowPathIcon className="w-5 h-5 animate-spin" />
+                <p>Pending...</p>
+              </div>
             ) : (
-              <div className="flex flex-col items-center justify-center space-y-4">
-                <div disabled={pendingTransaction}>
+              <div className="flex flex-col items-center justify-center space-y-1">
+                <div disabled={pendingTransaction || walletIsConnecting}>
                   <ConnectKitProvider
                     onConnect={({ address }) => setAddress(address)}
                     onDisconnect={() => setAddress(null)}
@@ -149,7 +249,11 @@ const ConnectAndCollectButton = ({ userData }) => {
                     <ConnectKitButton
                       theme="retro"
                       mode="auto"
-                      label="Connect your wallet"
+                      label={
+                        walletIsConnecting
+                          ? "Connecting..."
+                          : "Connect your wallet"
+                      }
                       className="hover:-translate-y-1"
                     />
                   </ConnectKitProvider>
@@ -158,6 +262,23 @@ const ConnectAndCollectButton = ({ userData }) => {
                   <span className="text-xs text-gray-300">
                     * when you connect your wallet no transaction is executed
                   </span>
+                )}
+
+                {isConnected && userCollecting && (
+                  <div className="cursor-pointer group">
+                    <button
+                      disabled={pendingTransaction === true}
+                      className="px-2 pt-2 text-sm text-purple-600 underline cursor-pointer group-hover:text-white"
+                      onClick={doStopCollecting}
+                    >
+                      Disconnect and stop earning ℹ️
+                    </button>
+                    <div className="h-6">
+                      <p className="items-center justify-center hidden text-xs text-center text-white group-hover:flex">
+                        *this will initiate a transaction
+                      </p>
+                    </div>
+                  </div>
                 )}
               </div>
             )}
