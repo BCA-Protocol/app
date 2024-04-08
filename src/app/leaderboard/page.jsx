@@ -1,28 +1,38 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { getTopUsers } from "@/utils/utils";
+import { useEffect, useState } from "react";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
 import { formatLargeNumber } from "@/utils/helper";
+import { getFunctions, httpsCallable } from "firebase/functions";
 
 export default function Page() {
   const [users, setUsers] = useState([]);
-  const [lastDoc, setLastDoc] = useState(null);
+  const [lastUser, setLastUser] = useState(null);
   const [usersLoading, setUsersLoading] = useState(false);
-  const [isInZeroPointsPhase, setIsInZeroPointsPhase] = useState(false);
 
   const fetchUsers = async () => {
     setUsersLoading(true);
-    try {
-      const {
-        users: newUsers,
-        lastDoc: newLastDoc,
-        isInZeroPointsPhase: newIsInZeroPointsPhase,
-      } = await getTopUsers(lastDoc, isInZeroPointsPhase);
 
-      setUsers((prev) => [...prev, ...newUsers]);
-      setLastDoc(newLastDoc);
-      setIsInZeroPointsPhase(newIsInZeroPointsPhase); // Update the phase based on the function response
+    try {
+      const functions = getFunctions();
+      const fetchLeaderboard = httpsCallable(
+        functions,
+        "fetchPaginatedLeaderboard"
+      );
+
+      // Prepare the data object with pagination parameters
+      const paginationData = lastUser
+        ? {
+            lastOverallPoints: lastUser.overallPoints,
+            lastCreated: lastUser.created,
+          }
+        : {};
+
+      const result = await fetchLeaderboard(paginationData);
+      const { users: newUsers, lastUser: newLastUser } = result.data;
+
+      setUsers((prevUsers) => [...prevUsers, ...newUsers]);
+      setLastUser(newLastUser);
     } catch (error) {
       console.error("Failed to fetch users:", error);
     } finally {
@@ -79,22 +89,23 @@ export default function Page() {
                         className="font-medium text-gray-900 lg:px-6 whitespace-nowrap "
                       >
                         <div className="flex items-center justify-start space-x-2">
-                          <UserCircleIcon className="w-12 h-12 text-fuchsia-600/35" />
+                          <UserCircleIcon className="w-10 h-10 text-fuchsia-600/35" />
                           <div className="">
                             <div className="overflow-hidden text-base font-semibold text-fuchsia-700 max-w-24 lg:max-w-[600px]">
                               {user.displayName}
-                            </div>
-                            <div className="font-normal text-gray-600 overflow-hidden max-w-24 lg:max-w-[600px]">
-                              @{user.displayName}
                             </div>
                           </div>
                         </div>
                       </td>
                       <td className="text-gray-100 lg:px-6 lg:py-4">
-                        {formatLargeNumber((user.totalPoints || 0) + (user.referralPoints || 0))}
+                        {formatLargeNumber(
+                          (user.totalPoints || 1) -
+                            1 +
+                            ((user.referralPoints || 1) - 1)
+                        )}
                       </td>
                       <td className="text-gray-100 lg:px-6 lg:py-4">
-                        {formatLargeNumber(user.referralPoints || 0)}
+                        {formatLargeNumber((user.referralPoints || 1) - 1)}
                       </td>
                     </tr>
                   ))}
