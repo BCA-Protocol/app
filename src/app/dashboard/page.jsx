@@ -2,7 +2,7 @@
 import { auth } from "@/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { getUserByUUID, getUserActivity } from "@/utils/utils";
 import { formatLargeNumber } from "@/utils/helper";
 import { sendEmailVerification } from "firebase/auth";
@@ -98,7 +98,7 @@ export default function Page() {
                   <div className="py-2 mb-2 font-semibold text-white">
                     Earnings
                   </div>
-                  <div class="lg:grid lg:grid-cols-2 gap-6">
+                  <div className="gap-6 lg:grid lg:grid-cols-2">
                     <div className="p-6 mb-4 bg-black/50 rounded-xl lg:mb-0 bca-retro">
                       <div className="flex">
                         <div className="flex flex-col items-start justify-center w-1/3 pr-8 text-xl font-bold text-white">
@@ -116,8 +116,9 @@ export default function Page() {
                           </span>
                           <p>
                             {formatLargeNumber(
-                              (userData.totalPoints || 0) +
-                                (userData.referralPoints || 0)
+                              (userData.totalPoints || 1) -
+                                1 +
+                                ((userData.referralPoints || 1) - 1)
                             )}{" "}
                           </p>
                         </div>
@@ -139,7 +140,9 @@ export default function Page() {
                             />
                           </span>
                           <p>
-                            {formatLargeNumber(userData.referralPoints || 0)}{" "}
+                            {formatLargeNumber(
+                              (userData.referralPoints || 1) - 1
+                            )}{" "}
                           </p>
                         </div>
                       </div>
