@@ -63,48 +63,19 @@ export async function getAllTasks() {
   }
 }
 
-export async function getTopUsers(
-  lastVisible = null,
-  isInZeroPointsPhase = false
-) {
+export async function getTopUsers(lastVisible = null) {
   try {
     const usersCollection = collection(db, "users");
     let q;
 
-    // Determine if the query should start in the zero points phase or not
-    if (isInZeroPointsPhase) {
-      // For users with 0 points, order by 'displayName'
-      q = lastVisible
-        ? query(
-            usersCollection,
-            where("totalPoints", "==", 0), // Explicitly target users with 0 points
-            orderBy("displayName"),
-            startAfter(lastVisible),
-            limit(100)
-          )
-        : query(
-            usersCollection,
-            where("totalPoints", "==", 0), // Explicitly target users with 0 points
-            orderBy("displayName"),
-            limit(100)
-          );
-    } else {
-      // For users with > 0 points, order by 'totalPoints' and 'referralPoints'
-      q = lastVisible
-        ? query(
-            usersCollection,
-            orderBy("totalPoints", "desc"),
-            orderBy("referralPoints", "desc"),
-            startAfter(lastVisible),
-            limit(100)
-          )
-        : query(
-            usersCollection,
-            orderBy("totalPoints", "desc"),
-            orderBy("referralPoints", "desc"),
-            limit(100)
-          );
-    }
+    q = lastVisible
+      ? query(
+          usersCollection,
+          orderBy("overallPoints", "desc"),
+          startAfter(lastVisible),
+          limit(100)
+        )
+      : query(usersCollection, orderBy("overallPoints", "desc"), limit(100));
 
     const usersSnapshot = await getDocs(q);
 
@@ -113,35 +84,9 @@ export async function getTopUsers(
       ...doc.data(),
     }));
 
-    // If not initially in zero points phase and fetched users are less than 100, fetch additional users with 0 points
-    if (!isInZeroPointsPhase && users.length < 100) {
-      const additionalUsersNeeded = 100 - users.length;
-      const zeroPointsQuery = query(
-        usersCollection,
-        where("totalPoints", "==", 0),
-        orderBy("displayName"),
-        limit(additionalUsersNeeded)
-      );
-
-      const additionalSnapshot = await getDocs(zeroPointsQuery);
-      const additionalUsers = additionalSnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-
-      users = [...users, ...additionalUsers]; // Combine both sets of users
-      // Update lastVisible to the last fetched document, if any
-      lastVisible =
-        additionalUsers.length > 0
-          ? additionalSnapshot.docs[additionalSnapshot.docs.length - 1]
-          : lastVisible;
-      // Update isInZeroPointsPhase based on whether additional users were fetched
-      isInZeroPointsPhase = additionalUsers.length > 0;
-    }
-
     const lastDoc =
       usersSnapshot.docs[usersSnapshot.docs.length - 1] || lastVisible;
-    return { users, lastDoc, isInZeroPointsPhase };
+    return { users, lastDoc };
   } catch (error) {
     console.error("Error getting top users:", error);
     throw error;
@@ -274,33 +219,35 @@ export async function addPointsToUser(uuid, pointsToAdd, description, type) {
     }
 
     const userDoc = userSnapshot.docs[0].ref;
+    const newPoints = parseInt(Math.floor(pointsToAdd));
 
     // Update the totalPoints field by adding the specified points
     if (type == "Referral") {
       await updateDoc(userDoc, {
         referralPoints:
-          (userSnapshot.docs[0].data().referralPoints || 0) +
-          parseInt(Math.floor(pointsToAdd)),
+          (userSnapshot.docs[0].data().referralPoints || 0) + newPoints,
+        overallPoints:
+          (userSnapshot.docs[0].data().overallPoints || 0) + newPoints,
       });
     } else {
       await updateDoc(userDoc, {
-        totalPoints:
-          (userSnapshot.docs[0].data().totalPoints || 0) +
-          parseInt(Math.floor(pointsToAdd)),
+        totalPoints: (userSnapshot.docs[0].data().totalPoints || 0) + newPoints,
+        overallPoints:
+          (userSnapshot.docs[0].data().overallPoints || 0) + newPoints,
       });
     }
 
     // Add a new record to the usersPoints collection
     await addDoc(usersPointsCollection, {
       userId: uuid,
-      points: pointsToAdd,
+      points: newPoints,
       description: description,
       created: Timestamp.now(),
     });
 
     // update global points here
     updateDoc(settingsDocRef, {
-      protocolPoints: increment(parseInt(Math.floor(pointsToAdd))),
+      protocolPoints: increment(newPoints),
     });
 
     // Optionally, you can fetch and return the updated user data
@@ -310,6 +257,32 @@ export async function addPointsToUser(uuid, pointsToAdd, description, type) {
     return { success: true, user: updatedUser };
   } catch (error) {
     console.error("Error adding points to user:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+export async function toggleCollecting(userId, flag) {
+  try {
+    const usersCollection = collection(db, "users");
+    const userQuery = query(usersCollection, where("userId", "==", userId));
+    const userSnapshot = await getDocs(userQuery);
+
+    if (userSnapshot.docs.length === 0) {
+      throw new Error("User not found");
+    }
+
+    const userDoc = userSnapshot.docs[0].ref;
+
+    await updateDoc(userDoc, {
+      collecting: flag,
+    });
+
+    const updatedUserSnapshot = await getDocs(userQuery);
+    const updatedUser = updatedUserSnapshot.docs[0].data();
+
+    return { success: true, user: updatedUser };
+  } catch (error) {
+    console.error("Error toggle collection:", error);
     return { success: false, error: error.message };
   }
 }
