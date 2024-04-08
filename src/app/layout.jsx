@@ -42,7 +42,7 @@ export default function RootLayout({ children }) {
         <link rel="apple-touch-icon" sizes="180I hax180" href="/favicon.png" />
         <meta name="theme-color" content="#ffffff" />
         {/* GTM Script */}
-        <Script strategy="afterInteractive">
+        <Script id="gtm-script" strategy="afterInteractive">
           {(function (w, d, s, l, i) {
             w[l] = w[l] || [];
             w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
