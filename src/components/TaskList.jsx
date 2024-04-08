@@ -97,7 +97,7 @@ const TaskList = ({ user, userData, sendEmailVerification }) => {
           <span className="w-1/5 text-sm font-bold">10,000 Points</span>
         </li>
         <li className="w-full text-sm lg:absolute text-gray-100/35 bottom-2">
-          <div class="flex flex-col group">
+          <div className="flex flex-col group">
             <span className="hidden group-hover:block text-fuchsia-100/60">
               A snapshot will be made from the<br /> AI-cookie smart contract.
             </span>
