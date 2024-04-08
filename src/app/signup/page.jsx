@@ -36,7 +36,9 @@ export default function Page() {
       const userRes = await addData("users", {
         userId: res.user.uid,
         displayName: displayName,
-        totalPoints: 0,
+        totalPoints: 1,
+        referralPoints: 1,
+        overallPoints: 2,
         referedBy: referalCode,
         completedTasks: {},
       });
