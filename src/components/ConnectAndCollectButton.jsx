@@ -223,7 +223,7 @@ const ConnectAndCollectButton = ({ userData }) => {
               <div>
                 <button
                   disabled={pendingTransaction === true}
-                  className="bca-retro min-h-10 py-1 text-base px-2 text-white transition duration-500 ease-in-out transform cursor-pointer disabled:bg-[#383838] disabled:text-[#686868] bg-fuchsia-700 rounded-lg"
+                  className="min-h-10 py-1 text-base font-semibold px-2 text-white transition duration-500 ease-in-out transform cursor-pointer disabled:bg-[#383838] disabled:text-[#686868] bg-purple-700 rounded-lg hover:bg-purple-900"
                   onClick={doStartCollecting}
                 >
                   Generate Smart Cookie
@@ -247,7 +247,7 @@ const ConnectAndCollectButton = ({ userData }) => {
                     options={connectKitOptions}
                   >
                     <ConnectKitButton
-                      theme="retro"
+                      theme="default"
                       mode="auto"
                       label={
                         walletIsConnecting
@@ -259,9 +259,14 @@ const ConnectAndCollectButton = ({ userData }) => {
                   </ConnectKitProvider>
                 </div>
                 {!isConnected && (
-                  <span className="text-xs text-gray-300">
-                    * when you connect your wallet no transaction is executed
-                  </span>
+                  <div className="flex flex-col pt-4">
+                    <span className="text-xs text-gray-300">
+                      * when you connect your wallet no transaction is executed
+                    </span>
+                    <span className="text-xs text-gray-300">
+                      You can disconnect at any time
+                    </span>
+                  </div>
                 )}
 
                 {isConnected && userCollecting && (

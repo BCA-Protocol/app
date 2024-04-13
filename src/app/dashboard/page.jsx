@@ -10,6 +10,10 @@ import ReferalChart from "@/components/ReferalChart";
 import TaskList from "@/components/TaskList";
 import Loader from "@/components/loader";
 import logo from "/public/logo-small.png";
+
+import mascotSad from "/public/m/1-small.png";
+import mascotLove from "/public/m/8-small.png";
+
 import Notification from "@/components/notifications/notification";
 import Image from "next/image";
 import { Web3Provider } from "@/providers/Web3Provider";
@@ -87,78 +91,90 @@ export default function Page() {
       )}
       {userData && (
         <>
-          <div className="px-2 pt-12">
+          <div className="px-2">
+            <div className="flex items-center justify-center w-full pt-0 text-center">
+              <div class="w-2/5 relative pt-0 z-10">
+                <div className="absolute block w-full border-2 border-b rounded-xl border-fuchsia-700 shrink-0 bg-fuchsia-700 bca-glow-top"></div>
+              </div>
+            </div>
             <div className="gap-4 lg:grid lg:grid-cols-3">
               <div className="col-span-2 mb-4 lg:mb-0">
-                <div className="flex flex-col items-center justify-end w-full h-16 p-2 font-bold text-center text-gray-100/80">
-                  <span>Train AI with your own data</span>
-                  <span>Completely decentralized and in your control</span>
+                <div className="flex flex-col items-center justify-center w-full h-16 px-32 py-32 space-y-6 font-bold text-center text-gray-100/80">
+                  <div className="flex flex-col items-start justify-center w-full text-6xl">
+                    <span>Train AI with</span>
+                    <span>your own data</span>
+                  </div>
+                  <div className="flex items-center justify-start w-full">
+                    <span className="text-xl font-normal">
+                      Completely decentralized and in your control
+                    </span>
+                  </div>
                 </div>
-                <div className="flex flex-col p-4 shadow-sm lg:h-48 align-items-center rounded-xl bg-gradient-to-l from-purple-800 to-indigo-900">
-                  <div className="py-2 mb-2 font-semibold text-white">
+                <div className="flex flex-col p-4 bg-[#250C3D] border-purple-950 border lg:h-48 align-items-center rounded-xl">
+                  <div className="mb-2 text-lg font-semibold text-white">
                     Earnings
                   </div>
                   <div className="gap-6 lg:grid lg:grid-cols-2">
-                    <div className="p-6 mb-4 bg-black/50 rounded-xl lg:mb-0 bca-retro">
-                      <div className="flex">
-                        <div className="flex flex-col items-start justify-center w-1/3 pr-8 text-xl font-bold text-white">
-                          <span>Total</span>
-                          <span>Earnings</span>
-                        </div>
-                        <div className="flex items-center justify-center w-2/3 space-x-2 text-3xl font-bold text-white">
-                          <span className="p-1 bg-black border rounded-full border-fuchsia-700 animate-pulse">
-                            <Image
-                              src={logo}
-                              alt="Logo"
-                              width={18}
-                              height={18}
-                            />
-                          </span>
-                          <p>
+                    <div className="flex items-center justify-start w-full px-6 py-4 mb-4 bg-purple-900 rounded-xl lg:mb-0 bca-purple-glow-inside">
+                      <div className="flex w-full">
+                        <div className="flex flex-col items-start justify-center w-1/2 pr-8 font-semibold text-white">
+                          <div className="flex flex-col w-1/2 text-base leading-5 text-purple-300">
+                            Total Earnings
+                          </div>
+                          <div className="text-3xl font-bold tracking-wide">
                             {formatLargeNumber(
                               (userData.totalPoints || 1) -
                                 1 +
                                 ((userData.referralPoints || 1) - 1)
                             )}{" "}
-                          </p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center justify-center object-contain w-1/2 space-x-2 text-3xl font-bold text-white">
+                          <Image src={mascotLove} alt="Logo" height={72} />
                         </div>
                       </div>
                     </div>
-                    <div className="p-6 rounded-xl bg-fuchsia-900/50 bca-retro">
-                      <div className="flex">
-                        <div className="flex flex-col items-center justify-center w-1/3 pr-8 text-xl font-semibold text-white">
-                          <span>Referral</span>
-                          <span>Earnings</span>
-                        </div>
-                        <div className="flex items-center justify-center w-2/3 space-x-2 text-3xl font-bold text-white">
-                          <span className="p-1 bg-black border rounded-full border-fuchsia-700 animate-pulse">
-                            <Image
-                              src={logo}
-                              alt="Logo"
-                              width={18}
-                              height={18}
-                            />
-                          </span>
-                          <p>
+
+                    <div className="flex items-center justify-start w-full px-6 py-4 mb-4 bg-fuchsia-700 rounded-xl lg:mb-0 bca-fuchsia-glow-inside">
+                      <div className="flex w-full">
+                        <div className="flex flex-col items-start justify-center w-1/2 pr-8 font-semibold text-white">
+                          <div className="flex flex-col w-1/2 text-base leading-5 text-purple-300">
+                            Referral Earnings
+                          </div>
+                          <div className="text-3xl font-bold tracking-wide">
                             {formatLargeNumber(
                               (userData.referralPoints || 1) - 1
                             )}{" "}
-                          </p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center justify-center object-contain w-1/2 space-x-2 text-3xl font-bold text-white">
+                          {(userData.referralPoints || 1) - 1 > 0 ? (
+                            <Image src={mascotLove} alt="Logo" height={72} />
+                          ) : (
+                            <Image src={mascotSad} alt="Logo" height={72} />
+                          )}
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="mt-2 ml-2 text-xs text-gray-400">
+                <div className="mt-2 ml-2 text-xs text-center text-gray-400">
                   * points will be converted into BCA tokens
                 </div>
               </div>
-              <div className="">
+              <div className="pt-48">
                 <div>
-                  <div className="flex flex-col items-center justify-end p-2 text-sm font-normal text-center lg:h-16 text-gray-500/80">
+                  <div className="flex flex-col items-center justify-end p-2 text-sm font-normal text-center lg:h-16 text-gray-300/80">
                     <span>Audited by SecuryX 🔐</span>
                   </div>
-                  <div className="flex flex-col h-48 p-4 shadow-sm align-items-center rounded-xl bg-gradient-to-l from-purple-800 to-indigo-900">
+                  <div className="flex flex-col h-48 px-4 shadow-sm align-items-center rounded-xl bg-[#250C3D] border-purple-950 border z-30 overflow-hidden">
+                    <div className="flex items-center justify-center w-full pt-0 text-center">
+                      <div class="w-2/5 relative pt-0 z-10">
+                        <div className="absolute block w-full border-2 border-b rounded-xl border-fuchsia-700 shrink-0 bg-fuchsia-700 bca-glow-top-small"></div>
+                      </div>
+                    </div>
                     <Web3Provider className="w-full cursor-pointer hover:-translate-y-1">
                       <ConnectAndCollectButton userData={userData} />
                     </Web3Provider>
@@ -192,7 +208,7 @@ export default function Page() {
               </div>
 
               <div className="order-first col-span-8 mt-4">
-                <div className="mt-2">
+                <div className="">
                   <ReferalChart userActivity={userActivity} />
                 </div>
               </div>

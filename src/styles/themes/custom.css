@@ -31,3 +31,51 @@ html[data-theme="custom"] {
 .bca-retro {
     box-shadow: rgb(0, 0, 0) -4px 4px 0px 0px;
 }
+
+.bca-glow-left {
+    box-shadow: rgb(162 28 175) 6px 0px 10px 3px;
+}
+
+.bca-glow-top {
+    box-shadow: rgba(163, 28, 175, 0.5) 0px -20px 1200px 160px;
+}
+.bca-glow-top-small {
+    box-shadow: rgba(163, 28, 175, 0.5) 0px 0px 200px 80px;
+}
+.bca-purple-glow-inside {
+    box-shadow: inset #B059C8 0px 3px 5px 0px;
+}
+.bca-fuchsia-glow-inside {
+    box-shadow: inset #D955D0 0px 3px 5px 0px;
+}
+.thin-line {
+    border-bottom-width: 0.01px;
+}
+
+.bca-glow-gold-inside {
+    box-shadow: inset #FCD5A1 0px 3px 5px 0px;
+}
+
+.bca-glow-silver-inside {
+    box-shadow: inset #D2D2D2 0px 3px 5px 0px;
+}
+
+.bca-glow-bronze-inside {
+    box-shadow: inset #EAC6C5 0px 3px 5px 0px;
+}
+
+.bca-glow-gold-outside {
+    box-shadow: #EAAE3E -5px 0px 20px 10px;
+}
+
+.bca-glow-silver-outside {
+    box-shadow: #A5A4A6 -5px 0px 20px 10px;
+}
+
+.bca-glow-bronze-outside {
+    box-shadow: #A1726B -5px 0px 20px 10px;
+}
+
+.bca-purple-row-glow-inside {
+    box-shadow: inset rgb(59 7 100) 0px 1px 5px 0px;
+}

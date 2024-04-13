@@ -6,8 +6,8 @@ import { formatTimestamp } from "@/utils/datetime";
 const TaskList = ({ user, userData, sendEmailVerification }) => {
   return (
     <div className="items-center justify-center w-full h-full text-center">
-      <ul className="relative h-full p-4 space-y-2 bg-black border border-fuchsia-700 rounded-xl text-fuchsia-700">
-        <li className="mb-4 font-bold">Available tasks</li>
+      <ul className="relative h-full p-4 space-y-2 bg-[#250C3D] border-purple-950 border rounded-xl text-fuchsia-700">
+        <li className="mb-4 font-bold text-fuchsia-200">Available Sources for Training AI</li>
 
         {/* Connect Wallet */}
         {/* <li

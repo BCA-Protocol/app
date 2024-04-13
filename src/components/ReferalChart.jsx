@@ -43,7 +43,7 @@ const EarningsChart = ({ userActivity }) => {
             text: "Earnings",
             align: "left",
             style: {
-              color: "#a21caf",
+              color: "#ffffff",
             },
           },
           grid: {
@@ -57,28 +57,28 @@ const EarningsChart = ({ userActivity }) => {
           yaxis: {
             labels: {
               style: {
-                colors: "#a21caf",
+                colors: "#E0ABF3",
               },
             },
             axisBorder: {
-              color: "#a21caf",
+              color: "#E0ABF3",
             },
             axisTicks: {
-              color: "#a21caf",
+              color: "#E0ABF3",
             },
           },
           xaxis: {
             categories: userActivity.days,
             labels: {
               style: {
-                colors: "#a21caf",
+                colors: "#E0ABF3",
               },
             },
             axisBorder: {
-              color: "#a21caf",
+              color: "#E0ABF3",
             },
             axisTicks: {
-              color: "#a21caf",
+              color: "#E0ABF3",
             },
           },
         },
@@ -87,10 +87,10 @@ const EarningsChart = ({ userActivity }) => {
   }, [userActivity]); // Rerun this effect if userActivity changes
 
   return (
-    <div>
+    <div className="bg-[#250C3D] border-purple-950 border rounded-xl">
       {chartData.series.length > 0 ? (
         <ReactApexCharts
-          className="py-6 bg-black rounded-xl"
+          className="py-6 bg-[#250C3D] rounded-xl"
           options={chartData.options}
           series={chartData.series}
           type="line"

@@ -26,7 +26,7 @@ const menuItems = [
   },
   {
     href: "/leaderboard",
-    title: "Leaderboard",
+    title: "Referral Program",
     icon: TrophyIcon,
   },
 ];
@@ -58,7 +58,7 @@ export default function SideBar({ currentPath }) {
       />
       <aside
         className={classNames(
-          "fixed inset-y-0 left-0 bg-[#131313] shadow-md w-60 z-40 lg:block",
+          "fixed inset-y-0 left-0 bg-gradient-to-r from-[#210D30] to-[#180924] shadow-md w-60 z-40 lg:block border-r border-purple-950",
           sidebarVisible ? "" : "hidden"
         )}
       >
@@ -86,16 +86,19 @@ export default function SideBar({ currentPath }) {
                           href={item.href}
                           className={classNames(
                             currentPath === item.href
-                              ? "bg-purple-900 text-white"
+                              ? "bg-purple-950 text-white relative"
                               : "",
-                            "group flex items-center rounded-xl font-semibold text-sm text-fuchsia-600 hover:text-white py-3 px-4 hover:bg-purple-800 border-fuchsia-900 gap-x-2"
+                            "group flex items-center rounded-xl font-normal text-sm text-fuchsia-200 hover:text-white py-3 px-3 hover:bg-purple-900 border-fuchsia-900 gap-x-2"
                           )}
                         >
+                          {currentPath === item.href && (
+                            <div className="absolute left-0.5 block w-0.5 py-3 bg-fuchsia-700 bca-glow-left"></div>
+                          )}
                           {IconElement && (
                             <IconElement
                               className={classNames(
-                                currentPath === item.href ? "" : "",
-                                "w-5 h-5 text-fuchsia-600 group-hover:text-white-400 shrink-0"
+                                currentPath === item.href ? "text-white" : "",
+                                "w-5 h-5 text-fuchsia-200 group-hover:text-white-400 shrink-0"
                               )}
                               aria-hidden="true"
                             />
@@ -107,19 +110,20 @@ export default function SideBar({ currentPath }) {
                   })}
               </ul>
             </div>
-            <div className="p-4">
+            <div className="p-4 lg:mt-36">
+              <div className="mb-6 border-purple-900 thin-line"></div>
               <Link
                 target="_blank"
                 href="https://docs.bcaprotocol.org/get-started"
-                className="flex items-center px-4 py-3 text-sm group rounded-xl text-fuchsia-600 hover:text-white hover:bg-purple-800 border-fuchsia-900 gap-x-2"
+                className="flex items-center px-4 py-2 text-sm group rounded-xl text-fuchsia-200 hover:text-white hover:bg-purple-900 gap-x-2"
               >
                 <BookOpenIcon
-                  className="w-5 h-5 text-fuchsia-600 group-hover:text-white-400 shrink-0"
+                  className="w-5 h-5 text-fuchsia-200 group-hover:text-white-400 shrink-0"
                   aria-hidden="true"
                 />
                 <div className="flex flex-col">
-                  <p className="font-bold">Docs</p>
-                  <p>Get started</p>
+                  <p className="text-sm font-semibold">Docs</p>
+                  <p className="text-xs">how to get started</p>
                 </div>
               </Link>
             </div>
@@ -139,13 +143,13 @@ export default function SideBar({ currentPath }) {
               className="cursor-pointer opacity-30 hover:opacity-100"
             />
           </div>
-          <div className="w-full p-4 cursor-pointer border-[#272727] group">
+          <div className="flex items-center justify-center w-full p-4 text-center cursor-pointer group">
             <button
               onClick={handleSignOut}
               type="button"
-              className="inline-flex items-center justify-start w-full px-4 py-3 space-x-3 text-base font-normal text-gray-500 transition cursor-pointer rounded-x-2 hover:text-fuchsia-600"
+              className="inline-flex items-center justify-center text-center px-3 py-2 space-x-1 text-base font-thin transition border border-purple-900 cursor-pointer text-fuchsia-300 hover:text-fuchsia-800 rounded-xl bg-[#250C3D]"
             >
-              <ArrowRightOnRectangleIcon className="w-6 h-6 shrink-0" />
+              <ArrowRightOnRectangleIcon className="w-4 h-4 shrink-0" />
               <span>Logout</span>
             </button>{" "}
           </div>

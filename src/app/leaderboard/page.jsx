@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
+import { RocketLaunchIcon, TrophyIcon } from "@heroicons/react/24/outline";
 import { formatLargeNumber } from "@/utils/helper";
 import { getFunctions, httpsCallable } from "firebase/functions";
 
@@ -46,72 +47,121 @@ export default function Page() {
 
   return (
     <>
-      <div className="p-4 pt-12">
-        <div className="w-full text-[0.8125rem] leading-5 text-slate-900 rounded-xl">
-          {users && (
-            <table className="w-full text-base text-left text-gray-500 rtl:text-right dark:text-gray-400">
-              <thead className="text-xs uppercase text-fuchsia-700 dark:text-fuchsia-400">
-                <tr>
-                  <th
-                    scope="col"
-                    className="px-4 py-2 text-left lg:px-6 lg:py-3"
-                  >
-                    Rank
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-4 py-2 text-left lg:px-6 lg:py-3"
-                  >
-                    User
-                  </th>
-                  <th scope="col" className="py-2 text-left lg:px-6 lg:py-3">
-                    Total Points
-                  </th>
-                  <th scope="col" className="py-2 text-left lg:px-6 lg:py-3">
-                    Referral Poins
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {users &&
-                  users.length > 0 &&
-                  users.map((user, index) => (
-                    <tr
-                      key={index}
-                      className="cursor-pointer hover:bg-fuchsia-950"
-                    >
-                      <td className="px-6 py-4 text-fuchsia-700">
-                        {index + 1}
-                      </td>
+      <div className="px-4 pb-24">
+        <div className="flex items-center justify-center w-full pt-0 text-center">
+          <div class="w-2/5 relative pt-0 z-10">
+            <div className="absolute block w-full border-2 border-b rounded-xl border-fuchsia-700 shrink-0 bg-fuchsia-700 bca-glow-top"></div>
+          </div>
+        </div>
 
-                      <td
-                        scope="row"
-                        className="font-medium text-gray-900 lg:px-6 whitespace-nowrap "
-                      >
-                        <div className="flex items-center justify-start space-x-2">
-                          <UserCircleIcon className="w-10 h-10 text-fuchsia-600/35" />
-                          <div className="">
-                            <div className="overflow-hidden text-base font-semibold text-fuchsia-700 max-w-24 lg:max-w-[600px]">
-                              {user.displayName}
+        <div className="mt-12 flex flex-col p-4 bg-[#250C3D] border-purple-950 border align-items-center rounded-xl">
+          <div className="mb-2 text-base font-semibold text-white">
+            Your statistics
+          </div>
+          <div className="inline-flex items-center justify-start space-x-4">
+            <div className="inline-flex items-center justify-center px-4 py-2 space-x-2 text-sm font-semibold rounded-lg bg-purple-950">
+              <RocketLaunchIcon className="w-4 h-4 text-white" />
+              <p className="text-white">Current Rank:</p>
+              <p className="text-fuchsia-600">79662</p>
+            </div>
+            <div className="inline-flex items-center justify-center px-4 py-2 space-x-2 text-sm font-semibold rounded-lg bg-purple-950">
+              <TrophyIcon className="w-4 h-4 text-white" />
+              <p className="text-white">Current Tier:</p>
+              <p className="text-fuchsia-600">79662</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="w-full text-[0.8125rem] leading-5 text-slate-900 rounded-xl mt-6 bg-[#250C3D] border-purple-950 border pb-12">
+          <div className="p-6 mb-2 text-base font-semibold text-white">
+            <p>Leaderboard</p>
+            <div className="mt-4 thin-line border-purple-950"></div>
+          </div>
+          <div className="px-8">
+            {users && (
+              <>
+                <div className="w-full text-base text-left text-gray-500 rtl:text-right">
+                  <div className="flex items-center justify-start w-full px-2 py-4 text-sm font-semibold text-fuchsia-200 dark:text-fuchsia-400">
+                    <span scope="col" className="w-1/12 text-left">
+                      Rank
+                    </span>
+                    <span scope="col" className="w-5/12 text-left">
+                      User
+                    </span>
+                    <span scope="col" className="w-2/12 px-2 text-right">
+                      Tier
+                    </span>
+                    <span scope="col" className="w-2/12 text-right">
+                      Total Points
+                    </span>
+                    <span scope="col" className="w-2/12 px-4 text-right">
+                      Referral Points
+                    </span>
+                  </div>
+                </div>
+                {users.length > 0 && (
+                  <div className="flex flex-col space-y-2">
+                  {users.map((user, index) => (
+                      <div className="flex items-center justify-start w-full px-2 py-2 overflow-hidden text-sm font-semibold transition ease-out border-t rounded-full cursor-pointer border-fuchsia-800 text-fuchsia-200 bca-purple-row-glow-inside hover:bg-purple-950 bg-[#260C44]">
+                        <span scope="col" className="w-1/12 text-left">
+                          {index == 0 && (
+                            <div className="flex items-center justify-center w-8 h-8 bg-[#CB7E2F] border-2 border-[#CE7613] rounded-full bca-glow-gold-outside">
+                              <div className="flex items-center justify-center w-6 h-6 font-semibold text-[#250C3D] bg-[#EEAD2C] rounded-full bca-glow-gold-inside">
+                                {index + 1}
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="text-gray-100 lg:px-6 lg:py-4">
-                        {formatLargeNumber(
-                          (user.totalPoints || 1) -
-                            1 +
-                            ((user.referralPoints || 1) - 1)
-                        )}
-                      </td>
-                      <td className="text-gray-100 lg:px-6 lg:py-4">
-                        {formatLargeNumber((user.referralPoints || 1) - 1)}
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          )}
+                          )}
+                          {index == 1 && (
+                            <span>
+                              <div className="flex items-center justify-center w-8 h-8 bg-[#B9B9B9] border-2 border-[#A0A0A0] rounded-full bca-glow-silver-outside">
+                                <div className="flex items-center justify-center w-6 h-6 font-semibold text-[#250C3D] bg-[#A2A2A2] rounded-full bca-glow-silver-inside">
+                                  {index + 1}
+                                </div>
+                              </div>
+                            </span>
+                          )}
+                          {index == 2 && (
+                            <span>
+                              <div className="flex items-center justify-center w-8 h-8 border-2 rounded-full bg-[#B5907F] border-[#9E6F64] bca-glow-bronze-outside">
+                                <div className="flex items-center justify-center w-6 h-6 font-semibold text-[#250C3D] rounded-full bg-[#AB7A71] bca-glow-bronze-inside">
+                                  {index + 1}
+                                </div>
+                              </div>
+                            </span>
+                          )}
+                          {index > 2 && (
+                            <span>
+                              <div className="flex items-center justify-center w-8 h-8 rounded-full">
+                                <div className="flex items-center justify-center w-6 h-6 font-semibold rounded-full text-fuchsia-100">
+                                  {index + 1}
+                                </div>
+                              </div>
+                            </span>
+                          )}
+                        </span>
+                        <span scope="col" className="w-5/12 text-left text-fuchsia-700">
+                          {user.displayName}
+                        </span>
+                        <span scope="col" className="w-2/12 text-right">
+                          Tier 1
+                        </span>
+                        <span scope="col" className="w-2/12 text-right">
+                          {formatLargeNumber(
+                            (user.totalPoints || 1) -
+                              1 +
+                              ((user.referralPoints || 1) - 1)
+                          )}
+                        </span>
+                        <span scope="col" className="w-2/12 px-4 text-right">
+                          {formatLargeNumber((user.referralPoints || 1) - 1)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
           <div className="flex justify-center mt-12">
             {usersLoading ? (
               <button className="text-base text-white" disabled>
@@ -119,7 +169,7 @@ export default function Page() {
               </button>
             ) : (
               <button
-                className="px-8 py-2 text-base text-white cursor-pointer hover:bg-fuchsia-950 bg-fuchsia-800 rounded-xl"
+                className="px-8 py-2 text-base text-white bg-transparent border cursor-pointer hover:bg-fuchsia-950 border-purple-950 rounded-2xl"
                 onClick={fetchUsers}
               >
                 Load More
