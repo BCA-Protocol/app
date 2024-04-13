@@ -14,6 +14,7 @@ import {
   TrophyIcon,
   ArrowRightOnRectangleIcon,
   BookOpenIcon,
+  Bars3Icon,
 } from "@heroicons/react/24/outline";
 import { classNames } from "@/utils/css-utils";
 import { useRouter } from "next/navigation";
@@ -52,13 +53,13 @@ export default function SideBar({ currentPath }) {
 
   return (
     <div>
-      <MenuIcon
-        className="absolute w-10 h-10 text-fuchsia-700 left-8 top-14"
+      <Bars3Icon
+        className="absolute z-40 w-10 h-10 p-1 border rounded-xl text-fuchsia-400 border-fuchsia-400 left-8 top-12"
         onClick={toggleSidebar}
       />
       <aside
         className={classNames(
-          "fixed inset-y-0 left-0 bg-gradient-to-r from-[#210D30] to-[#180924] shadow-md w-60 z-40 lg:block border-r border-purple-950",
+          "fixed inset-y-0 left-0 bg-gradient-to-r from-[#210D30] to-[#180924] shadow-md w-72 lg:w-60 z-40 lg:block border-r border-purple-950",
           sidebarVisible ? "" : "hidden"
         )}
       >

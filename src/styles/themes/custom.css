@@ -25,8 +25,8 @@ html[data-theme="custom"] {
     --background-box-color: #292b2c;
 
     --border-primary: rgba(173, 104, 243, .72);
-    
-    }
+
+}
 
 .bca-retro {
     box-shadow: rgb(0, 0, 0) -4px 4px 0px 0px;
@@ -39,15 +39,19 @@ html[data-theme="custom"] {
 .bca-glow-top {
     box-shadow: rgba(163, 28, 175, 0.5) 0px -20px 1200px 160px;
 }
+
 .bca-glow-top-small {
     box-shadow: rgba(163, 28, 175, 0.5) 0px 0px 200px 80px;
 }
+
 .bca-purple-glow-inside {
     box-shadow: inset #B059C8 0px 3px 5px 0px;
 }
+
 .bca-fuchsia-glow-inside {
     box-shadow: inset #D955D0 0px 3px 5px 0px;
 }
+
 .thin-line {
     border-bottom-width: 0.01px;
 }
@@ -78,4 +82,16 @@ html[data-theme="custom"] {
 
 .bca-purple-row-glow-inside {
     box-shadow: inset rgb(59 7 100) 0px 1px 5px 0px;
+}
+
+.gradient-opacity-pink {
+    background: linear-gradient(to bottom,
+            rgba(162, 28, 175, 0) 50%,
+            rgba(162, 28, 175, 0.8) 100%);
+}
+
+.gradient-opacity-purple {
+    background: linear-gradient(to bottom,
+            rgba(88, 28, 135, 0) 50%,
+            rgba(88, 28, 135, 0.8) 100%);
 }

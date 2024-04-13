@@ -11,8 +11,13 @@ import TaskList from "@/components/TaskList";
 import Loader from "@/components/loader";
 import logo from "/public/logo-small.png";
 
+import animation from "/public/animation.gif";
 import mascotSad from "/public/m/1-small.png";
 import mascotLove from "/public/m/8-small.png";
+import mascotHappy from "/public/m/7-small.png";
+
+import cookieImage from "/public/cookie.png";
+import lockImage from "/public/lock.svg";
 
 import Notification from "@/components/notifications/notification";
 import Image from "next/image";
@@ -99,13 +104,13 @@ export default function Page() {
             </div>
             <div className="gap-4 lg:grid lg:grid-cols-3">
               <div className="col-span-2 mb-4 lg:mb-0">
-                <div className="flex flex-col items-center justify-center w-full h-16 px-32 py-32 space-y-6 font-bold text-center text-gray-100/80">
-                  <div className="flex flex-col items-start justify-center w-full text-6xl">
+                <div className="flex flex-col items-center justify-center w-full px-8 py-8 space-y-6 font-bold text-center text-white lg:h-16 lg:px-32 lg:py-32">
+                  <div className="flex flex-col items-start justify-center w-full text-4xl lg:text-6xl">
                     <span>Train AI with</span>
                     <span>your own data</span>
                   </div>
-                  <div className="flex items-center justify-start w-full">
-                    <span className="text-xl font-normal">
+                  <div className="flex items-start justify-start w-full lg:items-center">
+                    <span className="text-base font-normal lg:text-xl">
                       Completely decentralized and in your control
                     </span>
                   </div>
@@ -115,7 +120,7 @@ export default function Page() {
                     Earnings
                   </div>
                   <div className="gap-6 lg:grid lg:grid-cols-2">
-                    <div className="flex items-center justify-start w-full px-6 py-4 mb-4 bg-purple-900 rounded-xl lg:mb-0 bca-purple-glow-inside">
+                    <div className="relative overflow-hidden flex items-center justify-start w-full px-6 py-4 mb-4 bg-purple-900 rounded-xl lg:mb-0 bca-purple-glow-inside bg-[url('/splash-pink.svg')] bg-right bg-no-repeat">
                       <div className="flex w-full">
                         <div className="flex flex-col items-start justify-center w-1/2 pr-8 font-semibold text-white">
                           <div className="flex flex-col w-1/2 text-base leading-5 text-purple-300">
@@ -130,13 +135,14 @@ export default function Page() {
                           </div>
                         </div>
 
-                        <div className="flex items-center justify-center object-contain w-1/2 space-x-2 text-3xl font-bold text-white">
-                          <Image src={mascotLove} alt="Logo" height={72} />
+                        <div className="absolute right-0 flex items-center justify-center object-contain w-1/2 space-x-2 text-3xl font-bold text-white -bottom-4 shrink-0">
+                          <Image src={mascotLove} alt="Logo" height={128} />
+                          <div className="absolute inset-0 gradient-opacity-purple"></div>
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-start w-full px-6 py-4 mb-4 bg-fuchsia-700 rounded-xl lg:mb-0 bca-fuchsia-glow-inside">
+                    <div className="relative overflow-hidden flex items-center justify-start w-full px-6 py-4 mb-4 bg-fuchsia-700 rounded-xl lg:mb-0 bca-fuchsia-glow-inside bg-[url('/splash-purple.svg')] bg-right-top bg-no-repeat">
                       <div className="flex w-full">
                         <div className="flex flex-col items-start justify-center w-1/2 pr-8 font-semibold text-white">
                           <div className="flex flex-col w-1/2 text-base leading-5 text-purple-300">
@@ -149,12 +155,18 @@ export default function Page() {
                           </div>
                         </div>
 
-                        <div className="flex items-center justify-center object-contain w-1/2 space-x-2 text-3xl font-bold text-white">
+                        <div className="absolute right-0 flex items-center justify-center object-contain w-1/2 space-x-2 text-3xl font-bold text-white -bottom-4 shrink-0">
                           {(userData.referralPoints || 1) - 1 > 0 ? (
-                            <Image src={mascotLove} alt="Logo" height={72} />
+                            <Image src={mascotHappy} alt="Logo" height={128} />
                           ) : (
-                            <Image src={mascotSad} alt="Logo" height={72} />
+                            <Image
+                              src={mascotSad}
+                              alt="Logo"
+                              height={128}
+                              className=""
+                            />
                           )}
+                          <div className="absolute inset-0 gradient-opacity-pink"></div>
                         </div>
                       </div>
                     </div>
@@ -164,17 +176,38 @@ export default function Page() {
                   * points will be converted into BCA tokens
                 </div>
               </div>
-              <div className="pt-48">
-                <div>
-                  <div className="flex flex-col items-center justify-end p-2 text-sm font-normal text-center lg:h-16 text-gray-300/80">
+              <div className="">
+                <div className="flex flex-col items-center justify-center w-full px-2 pt-2 font-bold text-center text-white">
+                  <Image src={animation} alt="Animation" className="" />
+                </div>
+                <div className="">
+                  <div className="flex flex-col items-center justify-end py-2 text-sm font-normal text-center text-fuchsia-300/80">
                     <span>Audited by SecuryX 🔐</span>
                   </div>
-                  <div className="flex flex-col h-48 px-4 shadow-sm align-items-center rounded-xl bg-[#250C3D] border-purple-950 border z-30 overflow-hidden">
+                  <div className="relative flex flex-col h-48 px-4 shadow-sm align-items-center rounded-xl bg-[#250C3D] border-purple-950 border z-30 overflow-hidden bg-[url('/splash-outline.svg')] bg-right bg-no-repeat">
                     <div className="flex items-center justify-center w-full pt-0 text-center">
                       <div class="w-2/5 relative pt-0 z-10">
                         <div className="absolute block w-full border-2 border-b rounded-xl border-fuchsia-700 shrink-0 bg-fuchsia-700 bca-glow-top-small"></div>
                       </div>
                     </div>
+
+                    <div className="absolute inset-0 top-8 left-12">
+                      <Image
+                        src={lockImage}
+                        alt="Lock"
+                        width={42}
+                        className="opacity-80"
+                      />
+                    </div>
+                    <div className="absolute inset-0 top-10 left-16">
+                      <Image
+                        src={cookieImage}
+                        alt="Cookie"
+                        width={42}
+                        className="opacity-80"
+                      />
+                    </div>
+
                     <Web3Provider className="w-full cursor-pointer hover:-translate-y-1">
                       <ConnectAndCollectButton userData={userData} />
                     </Web3Provider>

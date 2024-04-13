@@ -56,7 +56,7 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      <body className="flex flex-col h-full bg-black">
+      <body className="relative flex flex-col h-full bg-black">
         {/* GTM noscript */}
         <noscript>
           <iframe

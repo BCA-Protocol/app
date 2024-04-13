@@ -97,7 +97,7 @@ export default function Header() {
       <div className="w-1/4 lg:hidden"></div>
 
       <div className="flex items-center justify-start space-x-4">
-        <div className="items-center justify-center px-2 text-white border shadow-sm lg:p-1 lg:justify-between lg:items-center lg:space-x-4 md:flex align-items-center rounded-xl border-[#8B6DAE] text-fuchsia-800">
+        <div className="items-center justify-center px-2 lg:py-1 py-2 text-white border shadow-sm lg:p-1 lg:justify-between lg:items-center lg:space-x-4 md:flex align-items-center rounded-xl border-[#8B6DAE] text-fuchsia-800">
           <span className="inline-flex items-center justify-center px-2 space-x-2 text-center">
             <UserPlusIcon className="w-5 h-5 font-bold text-fuchsia-600" />
             <p className="text-sm font-medium">
@@ -125,7 +125,7 @@ export default function Header() {
           {userData && <span>{userData.displayName}</span>}
         </div>
 
-        <div className="flex flex-col items-end justify-center w-full text-base text-white">
+        <div className="flex flex-col items-center justify-center w-full text-base text-white lg:items-end">
           <span className="text-xs">Protocol Growth </span>
           {displayNumber && (
             <span className="font-bold text-fuchsia-600">
@@ -136,7 +136,9 @@ export default function Header() {
 
         <div className="flex-col items-end justify-end hidden w-full text-base text-transparent lg:flex bg-gradient-to-r from-white to-fuchsia-600 bg-clip-text">
           <span className="text-xs">Welcome </span>
-          {userData && <span className="font-bold">{userData.displayName}</span>}
+          {userData && (
+            <span className="font-bold">{userData.displayName}</span>
+          )}
         </div>
       </div>
 
