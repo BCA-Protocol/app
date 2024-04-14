@@ -9,7 +9,6 @@ import { sendEmailVerification } from "firebase/auth";
 import ReferalChart from "@/components/ReferalChart";
 import TaskList from "@/components/TaskList";
 import Loader from "@/components/loader";
-import logo from "/public/logo-small.png";
 
 import animation from "/public/animation.gif";
 import mascotSad from "/public/m/1-small.png";

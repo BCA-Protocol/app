@@ -1,15 +1,38 @@
 "use client";
 
+import { auth } from "@/firebase";
 import { useEffect, useState } from "react";
-import { UserCircleIcon } from "@heroicons/react/24/solid";
 import { RocketLaunchIcon, TrophyIcon } from "@heroicons/react/24/outline";
 import { formatLargeNumber } from "@/utils/helper";
 import { getFunctions, httpsCallable } from "firebase/functions";
+import { getUserByUUID } from "@/utils/utils";
+import { useRouter } from "next/navigation";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 export default function Page() {
+  const [user] = useAuthState(auth);
   const [users, setUsers] = useState([]);
   const [lastUser, setLastUser] = useState(null);
+  const [userData, setUserData] = useState(null);
   const [usersLoading, setUsersLoading] = useState(false);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!user) {
+        router.replace("/");
+        return;
+      }
+      try {
+        const userDataRes = await getUserByUUID(user.uid);
+        userDataRes && setUserData(userDataRes);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    fetchUserData();
+  }, [router, user]);
 
   const fetchUsers = async () => {
     setUsersLoading(true);
@@ -61,13 +84,25 @@ export default function Page() {
           <div className="inline-flex items-center justify-start space-x-4">
             <div className="inline-flex items-center justify-center px-4 py-2 space-x-2 text-sm font-semibold rounded-lg bg-purple-950">
               <RocketLaunchIcon className="w-4 h-4 text-white" />
-              <p className="text-white">Current Rank:</p>
-              <p className="text-fuchsia-600">79662</p>
+              <p className="text-white">Total Points:</p>
+              <p className="text-fuchsia-600">
+                {formatLargeNumber(
+                  (userData?.totalPoints || 1) -
+                    1 +
+                    ((userData?.referralPoints || 1) - 1)
+                )}{" "}
+              </p>
             </div>
             <div className="inline-flex items-center justify-center px-4 py-2 space-x-2 text-sm font-semibold rounded-lg bg-purple-950">
               <TrophyIcon className="w-4 h-4 text-white" />
               <p className="text-white">Current Tier:</p>
-              <p className="text-fuchsia-600">79662</p>
+              <p className="text-fuchsia-600">
+                {userData?.overallPoints > 250000
+                  ? "1"
+                  : userData?.overallPoints > 125000
+                  ? "2"
+                  : "3"}
+              </p>
             </div>
           </div>
         </div>
@@ -90,7 +125,7 @@ export default function Page() {
                     </span>
                     <span
                       scope="col"
-                      className="hidden w-2/12 text-left lg:px-2 lg:text-right lg:flex"
+                      className="hidden w-2/12 text-left lg:px-0 lg:text-right lg:flex"
                     >
                       Tier
                     </span>
@@ -155,7 +190,11 @@ export default function Page() {
                           scope="col"
                           className="hidden w-2/12 text-xs text-left lg:text-right lg:text-base lg:flex"
                         >
-                          Tier 1
+                          {user?.overallPoints > 250000
+                            ? "1"
+                            : user?.overallPoints > 125000
+                            ? "2"
+                            : "3"}
                         </span>
                         <span
                           scope="col"
