@@ -66,7 +66,7 @@ export default function Page() {
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  });
 
   return (
     <>
@@ -140,7 +140,7 @@ export default function Page() {
                 {users.length > 0 && (
                   <div className="flex flex-col space-y-2">
                     {users.map((user, index) => (
-                      <div className="flex items-center justify-start w-full px-2 py-2 overflow-hidden text-sm font-semibold transition ease-out border-t rounded-full cursor-pointer border-fuchsia-800 text-fuchsia-200 bca-purple-row-glow-inside hover:bg-purple-950 bg-[#260C44]">
+                      <div key={index} className="flex items-center justify-start w-full px-2 py-2 overflow-hidden text-sm font-semibold transition ease-out border-t rounded-full cursor-pointer border-fuchsia-800 text-fuchsia-200 bca-purple-row-glow-inside hover:bg-purple-950 bg-[#260C44]">
                         <span scope="col" className="w-1/12 text-left">
                           {index == 0 && (
                             <div className="flex items-center justify-center w-8 h-8 bg-[#CB7E2F] border-2 border-[#CE7613] rounded-full bca-glow-gold-outside">
