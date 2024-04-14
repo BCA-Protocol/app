@@ -77,7 +77,7 @@ export default function Page() {
             <p>Leaderboard</p>
             <div className="mt-4 thin-line border-purple-950"></div>
           </div>
-          <div className="px-8">
+          <div className="px-2 lg:px-8">
             {users && (
               <>
                 <div className="w-full text-base text-left text-gray-500 rtl:text-right">
@@ -85,23 +85,26 @@ export default function Page() {
                     <span scope="col" className="w-1/12 text-left">
                       Rank
                     </span>
-                    <span scope="col" className="w-5/12 text-left">
+                    <span scope="col" className="w-5/12 ml-4 text-left lg:ml-0">
                       User
                     </span>
-                    <span scope="col" className="w-2/12 px-2 text-right">
+                    <span
+                      scope="col"
+                      className="hidden w-2/12 text-left lg:px-2 lg:text-right lg:flex"
+                    >
                       Tier
                     </span>
-                    <span scope="col" className="w-2/12 text-right">
+                    <span scope="col" className="w-2/12 lg:text-right">
                       Total Points
                     </span>
-                    <span scope="col" className="w-2/12 px-4 text-right">
+                    <span scope="col" className="w-2/12 lg:px-4 lg:text-right">
                       Referral Points
                     </span>
                   </div>
                 </div>
                 {users.length > 0 && (
                   <div className="flex flex-col space-y-2">
-                  {users.map((user, index) => (
+                    {users.map((user, index) => (
                       <div className="flex items-center justify-start w-full px-2 py-2 overflow-hidden text-sm font-semibold transition ease-out border-t rounded-full cursor-pointer border-fuchsia-800 text-fuchsia-200 bca-purple-row-glow-inside hover:bg-purple-950 bg-[#260C44]">
                         <span scope="col" className="w-1/12 text-left">
                           {index == 0 && (
@@ -139,20 +142,35 @@ export default function Page() {
                             </span>
                           )}
                         </span>
-                        <span scope="col" className="w-5/12 text-left text-fuchsia-700">
-                          {user.displayName}
+                        <span
+                          scope="col"
+                          className="inline-flex w-5/12 ml-4 space-x-2 text-left lg:ml-0"
+                        >
+                          <p className="text-fuchsia-700">{user.displayName}</p>
+                          <p className="flex text-fuchsia-400 lg:hidden">
+                            (T1)
+                          </p>
                         </span>
-                        <span scope="col" className="w-2/12 text-right">
+                        <span
+                          scope="col"
+                          className="hidden w-2/12 text-xs text-left lg:text-right lg:text-base lg:flex"
+                        >
                           Tier 1
                         </span>
-                        <span scope="col" className="w-2/12 text-right">
+                        <span
+                          scope="col"
+                          className="w-2/12 text-xs lg:text-right lg:text-base"
+                        >
                           {formatLargeNumber(
                             (user.totalPoints || 1) -
                               1 +
                               ((user.referralPoints || 1) - 1)
                           )}
                         </span>
-                        <span scope="col" className="w-2/12 px-4 text-right">
+                        <span
+                          scope="col"
+                          className="w-2/12 px-4 text-xs lg:text-base lg:text-right"
+                        >
                           {formatLargeNumber((user.referralPoints || 1) - 1)}
                         </span>
                       </div>

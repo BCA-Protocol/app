@@ -54,7 +54,7 @@ export default function SideBar({ currentPath }) {
   return (
     <div>
       <Bars3Icon
-        className="absolute z-40 w-10 h-10 p-1 border rounded-xl text-fuchsia-400 border-fuchsia-400 left-8 top-12"
+        className="absolute z-40 w-10 h-10 p-1 border rounded-xl text-fuchsia-700 border-fuchsia-700 left-8 top-12"
         onClick={toggleSidebar}
       />
       <aside
@@ -66,7 +66,7 @@ export default function SideBar({ currentPath }) {
         <div className="flex flex-col justify-between h-full">
           <CloseIcon
             onClick={toggleSidebar}
-            className="absolute z-40 w-10 h-10 border rounded-lg cursor-pointer right-1 top-10 ml-28 border-fuchsia-700 text-fuchsia-700 lg:hidden"
+            className="absolute z-40 w-10 h-10 border cursor-pointer rounded-xl right-1 top-10 ml-28 border-fuchsia-700 text-fuchsia-700 lg:hidden"
           />
 
           <div className="flex-grow">
