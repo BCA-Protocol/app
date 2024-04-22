@@ -13,6 +13,8 @@
     "@emotion/styled": "^11.11.0",
     "@heroicons/react": "^2.1.1",
     "@mui/icons-material": "^5.15.13",
+    "@supabase/ssr": "^0.3.0",
+    "@supabase/supabase-js": "^2.42.5",
     "@tabler/icons-react": "^2.40.0",
     "@tanstack/react-query": "^5.28.4",
     "apexcharts": "^3.47.0",
