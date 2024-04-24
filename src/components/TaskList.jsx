@@ -1,13 +1,16 @@
-import { Web3Provider } from "@/providers/Web3Provider";
 import { classNames } from "@/utils/css-utils";
-import ConnectAndCollectButton from "./ConnectAndCollectButton";
 import { formatTimestamp } from "@/utils/datetime";
+import { getTwitterOauthUrl } from "@/providers/TwitterOauthUrl";
+import { getDiscordOauthUrl } from "@/providers/DiscordOauthUrl";
+import TelegramLogin from "@/providers/TelegramProvider";
 
 const TaskList = ({ user, userData, sendEmailVerification }) => {
   return (
     <div className="items-center justify-center w-full h-full text-center">
       <ul className="relative h-full p-4 space-y-2 bg-[#250C3D] border-purple-950 border rounded-xl text-fuchsia-700">
-        <li className="mb-4 font-bold text-fuchsia-200">Available Sources for Training AI</li>
+        <li className="mb-4 font-bold text-fuchsia-200">
+          Available Sources for Training AI
+        </li>
 
         {/* Connect Wallet */}
         {/* <li
@@ -42,6 +45,114 @@ const TaskList = ({ user, userData, sendEmailVerification }) => {
           )}
         </li> */}
         {/* End of Connect Wallet */}
+
+        {/* Connect Twitter */}
+        <li
+          className={classNames(
+            "flex flex-row items-center justify-between p-2 border border-fuchsia-600 rounded-xl",
+            userData.completedTasks?.hasOwnProperty("connectTwitter")
+              ? "bg-fuchsia-950"
+              : "hover:bg-fuchsia-950 hover:shadow-cyan-500/60 hover:shadow-lg"
+          )}
+        >
+          {userData.completedTasks?.hasOwnProperty("connectTwitter") ? (
+            <>
+              <div className="flex flex-col items-start justify-center">
+                <div className="font-bold">✓ Twitter Connected ⭐⭐⭐</div>
+                <div className="pl-4 text-xs">
+                  {formatTimestamp(
+                    userData.completedTasks?.connectTwitter?.created || null
+                  )}
+                </div>
+              </div>
+              <span className="w-1/5 text-sm font-bold text-fuchsia-600">
+                30,000 Points
+              </span>
+            </>
+          ) : (
+            <>
+              <div className="w-2/3 text-white cursor-pointer hover:-translate-y-1">
+                <a href={getTwitterOauthUrl()}>Connect Twitter</a>
+              </div>
+              <span className="w-1/5 text-sm font-bold text-fuchsia-600">
+                30,000 Points
+              </span>
+            </>
+          )}
+        </li>
+        {/* End Of Connect Twitter */}
+
+        {/* Connect Discord */}
+        <li
+          className={classNames(
+            "flex flex-row items-center justify-between p-2 border border-fuchsia-600 rounded-xl",
+            userData.completedTasks?.hasOwnProperty("connectDiscord")
+              ? "bg-fuchsia-950"
+              : "hover:bg-fuchsia-950 hover:shadow-cyan-500/60 hover:shadow-lg"
+          )}
+        >
+          {userData.completedTasks?.hasOwnProperty("connectDiscord") ? (
+            <>
+              <div className="flex flex-col items-start justify-center">
+                <div className="font-bold">✓ Discord Connected ⭐⭐⭐</div>
+                <div className="pl-4 text-xs">
+                  {formatTimestamp(
+                    userData.completedTasks?.connectDiscord?.created || null
+                  )}
+                </div>
+              </div>
+              <span className="w-1/5 text-sm font-bold text-fuchsia-600">
+                30,000 Points
+              </span>
+            </>
+          ) : (
+            <>
+              <div className="w-2/3 text-white cursor-pointer hover:-translate-y-1">
+                <a href={getDiscordOauthUrl()}>Connect Discord</a>
+              </div>
+              <span className="w-1/5 text-sm font-bold text-fuchsia-600">
+                30,000 Points
+              </span>
+            </>
+          )}
+        </li>
+        {/* End Of Connect Discord */}
+
+        {/* Connect Telegram */}
+        <li
+          className={classNames(
+            "flex flex-row items-center justify-between p-2 border border-fuchsia-600 rounded-xl",
+            userData.completedTasks?.hasOwnProperty("connectTelegram")
+              ? "bg-fuchsia-950"
+              : "hover:bg-fuchsia-950 hover:shadow-cyan-500/60 hover:shadow-lg"
+          )}
+        >
+          {userData.completedTasks?.hasOwnProperty("connectTelegram") ? (
+            <>
+              <div className="flex flex-col items-start justify-center">
+                <div className="font-bold">✓ Telegram Connected ⭐⭐⭐</div>
+                <div className="pl-4 text-xs">
+                  {formatTimestamp(
+                    userData.completedTasks?.connectTelegram?.created || null
+                  )}
+                </div>
+              </div>
+              <span className="w-1/5 text-sm font-bold text-fuchsia-600">
+                30,000 Points
+              </span>
+            </>
+          ) : (
+            <>
+              <div className="w-2/3 text-white cursor-pointer hover:-translate-y-1">
+                <TelegramLogin uid={user.uid} />
+              </div>
+              <span className="w-1/5 text-sm font-bold text-fuchsia-600">
+                30,000 Points
+              </span>
+            </>
+          )}
+        </li>
+        {/* End Of Connect Telegram */}
 
         {/* Verify email */}
         <li
@@ -94,12 +205,15 @@ const TaskList = ({ user, userData, sendEmailVerification }) => {
               )}
             </div>
           </div>
-          <span className="w-1/5 text-sm font-bold">10,000 Points</span>
+          <span className="w-1/5 text-sm font-bold text-fuchsia-600">
+            10,000 Points
+          </span>
         </li>
-        <li className="w-full text-sm lg:absolute text-gray-100/35 bottom-2">
+        <li className="flex items-center justify-center text-sm text-center lg:absolute text-gray-100/35 bottom-2">
           <div className="flex flex-col group">
-            <span className="hidden group-hover:block text-fuchsia-100/60">
-              A snapshot will be made from the<br /> AI-cookie smart contract.
+            <span className="hidden p-2 border rounded-md border-fuchsia-600 bg-fuchsia-950 group-hover:block text-fuchsia-100/60">
+              A snapshot will be made from the
+              <br /> AI-cookie smart contract.
             </span>
             <span className="underline cursor-pointer">
               <strong>Tier 3</strong> Contributors are eligible for{" "}
