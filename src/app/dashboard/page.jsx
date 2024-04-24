@@ -56,7 +56,6 @@ export default function Page() {
         // const userDataRes = await getUserByUUID(user.uid);
         console.log(user.id)
         const {data,error} = await getUser(user.id);
-        // console.log(userDataRes)
         // taskData && setIncompleteTasks(taskData);
         data && setUserData(data);
 
@@ -138,9 +137,9 @@ export default function Page() {
                           </div>
                           <div className="text-3xl font-bold tracking-wide">
                             {formatLargeNumber(
-                              (userData.totalPoints || 1) -
+                              (userData.total_points || 1) -
                                 1 +
-                                ((userData.referralPoints || 1) - 1)
+                                ((userData.referral_points || 1) - 1)
                             )}{" "}
                           </div>
                         </div>
@@ -160,13 +159,13 @@ export default function Page() {
                           </div>
                           <div className="text-3xl font-bold tracking-wide">
                             {formatLargeNumber(
-                              (userData.referralPoints || 1) - 1
+                              (userData.referral_points || 1) - 1
                             )}{" "}
                           </div>
                         </div>
 
                         <div className="absolute right-0 flex items-center justify-center object-contain w-1/2 space-x-2 text-3xl font-bold text-white -bottom-4 shrink-0">
-                          {(userData.referralPoints || 1) - 1 > 0 ? (
+                          {(userData.referral_points || 1) - 1 > 0 ? (
                             <Image src={mascotHappy} alt="Logo" height={128} />
                           ) : (
                             <Image
