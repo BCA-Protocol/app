@@ -60,11 +60,11 @@ const ConnectAndCollectButton = ({ userData }) => {
     readRefetch();
   }, 20000);
 
-  console.log("Method stop", methodStop);
-  console.log("Method start", methodStart);
+  // console.log("Method stop", methodStop);
+  // console.log("Method start", methodStart);
 
   const doStartCollecting = () => {
-    console.log(methodStart, methodStop);
+    // console.log(methodStart, methodStop);
     if (methodStart || methodStop) return;
     setMethodStart(true);
     setPendingTransaction(true);
@@ -123,10 +123,9 @@ const ConnectAndCollectButton = ({ userData }) => {
 
   useEffect(() => {
     if (isPending) return;
-    console.log("Success, start, stop ", isSuccess, methodStart, methodStop);
+    // console.log("Success, start, stop ", isSuccess, methodStart, methodStop);
     if (isSuccess) {
       if (methodStart) {
-        console.log("From starting");
         // start collecting
         const handlePostStartCollecting = async () => {
           try {
@@ -170,7 +169,6 @@ const ConnectAndCollectButton = ({ userData }) => {
       }
 
       if (methodStop) {
-        console.log("From Stopping");
         // stop collecting
         const handlePostStopCollecting = async () => {
           // remove our cookie
@@ -196,9 +194,6 @@ const ConnectAndCollectButton = ({ userData }) => {
       console.log(theError);
     }
   }, [isSuccess, isError, theError, isPending]);
-
-  // console.log(blockPoints);
-  // console.log("pending", pendingTransaction);
   return (
     <div className="flex flex-col items-center justify-center h-full">
       <div className="p-1 text-base font-light text-center text-white">

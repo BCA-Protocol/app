@@ -20,6 +20,7 @@
     "apexcharts": "^3.47.0",
     "connectkit": "^1.7.2",
     "cookie": "^0.6.0",
+    "discord-oauth2": "^2.12.1",
     "firebase": "^10.6.0",
     "firebase-tools": "^13.7.1",
     "heroicons": "^2.1.1",

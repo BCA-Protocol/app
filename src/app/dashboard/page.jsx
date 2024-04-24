@@ -187,11 +187,15 @@ export default function Page() {
                 </div>
               </div>
               <div className="">
-                <div className="flex flex-col items-center justify-center w-full px-2 pt-2 font-bold text-center text-white">
-                  <Image src={animation} alt="Animation" className="" />
+                <div className="relative flex flex-col items-center justify-center object-cover font-bold text-center text-white lg:h-16 lg:px-32 lg:py-32">
+                  <Image
+                    src={animation}
+                    alt="Animation"
+                    className="absolute inset-0 max-h-[240px]"
+                  />
                 </div>
                 <div className="">
-                  <div className="flex flex-col items-center justify-end py-2 text-sm font-normal text-center text-fuchsia-300/80">
+                  <div className="flex flex-col items-center justify-end h-8 py-2 -mt-8 text-sm font-normal text-center text-fuchsia-300/80">
                     <span>Audited by SecuryX 🔐</span>
                   </div>
                   <div className="relative flex flex-col h-48 px-4 shadow-sm align-items-center rounded-xl bg-[#250C3D] border-purple-950 border z-30 overflow-hidden bg-[url('/splash-outline.svg')] bg-right bg-no-repeat">
