@@ -1,18 +1,18 @@
 "use client";
+import React from "react";
 import { auth } from "@/firebase";
 import { sendPasswordResetEmail } from "firebase/auth";
-import {
-  useAuthState,
-  useSignInWithEmailAndPassword,
-} from "react-firebase-hooks/auth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import SignInForm from "@/components/SignInForm";
 import Loader from "@/components/loader";
+import { signIn } from "@/server-action/auth-action";
+import useAuth from "@/features/base/auth/hooks/use-auth";
 
 const Home = () => {
-  const [user, loading] = useAuthState(auth);
-  const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
+  // const [user, loading] = useAuthState(auth);
+  const {loading,user} =  useAuth()
+  // const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -21,7 +21,7 @@ const Home = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (user) {
+    if (user?.id) {
       router.replace("/dashboard");
     }
   }, [router, user]);
@@ -31,28 +31,7 @@ const Home = () => {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const signUp = async (formData: FormData) => {
-    "use server";
-
-    const origin = headers().get("origin");
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-    const supabase = createClient();
-
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${origin}/auth/callback`,
-      },
-    });
-
-    if (error) {
-      return redirect("/login?message=Could not authenticate user");
-    }
-
-    return redirect("/login?message=Check email to continue sign in process");
-  };
+  
 
   const handleSubmit = async () => {
     try {
@@ -60,6 +39,7 @@ const Home = () => {
       //   formData.email,
       //   formData.password
       // );
+      signIn({ email: formData.email, password: formData.password });
     } catch (error) {
       console.error("API call failed:", error);
     }

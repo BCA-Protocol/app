@@ -4,11 +4,9 @@ import Image from "next/image";
 import logo from "/public/bca-left.png";
 import mascotHappy from "/public/m/4-small.png";
 import mascotLove from "/public/m/8-small.png";
-
-import { useSignOut } from "react-firebase-hooks/auth";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
-import { auth } from "@/firebase";
+// import { auth } from "@/firebase";
 import {
   Squares2X2Icon,
   TrophyIcon,
@@ -18,6 +16,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { classNames } from "@/utils/css-utils";
 import { useRouter } from "next/navigation";
+import {signOut} from '@/server-action/auth-action'
 
 const menuItems = [
   {
@@ -34,12 +33,13 @@ const menuItems = [
 
 export default function SideBar({ currentPath }) {
   const router = useRouter();
-  const [signOut] = useSignOut(auth);
+  // const [signOut] = useSignOut(auth);
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [activeMascot, setActiveMascot] = useState(mascotHappy);
 
   const handleSignOut = async () => {
     try {
+      // await signOut();
       await signOut();
       router.replace("/");
     } catch (error) {

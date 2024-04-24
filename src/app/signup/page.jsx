@@ -11,6 +11,7 @@ import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { addPointsToUser } from "@/utils/utils";
 import { Timestamp } from "firebase/firestore";
 import { collectBrowserData, fetchIPAddress } from "@/utils/helper";
+import {signUpAction} from './actions'
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -18,6 +19,7 @@ export default function Page() {
   const [user] = useAuthState(auth);
   const [loading, setLoading] = useState(false);
   const refCode = searchParams.get("ref");
+  const [signUp, setSignUp] = useState()
 
   const [createUser] = useCreateUserWithEmailAndPassword(auth);
 
@@ -31,33 +33,37 @@ export default function Page() {
   const handleSignUp = async (formData) => {
     setLoading(true);
     const { email, password, displayName, referalCode } = formData;
-    let res = await createUser(email, password);
-    if (res && res.user) {
-      const userRes = await addData("users", {
-        userId: res.user.uid,
-        displayName: displayName,
-        totalPoints: 1,
-        referralPoints: 1,
-        overallPoints: 2,
-        referedBy: referalCode,
-        completedTasks: {},
-      });
-      if (referalCode) {
-        await addPointsToUser(referalCode, 5000, "Referral SignUp", "Referral");
-      }
+    console.log('formData', formData)
+    const ip = await fetchIPAddress();
+    const browserData = collectBrowserData();
+    await signUpAction({email, password, displayName,referedBy: referalCode,ip, browserData})
+    // let res = await createUser(email, password);
+    // if (res && res.user) {
+    //   const userRes = await addData("users", {
+    //     userId: res.user.uid,
+    //     displayName: displayName,
+    //     totalPoints: 1,
+    //     referralPoints: 1,
+    //     overallPoints: 2,
+    //     referedBy: referalCode,
+    //     completedTasks: {},
+    //   });
+    //   if (referalCode) {
+    //     await addPointsToUser(referalCode, 5000, "Referral SignUp", "Referral");
+    //   }
 
-      const ip = await fetchIPAddress();
-      const browserData = collectBrowserData();
+    //   const ip = await fetchIPAddress();
+    //   const browserData = collectBrowserData();
 
-      // fetch additional relevant data for the user
-      await handleTaskCompletion(res.user.uid, "createAccount", {
-        email: email,
-        ip: ip,
-        browserData: browserData,
-      });
+    //   // fetch additional relevant data for the user
+    //   await handleTaskCompletion(res.user.uid, "createAccount", {
+    //     email: email,
+    //     ip: ip,
+    //     browserData: browserData,
+    //   });
 
-      setUserCreated(true);
-    }
+    //   setUserCreated(true);
+    // }
     setLoading(false);
   };
 

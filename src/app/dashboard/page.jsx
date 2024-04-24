@@ -27,9 +27,14 @@ import baseLogo from "/public/chains/base.png";
 import arbitrumLogo from "/public/chains/arbitrum.png";
 import bnbLogo from "/public/chains/bnb.png";
 import optimismLogo from "/public/chains/optimism.png";
+import useAuth from "@/features/base/auth/hooks/use-auth";
+import { getUser } from "./actions";
+
 
 export default function Page() {
-  const [user] = useAuthState(auth);
+ 
+  // const [user] = useAuthState(auth);
+  const {user} =  useAuth()
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [notification, setNotification] = useState(null);
@@ -39,18 +44,24 @@ export default function Page() {
 
   useEffect(() => {
     const fetchIncompleteTasks = async () => {
-      if (!user) {
-        router.replace("/");
-        return;
+      // if (!user) {
+      //   router.replace("/");
+      //   return;
+      // }
+      if(!user?.id){
+        return
       }
       try {
         setLoading(true);
-        const userDataRes = await getUserByUUID(user.uid);
+        // const userDataRes = await getUserByUUID(user.uid);
+        console.log(user.id)
+        const {data,error} = await getUser(user.id);
+        // console.log(userDataRes)
         // taskData && setIncompleteTasks(taskData);
-        userDataRes && setUserData(userDataRes);
+        data && setUserData(data);
 
-        const fullUserActivity = await getUserActivity(user.uid);
-        setUserActivity(fullUserActivity);
+        // const fullUserActivity = await getUserActivity(user.uid);
+        // setUserActivity(fullUserActivity);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching incomplete tasks:", error);
