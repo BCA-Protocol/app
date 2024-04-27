@@ -63,7 +63,7 @@ const Home = () => {
           console.log("Not Redirect");
         }
       });
-    } else if (errorCode!==null) setErrorSocial(errorCode==='access_denied'? "Connection rejected by the user": "An unknown error has occured")
+    } else if (errorCode!==null || socialType==="twitter?error=access_denied") setErrorSocial(errorCode==='access_denied' || socialType==="twitter?error=access_denied"? "Connection rejected by the user": "An unknown error has occured")
   }, []);
 
   useEffect(() => {

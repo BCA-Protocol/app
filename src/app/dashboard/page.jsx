@@ -57,12 +57,11 @@ export default function Page() {
       if (errorSocial) {
         setNotification({
           type: "error",
-          message: errorSocial, // Set the error message from the URL param
+          message: errorSocial,
           show: true,
         });
         const newParams = new URLSearchParams(params.toString());
         newParams.delete("error_message");
-        console.log('new_params', newParams)
         router.replace('/dashboard', undefined, { shallow: true });
       }
       } catch (error) {
