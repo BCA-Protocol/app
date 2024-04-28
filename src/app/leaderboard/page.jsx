@@ -8,9 +8,13 @@ import { getFunctions, httpsCallable } from "firebase/functions";
 import { getUserByUUID } from "@/utils/utils";
 import { useRouter } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
+import useAuth from "@/features/base/auth/hooks/use-auth";
+import { getUser } from "../dashboard/actions";
+
 
 export default function Page() {
-  const [user] = useAuthState(auth);
+  // const [user] = useAuthState(auth);
+  const {user} =  useAuth()
   const [users, setUsers] = useState([]);
   const [lastUser, setLastUser] = useState(null);
   const [userData, setUserData] = useState(null);
@@ -20,13 +24,13 @@ export default function Page() {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      if (!user) {
-        router.replace("/");
+      if (!user?.id) {
         return;
       }
       try {
-        const userDataRes = await getUserByUUID(user.uid);
-        userDataRes && setUserData(userDataRes);
+        // const userDataRes = await getUserByUUID(user.uid);
+        const {data,error} = await getUser(user.id);
+        data && setUserData(data);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
