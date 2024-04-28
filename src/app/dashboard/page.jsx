@@ -1,7 +1,7 @@
 "use client";
 import { auth } from "@/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getUserByUUID, getUserActivity } from "@/utils/utils";
 import { formatLargeNumber } from "@/utils/helper";
@@ -36,7 +36,8 @@ export default function Page() {
   const [userActivity, setUserActivity] = useState([]);
 
   const router = useRouter();
-
+  const params = useSearchParams()
+  const errorSocial = params.get("error_message");
   useEffect(() => {
     const fetchIncompleteTasks = async () => {
       if (!user) {
@@ -52,6 +53,17 @@ export default function Page() {
         const fullUserActivity = await getUserActivity(user.uid);
         setUserActivity(fullUserActivity);
         setLoading(false);
+        // Check if error_message exists in params
+      if (errorSocial) {
+        setNotification({
+          type: "error",
+          message: errorSocial,
+          show: true,
+        });
+        const newParams = new URLSearchParams(params.toString());
+        newParams.delete("error_message");
+        router.replace('/dashboard', undefined, { shallow: true });
+      }
       } catch (error) {
         console.error("Error fetching incomplete tasks:", error);
         setLoading(false);

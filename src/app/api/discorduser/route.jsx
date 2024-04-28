@@ -19,6 +19,10 @@ export async function GET(request, response) {
       method: "POST",
       body,
     }).then((res) => res.json());
+    if(tokenData.error){
+      return NextResponse.json({ error: "Internal Server Error" })
+    }
+
     const userData = await fetch("https://discord.com/api/users/@me", {
       headers: {
         authorization: `${tokenData.token_type} ${tokenData.access_token}`,
@@ -26,6 +30,9 @@ export async function GET(request, response) {
       method: "GET",
     }).then((res) => res.json());
 
+    if(userData?.message){
+      return NextResponse.json({ error: "Internal Server Error" })
+    }
     return NextResponse.json({ userData });
   } catch (err) {
     console.error("Discord Sign-In Error:", err.message);

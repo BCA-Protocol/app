@@ -473,12 +473,14 @@ export const handleTaskCompletion = async (
           ...additionalUserData,
         });
         await addPointsToUser(userId, taskPoints, taskData.name);
-        await addPointsToUser(
-          referedBy,
-          taskPoints * 0.07,
-          taskData.name + " (Referral)",
-          "Referral"
-        );
+        if(referedBy){
+          await addPointsToUser(
+            referedBy,
+            taskPoints * 0.07,
+            taskData.name + " (Referral)",
+            "Referral"
+          );
+        }
         // await addReferralPointsToUser(referedBy, taskPoints * 0.07);
         console.log("Task completed. Points added.");
       } else {
