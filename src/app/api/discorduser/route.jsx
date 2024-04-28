@@ -39,3 +39,5 @@ export async function GET(request, response) {
     return NextResponse.json({ error: "Internal Server Error" });
   }
 }
+
+export const dynamic = "force-dynamic";
