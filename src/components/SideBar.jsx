@@ -13,6 +13,7 @@ import {
   Squares2X2Icon,
   TrophyIcon,
   ArrowRightOnRectangleIcon,
+  RocketLaunchIcon,
   BookOpenIcon,
   Bars3Icon,
 } from "@heroicons/react/24/outline";
@@ -29,6 +30,11 @@ const menuItems = [
     href: "/leaderboard",
     title: "Referral Program",
     icon: TrophyIcon,
+  },
+  {
+    href: "/quest",
+    title: "Quest",
+    icon: RocketLaunchIcon,
   },
 ];
 
