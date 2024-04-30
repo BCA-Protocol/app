@@ -7,7 +7,7 @@ import mascotLove from "/public/m/8-small.png";
 import { LockClosedIcon } from '@heroicons/react/24/solid';
 
 export default function QuestPopUp({ isOpen, onClose, companyData }) {
-  const [activeButton, setActiveButton] = useState('Test 1');
+  const [activeButton, setActiveButton] = useState('Tokens');
 
   useEffect(() => {
     const handleOutsideClick = (e) => {
