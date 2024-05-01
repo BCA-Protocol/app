@@ -13,4 +13,4 @@ export const getUser = async (id: string) => {
    console.log("response", response)
 
     return response;
-  };
+};

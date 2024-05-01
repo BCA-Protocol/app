@@ -1,7 +1,7 @@
 "use client";
 
 import { auth } from "@/firebase";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { RocketLaunchIcon, TrophyIcon } from "@heroicons/react/24/outline";
 import { formatLargeNumber } from "@/utils/helper";
 import { getFunctions, httpsCallable } from "firebase/functions";
@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
 import useAuth from "@/features/base/auth/hooks/use-auth";
 import { getUser } from "../dashboard/actions";
+import { fetchLeaderboardUsers } from "./actions";
 
 
 export default function Page() {
@@ -19,6 +20,8 @@ export default function Page() {
   const [lastUser, setLastUser] = useState(null);
   const [userData, setUserData] = useState(null);
   const [usersLoading, setUsersLoading] = useState(false);
+  const [page, setPage] = useState(0);
+  const [count, setCount] = useState(0);
 
   const router = useRouter();
 
@@ -36,41 +39,58 @@ export default function Page() {
       }
     };
     fetchUserData();
-  }, [router, user]);
+  }, [ user]);
 
   const fetchUsers = async () => {
+    // setUsersLoading(true);
+
+    // try {
+    //   const functions = getFunctions();
+    //   const fetchLeaderboard = httpsCallable(
+    //     functions,
+    //     "fetchPaginatedLeaderboard"
+    //   );
+
+    //   // Prepare the data object with pagination parameters
+    //   const paginationData = lastUser
+    //     ? {
+    //         lastOverallPoints: lastUser.overallPoints,
+    //         lastCreated: lastUser.created,
+    //       }
+    //     : {};
+
+    //   const result = await fetchLeaderboard(paginationData);
+    //   const { users: newUsers, lastUser: newLastUser } = result.data;
+
+    //   setUsers((prevUsers) => [...prevUsers, ...newUsers]);
+    //   setLastUser(newLastUser);
+    // } catch (error) {
+    //   console.error("Failed to fetch users:", error);
+    // } finally {
+    //   setUsersLoading(false);
+    // }
     setUsersLoading(true);
+    const {users,count} = await fetchLeaderboardUsers({page})
+    setCount(count)
+    console.log("users",users)
+    if(users){
+      setUsers((prevUsers) => [...prevUsers, ...users]);
+    }
+    
+    setUsersLoading(false);
+  };
+  useEffect(() => {
+    fetchUsers( )
+  }, [page]);
 
-    try {
-      const functions = getFunctions();
-      const fetchLeaderboard = httpsCallable(
-        functions,
-        "fetchPaginatedLeaderboard"
-      );
-
-      // Prepare the data object with pagination parameters
-      const paginationData = lastUser
-        ? {
-            lastOverallPoints: lastUser.overallPoints,
-            lastCreated: lastUser.created,
-          }
-        : {};
-
-      const result = await fetchLeaderboard(paginationData);
-      const { users: newUsers, lastUser: newLastUser } = result.data;
-
-      setUsers((prevUsers) => [...prevUsers, ...newUsers]);
-      setLastUser(newLastUser);
-    } catch (error) {
-      console.error("Failed to fetch users:", error);
-    } finally {
-      setUsersLoading(false);
+  // useEffect(() => {
+  //   fetchUsers();
+  // },[]);
+  const loadMoreUsers = () => {
+    if(users.length < count){
+      setPage((prevPage) => prevPage + 1);
     }
   };
-
-  useEffect(() => {
-    fetchUsers();
-  });
 
   return (
     <>
@@ -91,9 +111,9 @@ export default function Page() {
               <p className="text-white">Total Points:</p>
               <p className="text-fuchsia-600">
                 {formatLargeNumber(
-                  (userData?.totalPoints || 1) -
+                  (userData?.total_points || 1) -
                     1 +
-                    ((userData?.referralPoints || 1) - 1)
+                    ((userData?.referral_points || 1) - 1)
                 )}{" "}
               </p>
             </div>
@@ -101,9 +121,9 @@ export default function Page() {
               <TrophyIcon className="w-4 h-4 text-white" />
               <p className="text-white">Current Tier:</p>
               <p className="text-fuchsia-600">
-                {userData?.overallPoints > 250000
+                {userData?.overall_points > 250000
                   ? "1"
-                  : userData?.overallPoints > 125000
+                  : userData?.overall_points > 125000
                   ? "2"
                   : "3"}
               </p>
@@ -185,7 +205,7 @@ export default function Page() {
                           scope="col"
                           className="inline-flex w-5/12 ml-4 space-x-2 text-left lg:ml-0"
                         >
-                          <p className="text-fuchsia-700">{user.displayName}</p>
+                          <p className="text-fuchsia-700">{user.display_name}</p>
                           <p className="flex text-fuchsia-400 lg:hidden">
                             (T1)
                           </p>
@@ -194,9 +214,9 @@ export default function Page() {
                           scope="col"
                           className="hidden w-2/12 text-xs text-left lg:text-right lg:text-base lg:flex"
                         >
-                          {user?.overallPoints > 250000
+                          {user?.overall_points > 250000
                             ? "1"
-                            : user?.overallPoints > 125000
+                            : user?.overall_points > 125000
                             ? "2"
                             : "3"}
                         </span>
@@ -205,16 +225,16 @@ export default function Page() {
                           className="w-2/12 text-xs lg:text-right lg:text-base"
                         >
                           {formatLargeNumber(
-                            (user.totalPoints || 1) -
+                            (user.total_points || 1) -
                               1 +
-                              ((user.referralPoints || 1) - 1)
+                              ((user.referral_points || 1) - 1)
                           )}
                         </span>
                         <span
                           scope="col"
                           className="w-2/12 px-4 text-xs lg:text-base lg:text-right"
                         >
-                          {formatLargeNumber((user.referralPoints || 1) - 1)}
+                          {formatLargeNumber((user.referral_points || 1) - 1)}
                         </span>
                       </div>
                     ))}
@@ -231,7 +251,7 @@ export default function Page() {
             ) : (
               <button
                 className="px-8 py-2 text-base text-white bg-transparent border cursor-pointer hover:bg-fuchsia-950 border-purple-950 rounded-2xl"
-                onClick={fetchUsers}
+                onClick={loadMoreUsers}
               >
                 Load More
               </button>
