@@ -4,11 +4,14 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IconFidgetSpinner } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
-import { handleTaskCompletion } from "@/utils/utils";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+// import { handleTaskCompletion } from "@/utils/utils";
+// import { getAuth, onAuthStateChanged } from "firebase/auth";
+import useAuth from "@/features/base/auth/hooks/use-auth";
+import { handleTaskCompletion } from "@/server-action/user-action";
 
-const auth = getAuth();
+// const auth = getAuth();
 const Home = () => {
+  const {user} =  useAuth()
   const searchParams = useSearchParams();
   const socialCode = searchParams.get("code");
   const socialType = searchParams.get("type");
@@ -19,9 +22,9 @@ const Home = () => {
   useEffect(() => {
     if (socialCode !== null && socialType) {
       setLoading(true);
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          const uid = user.uid;
+      // onAuthStateChanged(auth, (user) => {
+        if (user?.id) {
+          const uid = user?.id;
           const gettoken = async (code) => {
             if (socialType == "discord") {
               const userData = await fetch(
@@ -58,9 +61,9 @@ const Home = () => {
         } else {
           console.log("Not Redirect");
         }
-      });
+      // });
     }
-  }, []);
+  }, [user]);
 
   return (
     <>
