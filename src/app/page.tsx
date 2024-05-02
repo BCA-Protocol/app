@@ -8,10 +8,11 @@ import SignInForm from "@/components/SignInForm";
 import Loader from "@/components/loader";
 import { signIn } from "@/server-action/auth-action";
 import useAuth from "@/features/base/auth/hooks/use-auth";
+import { handleResetPassword } from "@/server-action/auth-action"
 
 const Home = () => {
   // const [user, loading] = useAuthState(auth);
-  const {loading,user} =  useAuth()
+  const { loading, user } = useAuth();
   // const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
   const [formData, setFormData] = useState({
     email: "",
@@ -45,11 +46,24 @@ const Home = () => {
     }
   };
 
+  // const handleForgotPasswordSubmit = async (e) => {
+  //   e.preventDefault();
+  //   await sendPasswordResetEmail(auth, formData.email);
+  //   alert(`Password Rest Link Send To ${formData.email}`);
+  // };
+
   const handleForgotPasswordSubmit = async (e) => {
     e.preventDefault();
-    await sendPasswordResetEmail(auth, formData.email);
-    alert(`Password Rest Link Send To ${formData.email}`);
+    
+    const { success, message } = await handleResetPassword(formData.email);
+    if (success) {
+      alert(message);
+    } else {
+      console.error("API call failed:", message);
+      //handle error
+    }
   };
+  
 
   return (
     <div className="">

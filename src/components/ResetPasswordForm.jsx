@@ -5,10 +5,11 @@ import { handleResetPassword } from "@/utils/utils";
 import { IconFidgetSpinner } from "@tabler/icons-react";
 import mascot from "/public/m/1-small.png";
 import Image from "next/image";
+import { handleConfirmNewPassword } from "@/server-action/auth-action"
 
 const ResetPasswordForm = () => {
   const searchParams = useSearchParams();
-  const oobCode = searchParams.get("oobCode");
+  // const oobCode = searchParams.get("oobCode");
 
   const [formData, setFormData] = useState({
     newPassword: "",
@@ -43,19 +44,30 @@ const ResetPasswordForm = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (!oobCode) {
-      alert("oob code doesnt exist");
-    }
+    // if (!oobCode) {
+    //   alert("oob code doesnt exist");
+    // }
     if (validateForm()) {
       setLoading(true);
       try {
-        const result = await handleResetPassword(oobCode, formData.newPassword);
-        if (result.success) {
-          alert(result.message);
-          router.replace("/");
+        // const result = await handleResetPassword(oobCode, formData.newPassword);
+
+        // if (result.success) {
+        //   alert(result.message);
+        //   router.replace("/");
+        // } else {
+        //   alert(result.message);
+        // }
+    
+        const { success, message, redirectUrl } = await handleConfirmNewPassword(formData.newPassword);
+        if (success) {
+          alert(message);
+          // router.replace(redirectUrl);
         } else {
-          alert(result.message);
+          alert(message);
+          //handle error
         }
+
         setLoading(false);
       } catch (error) {
         alert(error);
