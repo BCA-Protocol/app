@@ -5,7 +5,7 @@ import logo from "/public/bca-left.png";
 import mascotHappy from "/public/m/4-small.png";
 import mascotLove from "/public/m/8-small.png";
 
-import { useSignOut } from "react-firebase-hooks/auth";
+import { useSignOut,useAuthState } from "react-firebase-hooks/auth";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import { auth } from "@/firebase";
@@ -32,6 +32,11 @@ const menuItems = [
     icon: TrophyIcon,
   },
   {
+    href: "/admin",
+    title: "Admin",
+    icon: RocketLaunchIcon,
+  },
+  {
     href: "/quest",
     title: "Quest",
     icon: RocketLaunchIcon,
@@ -41,6 +46,7 @@ const menuItems = [
 export default function SideBar({ currentPath }) {
   const router = useRouter();
   const [signOut] = useSignOut(auth);
+  const [user] = useAuthState(auth);
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [activeMascot, setActiveMascot] = useState(mascotHappy);
 
@@ -56,6 +62,7 @@ export default function SideBar({ currentPath }) {
   const toggleSidebar = () => {
     setSidebarVisible(!sidebarVisible);
   };
+  console.log('user',user?.email)
 
   return (
     <div>
@@ -86,34 +93,36 @@ export default function SideBar({ currentPath }) {
                   menuItems.length > 0 &&
                   menuItems.map((item, index) => {
                     const IconElement = item.icon || null;
-
-                    return (
-                      <li key={index}>
-                        <Link
-                          href={item.href}
-                          className={classNames(
-                            currentPath === item.href
-                              ? "bg-purple-950 text-white relative"
-                              : "",
-                            "group flex items-center rounded-xl font-normal text-sm text-fuchsia-200 hover:text-white py-3 px-3 hover:bg-purple-900 border-fuchsia-900 gap-x-2"
-                          )}
-                        >
-                          {currentPath === item.href && (
-                            <div className="absolute left-0.5 block w-0.5 py-3 bg-fuchsia-700 bca-glow-left"></div>
-                          )}
-                          {IconElement && (
-                            <IconElement
-                              className={classNames(
-                                currentPath === item.href ? "text-white" : "",
-                                "w-5 h-5 text-fuchsia-200 group-hover:text-white-400 shrink-0"
-                              )}
-                              aria-hidden="true"
-                            />
-                          )}
-                          {item.title}
-                        </Link>
-                      </li>
-                    );
+                    if(item.href==='/admin' && user?.email!=='ak.wazir96@gmail.com') return <></>
+                    else{
+                      return (
+                        <li key={index}>
+                          <Link
+                            href={item.href}
+                            className={classNames(
+                              currentPath === item.href
+                                ? "bg-purple-950 text-white relative"
+                                : "",
+                              "group flex items-center rounded-xl font-normal text-sm text-fuchsia-200 hover:text-white py-3 px-3 hover:bg-purple-900 border-fuchsia-900 gap-x-2"
+                            )}
+                          >
+                            {currentPath === item.href && (
+                              <div className="absolute left-0.5 block w-0.5 py-3 bg-fuchsia-700 bca-glow-left"></div>
+                            )}
+                            {IconElement && (
+                              <IconElement
+                                className={classNames(
+                                  currentPath === item.href ? "text-white" : "",
+                                  "w-5 h-5 text-fuchsia-200 group-hover:text-white-400 shrink-0"
+                                )}
+                                aria-hidden="true"
+                              />
+                            )}
+                            {item.title}
+                          </Link>
+                        </li>
+                      );
+                    }
                   })}
               </ul>
             </div>
