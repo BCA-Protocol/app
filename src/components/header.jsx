@@ -23,7 +23,7 @@ export default function Header() {
   const [globalSettings, setGlobalSettings] = useState(null);
   const [copiedRefCode, setCopiedRefLink] = useState(null);
   const [refsCount, setRefsCount] = useState(null);
-  const actualNumber = globalSettings?.protocolPoints || 1234567;
+  const actualNumber = globalSettings?.settings?.protocol_points || 1234567;
   const startNumber = Math.max(actualNumber - 100000, 0);
   const [displayNumber, setDisplayNumber] = useState(startNumber);
   const displayNumberRef = useRef(startNumber);
