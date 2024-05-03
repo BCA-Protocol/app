@@ -28,7 +28,7 @@ import arbitrumLogo from "/public/chains/arbitrum.png";
 import bnbLogo from "/public/chains/bnb.png";
 import optimismLogo from "/public/chains/optimism.png";
 import useAuth from "@/features/base/auth/hooks/use-auth";
-import { getUser } from "./actions";
+import { getUserById } from "@/server-action/user-action";
 
 
 export default function Page() {
@@ -55,8 +55,9 @@ export default function Page() {
         setLoading(true);
         // const userDataRes = await getUserByUUID(user.uid);
         console.log(user.id)
-        const {data,error} = await getUser(user.id);
+        const data = await getUserById(user.id);
         // taskData && setIncompleteTasks(taskData);
+
         data && setUserData(data);
 
         // const fullUserActivity = await getUserActivity(user.uid);

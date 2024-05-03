@@ -26,7 +26,7 @@ export const signUpAction = async ({email, password, displayName, referedBy,ip,b
   });
   if (referedBy) {
       await addPointsToUser({userId: referedBy, pointsToAdd:5000, description:"Referral SignUp", type:"Referral"});
-      const response = await supabase.from('users').update({refered_by: referedBy}).eq('id', referedBy);
+      const response = await supabase.from('users').update({refered_by: referedBy}).eq('id', authUser?.user?.id!);
       console.log(response)
   }
   

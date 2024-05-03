@@ -2,20 +2,24 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
+import useAuth from "@/features/base/auth/hooks/use-auth";
 import { auth } from "@/firebase";
 import { formatLargeNumber } from "@/utils/helper";
 import {
-  getUserByUUID,
-  getReferralCount,
-  getGlobalSettings,
+  // getUserByUUID,
+  // getReferralCount,
+  // getGlobalSettings,
 } from "@/utils/utils";
 import SuccessMessage from "@/components/notifications/success";
 import { UserPlusIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
+import { getUserById, getReferralCount } from "@/server-action/user-action";
+import { getGlobalSettings } from "@/server-action/base-action";
 
 export default function Header() {
-  const [user] = useAuthState(auth);
-  const [userData, setUserData] = useState([]);
+  // const [user] = useAuthState(auth);
+  const {user} =  useAuth()
+  const [userData, setUserData] = useState(null);
   const [globalSettings, setGlobalSettings] = useState(null);
   const [copiedRefCode, setCopiedRefLink] = useState(null);
   const [refsCount, setRefsCount] = useState(null);
@@ -28,15 +32,18 @@ export default function Header() {
 
   useEffect(() => {
     const fetchUsersAndSettings = async () => {
-      const userRes = await getUserByUUID(user.uid);
+      if (!user?.id) {
+        return;
+      }
+      const userRes = await getUserById(user.id)
       setUserData(userRes);
-      const refCount = await getReferralCount(user.uid);
+      const refCount = await getReferralCount(user.id);
       setRefsCount(refCount);
 
       const globalSettingsData = await getGlobalSettings();
       setGlobalSettings(globalSettingsData);
     };
-    user && user.uid && fetchUsersAndSettings();
+    user && user.id && fetchUsersAndSettings();
   }, [user]);
 
   useEffect(() => {
@@ -75,7 +82,7 @@ export default function Header() {
 
   const handleCopy = () => {
     const inputElement = document.createElement("input");
-    const referralCode = userData?.userId;
+    const referralCode = userData?.id;
     const urlToCopy = `${window.location.origin}/signup?ref=${referralCode}`;
 
     inputElement.value = urlToCopy;

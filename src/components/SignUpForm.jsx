@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { getUserByUUID } from "@/utils/utils";
+import { getUserById } from "@/server-action/user-action";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "/public/bca-left.png";
@@ -42,8 +43,9 @@ export default function SignUpForm({ onSignUp, refCode }) {
       return;
     }
     setSignupDisable(true);
-    const userdata = await getUserByUUID(formData.referalCode);
-    if (userdata?.userId) {
+    // const userdata = await getUserByUUID(formData.referalCode);
+    const userdata = await getUserById(formData.referalCode)
+    if (userdata?.id) {
       setSignupDisable(false);
     } else {
       validationErrors.referalCode =
@@ -189,7 +191,7 @@ export default function SignUpForm({ onSignUp, refCode }) {
                 name="referalCode"
                 value={formData.referalCode}
                 onChange={handleChange}
-                onBlur={handleReferalBlur}
+                // onBlur={handleReferalBlur}
                 className={`w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm ${
                   errors.referalCode ? "border-red-500" : ""
                 }`}

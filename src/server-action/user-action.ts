@@ -4,7 +4,48 @@ import { headers } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
-export const addPointsToUser = async ({
+const getUserById = async (id: string) => {
+  console.log("id", id)   
+  const origin = headers().get("origin");
+  const supabase = createClient();
+
+  try {
+    const { data, error }  = await supabase.from('users').select().eq('id', id).single();
+    console.log("userData:---", data, error)
+    if (error) {
+      throw new Error(`Error fetching referral count for user ${id}: ${error.message}`);
+    }
+    if (data) {
+      return data;
+    }
+  } catch (error) {
+    console.error("Error getting referral count:", error);
+  }
+};
+
+const getReferralCount = async (id: string) => {
+  const supabase = createClient();
+
+  try {
+    const { count, error } = await supabase
+      .from("users")
+      .select("*", { count: "exact", head: true })
+      .eq("refered_by", id);      
+
+    console.log("-----------------------refCountData------------",count,error)
+    if (error) {
+      // throw new Error(`Error fetching referral count for user ${id}: ${error.message}`);
+      return 0; // Return 0 for error handling
+    }
+
+    return count || 0;
+  } catch (error) {
+    console.error("Error getting referral count:", error);
+    return 0; // Return 0 for error handling
+  }
+};
+
+const addPointsToUser = async ({
   userId,
   pointsToAdd,
   description,
@@ -71,7 +112,7 @@ export const addPointsToUser = async ({
   return { success: true, user: updatedUser };
 };
 
-export const handleTaskCompletion = async (
+const handleTaskCompletion = async (
   userId: string,
   taskId: string,
   additionalUserData: any = {}
@@ -152,3 +193,10 @@ export const handleTaskCompletion = async (
     return false;
   }
 };
+
+export { 
+  getUserById,
+  getReferralCount,
+  addPointsToUser,
+  handleTaskCompletion,
+}
