@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import { handleTaskCompletion } from "@/utils/utils";
+// import { handleTaskCompletion } from "@/utils/utils";
+import { handleTaskCompletion } from "@/server-action/user-action";
 import { useRouter } from "next/navigation";
 
 const TelegramLogin = ({ uid }) => {
@@ -29,7 +30,7 @@ const TelegramLogin = ({ uid }) => {
           return true;
         }
         const taskRes = await handleTaskCompletion(uid, "connectTelegram", {
-          telegramData: data,
+          telegram_data: data,
         });
         router.replace("/");
       }

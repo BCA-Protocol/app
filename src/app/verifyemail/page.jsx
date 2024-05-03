@@ -3,7 +3,8 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IconFidgetSpinner } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
-import { verifyEmail, handleTaskCompletion } from "@/utils/utils";
+import { verifyEmail } from "@/utils/utils";
+import { handleTaskCompletion } from "@/server-action/user-action";
 const Home = () => {
   const searchParams = useSearchParams();
   const oobCode = searchParams.get("oobCode");

@@ -12,7 +12,7 @@ const getUserById = async (id: string) => {
   try {
     const { data, error }  = await supabase.from('users').select().eq('id', id).single();
     console.log("userData:---", data, error)
-    if (error) {
+    if (error) {      
       throw new Error(`Error fetching referral count for user ${id}: ${error.message}`);
     }
     if (data) {
@@ -42,6 +42,31 @@ const getReferralCount = async (id: string) => {
   } catch (error) {
     console.error("Error getting referral count:", error);
     return 0; // Return 0 for error handling
+  }
+};
+
+const toggleCollecting = async (id: string, value: boolean) => {
+  const supabase = createClient();
+
+  try {
+    const { data: updatedUserData, error } = await supabase
+      .from("users")
+      .update({ collecting: value})
+      .eq("id", id)  
+      .select()
+      .single();
+
+    console.log("-----------------------toggleCollectingData------------",updatedUserData,error)
+    if (error) {
+      // throw new Error(`Error fetching referral count for user ${id}: ${error.message}`);
+      console.log("Error fetching referral count:", error)
+      return { success: false, error: error?.message };
+    }
+
+    return { success: true, user: updatedUserData };
+  } catch (error) {
+    console.error("Error getting referral count:", error);
+    return { success: false, error: error };
   }
 };
 
@@ -157,7 +182,7 @@ const handleTaskCompletion = async (
     const taskPoints = task.points;
 
     let completed_tasks = user.completed_tasks || {};
-    const updatedUser = {
+    const updatedUserData = {
       completed_tasks: {
         ...completed_tasks,
         [taskId]: {
@@ -165,11 +190,12 @@ const handleTaskCompletion = async (
           created: Date.now(),
         },
       },
-      ip:additionalUserData.ip,
-      browser_data:additionalUserData.browserData,
+      ...additionalUserData,
+      // ip:additionalUserData.ip,
+      // browser_data:additionalUserData.browserData,
     };
-    console.log("updatedUser",updatedUser)
-    await supabase.from("users").update(updatedUser).eq("id", userId);
+    console.log("updatedUserData",updatedUserData)
+    await supabase.from("users").update(updatedUserData).eq("id", userId);
 
     await addPointsToUser({
       userId,
@@ -197,6 +223,7 @@ const handleTaskCompletion = async (
 export { 
   getUserById,
   getReferralCount,
+  toggleCollecting,
   addPointsToUser,
   handleTaskCompletion,
 }

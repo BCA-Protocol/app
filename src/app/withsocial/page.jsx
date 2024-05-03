@@ -35,7 +35,7 @@ const Home = () => {
                   uid,
                   "connectDiscord",
                   {
-                    discordData: userData.userData,
+                    discord_data: userData.userData,
                   }
                 );
                 router.replace("/");
@@ -49,7 +49,7 @@ const Home = () => {
                   uid,
                   "connectTwitter",
                   {
-                    twitterData: userData.userData,
+                    twitter_data: userData.userData,
                   }
                 );
                 router.replace("/");
