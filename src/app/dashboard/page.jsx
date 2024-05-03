@@ -60,9 +60,9 @@ export default function Page() {
           message: errorSocial,
           show: true,
         });
-        const newParams = new URLSearchParams(params.toString());
-        newParams.delete("error_message");
-        router.replace('/dashboard', undefined, { shallow: true });
+        // const newParams = new URLSearchParams(params.toString());
+        // newParams.delete("error_message");
+        // router.replace('/dashboard', undefined, { shallow: true });
       }
       } catch (error) {
         console.error("Error fetching incomplete tasks:", error);

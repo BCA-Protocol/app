@@ -4,9 +4,7 @@ import { auth } from "@/firebase";
 import { useEffect, useState } from "react";
 // import { RocketLaunchIcon, TrophyIcon, Bol } from "@heroicons/react/24/outline";
 import { BoltIcon, UserIcon } from "@heroicons/react/24/solid";
-import { formatLargeNumber } from "@/utils/helper";
-import { getFunctions, httpsCallable } from "firebase/functions";
-import { getUserByUUID } from "@/utils/utils";
+import { getData } from "@/utils/utils";
 import { useRouter } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { IconLink,IconCoinBitcoinFilled, IconBrandTwitterFilled, IconBrandDiscordFilled } from "@tabler/icons-react";
@@ -14,75 +12,32 @@ import QuestPopUp from "@/components/QuestPopUp";
 
 export default function Page() {
   const [user] = useAuthState(auth);
-  const [users, setUsers] = useState([]);
-  const [lastUser, setLastUser] = useState(null);
-  const [userData, setUserData] = useState(null);
-  const [usersLoading, setUsersLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const [companyData, setCompanyData] = useState(null);
+  const [selectedQuest, setSelectedQuest] = useState(null);
+  const [questData, setQuestData] = useState(null);
 
   const router = useRouter();
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchQuestData = async () => {
       if (!user) {
         router.replace("/");
         return;
       }
       try {
-        const userDataRes = await getUserByUUID(user.uid);
-        userDataRes && setUserData(userDataRes);
+        const questsDataRes = await getData("quests");
+        questsDataRes && setQuestData(questsDataRes);
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.error("Error fetching Quests data:", error);
       }
     };
-    fetchUserData();
+    fetchQuestData();
   }, [router, user]);
 
-  const fetchUsers = async () => {
-    setUsersLoading(true);
-
-    try {
-      const functions = getFunctions();
-      const fetchLeaderboard = httpsCallable(
-        functions,
-        "fetchPaginatedLeaderboard"
-      );
-
-      // Prepare the data object with pagination parameters
-      const paginationData = lastUser
-        ? {
-            lastOverallPoints: lastUser.overallPoints,
-            lastCreated: lastUser.created,
-          }
-        : {};
-
-      const result = await fetchLeaderboard(paginationData);
-      const { users: newUsers, lastUser: newLastUser } = result.data;
-
-      setUsers((prevUsers) => [...prevUsers, ...newUsers]);
-      setLastUser(newLastUser);
-    } catch (error) {
-      console.error("Failed to fetch users:", error);
-    } finally {
-      setUsersLoading(false);
-    }
-  };
-
-  // useEffect(() => {
-  //   fetchUsers();
-  // });
-  const test_data = [
-    {name: 'CredBull',link: 'credibull.io', twitter:'33k',discord:'33k',user:'7.2k',light:'7.2k'},
-    {name: 'CRIPTOKEN',link: 'criptoken.ai', twitter:'33k',discord:'33k',user:'7.2k',light:'7.2k'},
-    {name: 'Orochi Network',link: 'orochi.network', twitter:'33k',discord:'33k',user:'7.2k',light:'7.2k'},
-    {name: 'Kitty Meme Coin',link: 'www.kittymemecoin.com', twitter:'33k',discord:'33k',user:'7.2k',light:'7.2k'}
-
-  ]
 
   return (
     <>
-    {modalOpen && <QuestPopUp isOpen={modalOpen} onClose={() => setModalOpen(false)} companyData={companyData}/>}
+    {modalOpen && <QuestPopUp isOpen={modalOpen} onClose={() => setModalOpen(false)} selectedQuest={selectedQuest}/>}
       <div className="px-4 pb-24">
         <div className="flex items-center justify-center w-full pt-0 text-center">
           <div class="w-2/5 relative pt-0 z-10">
@@ -96,21 +51,18 @@ export default function Page() {
             <div className="mt-4 thin-line border-purple-950"></div>
           </div>
           <div className="px-2 lg:px-8">
-            {test_data && (
+            {questData && (
               <>
-                {test_data.length > 0 && (
+                {questData.length > 0 && (
                   <div className="flex flex-col space-y-2">
-                    {test_data.map((user, index) => (
-                      <div key={index} className="flex items-center justify-start w-full px-2 py-2 overflow-hidden text-sm font-semibold transition ease-out border-t rounded-full cursor-pointer border-fuchsia-800 text-fuchsia-200 bca-purple-row-glow-inside hover:bg-purple-950 bg-[#260C44]" onClick={() => {setCompanyData(user); setModalOpen(true)}}>
-                        {/* <span scope="col" className="w-1/12 text-left">
-                          
-                        </span> */}
+                    {questData.map((quest, index) => (
+                      <div key={index} className="flex items-center justify-start w-full px-2 py-2 overflow-hidden text-sm font-semibold transition ease-out border-t rounded-full cursor-pointer border-fuchsia-800 text-fuchsia-200 bca-purple-row-glow-inside hover:bg-purple-950 bg-[#260C44]" onClick={() => {setSelectedQuest(quest); setModalOpen(true)}}>
                         <span
                           scope="col"
                           className="inline-flex w-5/12 ml-4 space-x-2 text-left lg:ml-2"
                         >
                           <IconCoinBitcoinFilled/>
-                          <p className="text-fuchsia-700">{user.name}</p>
+                          <p className="text-fuchsia-700">{quest.name}</p>
                           {/* <p className="flex text-fuchsia-400 lg:hidden">
                             (T1)
                           </p> */}
@@ -123,7 +75,7 @@ export default function Page() {
                         <div className="inline-flex items-center justify-end px-4 py-1 space-x-2 text-sm font-semibold rounded-xl bg-purple-950">
                           <IconLink className="w-3 h-3 text-white"/>
                           <p className="text-white-300">
-                          {user.link}
+                          {quest.link}
                           </p>
                         </div>
                         </span>
@@ -134,7 +86,7 @@ export default function Page() {
                         <div className="inline-flex items-center justify-center px-4 py-1 space-x-2 text-sm font-semibold rounded-xl bg-purple-950">
                           <IconBrandTwitterFilled className="w-3 h-3 text-white"/>
                           <p className="text-white">
-                          {user.twitter}
+                          {quest.twitter}
                           </p>
                         </div>
                         </span>
@@ -145,7 +97,7 @@ export default function Page() {
                         <div className="inline-flex items-center justify-center px-4 py-1 space-x-2 text-sm font-semibold rounded-xl bg-purple-950">
                           <IconBrandDiscordFilled className="w-3 h-3 text-white"/>
                           <p className="text-white">
-                          {user.discord}
+                          {quest.discord}
                           </p>
                         </div>
                         </span>
@@ -156,7 +108,7 @@ export default function Page() {
                         <div className="inline-flex items-center justify-center px-4 py-1 space-x-2 text-sm font-semibold rounded-xl bg-purple-950">
                           <UserIcon className="w-3 h-3 text-white"/>
                           <p className="text-white">
-                          {user.user}
+                          {quest.user}
                           </p>
                         </div>
                         </span>
@@ -167,7 +119,7 @@ export default function Page() {
                         <div className="inline-flex items-center justify-center px-4 py-1 space-x-2 text-sm font-semibold rounded-xl bg-purple-950">
                           <BoltIcon className="w-3 h-3 text-white"/>
                           <p className="text-white">
-                          {user.light}
+                          {quest.light}
                           </p>
                         </div>
                         </span>
@@ -179,18 +131,6 @@ export default function Page() {
             )}
           </div>
           <div className="flex justify-center mt-12">
-            {usersLoading ? (
-              <button className="text-base text-white" disabled>
-                Loading...
-              </button>
-            ) : (
-              <button
-                className="px-8 py-2 text-base text-white bg-transparent border cursor-pointer hover:bg-fuchsia-950 border-purple-950 rounded-2xl"
-                onClick={fetchUsers}
-              >
-                Load More
-              </button>
-            )}
           </div>
         </div>
       </div>

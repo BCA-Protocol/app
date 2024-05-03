@@ -6,8 +6,9 @@ import mascotLove from "/public/m/8-small.png";
 
 import { LockClosedIcon } from '@heroicons/react/24/solid';
 
-export default function QuestPopUp({ isOpen, onClose, companyData }) {
+export default function QuestPopUp({ isOpen, onClose, selectedQuest }) {
   const [activeButton, setActiveButton] = useState('Tokens');
+  console.log('temp',selectedQuest)
 
   useEffect(() => {
     const handleOutsideClick = (e) => {
@@ -88,7 +89,7 @@ export default function QuestPopUp({ isOpen, onClose, companyData }) {
                   <Image src={logo} alt="Logo" width={120} height={120} />
                 </div>
                 <h3 className="text-2xl font-medium text-white">
-                  {companyData.name}
+                  {selectedQuest?.name}
                 </h3>
               </div>
               <div className="py-4 flex flex-col space-y-4">
