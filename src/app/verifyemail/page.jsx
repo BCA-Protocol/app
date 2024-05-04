@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { IconFidgetSpinner } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { verifyEmail } from "@/utils/utils";
-import { handleTaskCompletion } from "@/server-action/user-action";
+import { handleVerifyEmail } from "@/server-action/auth-action";
 const Home = () => {
   const searchParams = useSearchParams();
   const oobCode = searchParams.get("oobCode");
@@ -17,22 +17,24 @@ const Home = () => {
       const handleVerification = async () => {
         setLoading(true);
         try {
-          const response = await verifyEmail(oobCode);
-          if (response.emailVerified) {
-            const taskCOmRes = await handleTaskCompletion(
-              response.localId,
-              "verifyEmail"
-            );
-            if (taskCOmRes) {
-              setLoading(false);
-              router.replace("/dashboard");
-              window.location.reload();
-            } else {
-              setLoading(false);
-            }
-          } else {
-            setLoading(false);
-          }
+          handleVerifyEmail();
+          setLoading(false);
+          // const response = await verifyEmail(oobCode);
+          // if (response.emailVerified) {
+          //   const taskCOmRes = await handleTaskCompletion(
+          //     response.localId,
+          //     "verifyEmail"
+          //   );
+          //   if (taskCOmRes) {
+          //     setLoading(false);
+          //     router.replace("/dashboard");
+          //     window.location.reload();
+          //   } else {
+          //     setLoading(false);
+          //   }
+          // } else {
+          //   setLoading(false);
+          // }
         } catch (error) {
           console.error("Error verifying email:", error);
         }

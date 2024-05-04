@@ -9,18 +9,20 @@ export const signUpAction = async ({email, password, displayName, referedBy,ip,b
   const origin = headers().get("origin");
   const supabase = createClient();
 
-  const { error } = await supabase.auth.signUp({
+  const { error, data:signupUserData }:any = await supabase.auth.signUp({
     email,
     password,
     options: {
-      emailRedirectTo: `${origin}/auth/callback`,
+      emailRedirectTo: `${origin}/verifyemail`,
               data: {
                   display_name:displayName,
                   refered_by: referedBy
               }
     },
   });
-  const { error:authError, data:authUser } = await supabase.auth.signInWithPassword({
+  console.log("signupUserData",error, signupUserData)
+  if(signupUserData?.user_metadata?.email_verified){
+    const { error:authError, data:authUser } = await supabase.auth.signInWithPassword({
       email,
       password,
   });
@@ -36,7 +38,9 @@ export const signUpAction = async ({email, password, displayName, referedBy,ip,b
     ip: ip,
     browser_data: browserData,
   });
-  console.log(error)
+  }else {
+
+  }
   if (error) {
     return redirect("/signup?message=Could not authenticate user");
   }
@@ -117,6 +121,19 @@ export const handleConfirmNewPassword = async (newPassword: string) => {
   } catch (error) {
     console.error("Error confirming new password:", error);
     return { success: false, message: "Error confirming new password", redirectUrl: "/" };
+  }
+}
+export const handleVerifyEmail = async () => {
+  try {
+    const supabase = createClient();
+    const user = await supabase.auth.getUser();
+    console.log("user", user)
+    // const taskCOmRes = await handleTaskCompletion(
+    //   response.localId,
+    //   "verifyEmail"
+    // );
+  } catch (error) {
+    
   }
 }
 
