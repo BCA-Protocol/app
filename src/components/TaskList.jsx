@@ -50,18 +50,18 @@ const TaskList = ({ user, userData, sendEmailVerification }) => {
         <li
           className={classNames(
             "flex flex-row items-center justify-between p-2 border border-fuchsia-600 rounded-xl",
-            userData.completedTasks?.hasOwnProperty("connectTwitter")
+            userData?.completed_tasks?.hasOwnProperty("connectTwitter")
               ? "bg-fuchsia-950"
               : "hover:bg-fuchsia-950 hover:shadow-cyan-500/60 hover:shadow-lg"
           )}
         >
-          {userData.completedTasks?.hasOwnProperty("connectTwitter") ? (
+          {userData?.completed_tasks?.hasOwnProperty("connectTwitter") ? (
             <>
               <div className="flex flex-col items-start justify-center">
                 <div className="font-bold">✓ Twitter Connected ⭐⭐⭐</div>
                 <div className="pl-4 text-xs">
                   {formatTimestamp(
-                    userData.completedTasks?.connectTwitter?.created || null
+                    userData?.completed_tasks?.connectTwitter?.created || null
                   )}
                 </div>
               </div>
@@ -86,18 +86,18 @@ const TaskList = ({ user, userData, sendEmailVerification }) => {
         <li
           className={classNames(
             "flex flex-row items-center justify-between p-2 border border-fuchsia-600 rounded-xl",
-            userData.completedTasks?.hasOwnProperty("connectDiscord")
+            userData?.completed_tasks?.hasOwnProperty("connectDiscord")
               ? "bg-fuchsia-950"
               : "hover:bg-fuchsia-950 hover:shadow-cyan-500/60 hover:shadow-lg"
           )}
         >
-          {userData.completedTasks?.hasOwnProperty("connectDiscord") ? (
+          {userData?.completed_tasks?.hasOwnProperty("connectDiscord") ? (
             <>
               <div className="flex flex-col items-start justify-center">
                 <div className="font-bold">✓ Discord Connected ⭐⭐⭐</div>
                 <div className="pl-4 text-xs">
                   {formatTimestamp(
-                    userData.completedTasks?.connectDiscord?.created || null
+                    userData?.completed_tasks?.connectDiscord?.created || null
                   )}
                 </div>
               </div>
@@ -122,18 +122,18 @@ const TaskList = ({ user, userData, sendEmailVerification }) => {
         <li
           className={classNames(
             "flex flex-row items-center justify-between p-2 border border-fuchsia-600 rounded-xl",
-            userData.completedTasks?.hasOwnProperty("connectTelegram")
+            userData?.completed_tasks?.hasOwnProperty("connectTelegram")
               ? "bg-fuchsia-950"
               : "hover:bg-fuchsia-950 hover:shadow-cyan-500/60 hover:shadow-lg"
           )}
         >
-          {userData.completedTasks?.hasOwnProperty("connectTelegram") ? (
+          {userData?.completed_tasks?.hasOwnProperty("connectTelegram") ? (
             <>
               <div className="flex flex-col items-start justify-center">
                 <div className="font-bold">✓ Telegram Connected ⭐⭐⭐</div>
                 <div className="pl-4 text-xs">
                   {formatTimestamp(
-                    userData.completedTasks?.connectTelegram?.created || null
+                    userData?.completed_tasks?.connectTelegram?.created || null
                   )}
                 </div>
               </div>
@@ -144,7 +144,7 @@ const TaskList = ({ user, userData, sendEmailVerification }) => {
           ) : (
             <>
               <div className="w-2/3 text-white cursor-pointer hover:-translate-y-1">
-                <TelegramLogin uid={user.uid} />
+                <TelegramLogin uid={user?.id} />
               </div>
               <span className="w-1/5 text-sm font-bold text-fuchsia-600">
                 30,000 Points
@@ -169,7 +169,7 @@ const TaskList = ({ user, userData, sendEmailVerification }) => {
                 <div className="font-bold">✓ Email verified ⭐</div>
                 <div className="pl-4 text-xs">
                   {formatTimestamp(
-                    userData.completedTasks?.verifyEmail?.created || null
+                    userData?.completed_tasks?.verifyEmail?.created || null
                   )}
                 </div>
               </div>
@@ -201,7 +201,7 @@ const TaskList = ({ user, userData, sendEmailVerification }) => {
             <div className="font-bold">✓ Account created ⭐</div>
             <div className="pl-4 text-xs">
               {formatTimestamp(
-                userData.completedTasks?.createAccount?.created || null
+                userData?.completed_tasks?.createAccount?.created || null
               )}
             </div>
           </div>

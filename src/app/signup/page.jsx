@@ -11,7 +11,7 @@ import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { addPointsToUser } from "@/utils/utils";
 import { Timestamp } from "firebase/firestore";
 import { collectBrowserData, fetchIPAddress } from "@/utils/helper";
-import {signUpAction} from '@/server-action/user-action'
+import {signUpAction} from '@/server-action/auth-action'
 
 export default function Page() {
   const searchParams = useSearchParams();

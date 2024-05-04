@@ -9,7 +9,7 @@ import { getUserByUUID } from "@/utils/utils";
 import { useRouter } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
 import useAuth from "@/features/base/auth/hooks/use-auth";
-import { getUser } from "../dashboard/actions";
+import { getUserById } from "@/server-action/user-action";
 import { fetchLeaderboardUsers } from "./actions";
 
 
@@ -32,7 +32,7 @@ export default function Page() {
       }
       try {
         // const userDataRes = await getUserByUUID(user.uid);
-        const {data,error} = await getUser(user.id);
+        const data = await getUserById(user.id);
         data && setUserData(data);
       } catch (error) {
         console.error("Error fetching user data:", error);

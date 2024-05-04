@@ -26,15 +26,15 @@ export const signUpAction = async ({email, password, displayName, referedBy,ip,b
   });
   if (referedBy) {
       await addPointsToUser({userId: referedBy, pointsToAdd:5000, description:"Referral SignUp", type:"Referral"});
-      const response = await supabase.from('users').update({refered_by: referedBy}).eq('id', referedBy);
+      const response = await supabase.from('users').update({refered_by: referedBy}).eq('id', authUser?.user?.id!);
       console.log(response)
   }
   
   console.log(authUser, authError)
   await handleTaskCompletion(authUser?.user?.id!, "createAccount", {
-  email: email,
-  ip: ip,
-  browserData: browserData,
+    email: email,
+    ip: ip,
+    browser_data: browserData,
   });
   console.log(error)
   if (error) {
@@ -43,20 +43,21 @@ export const signUpAction = async ({email, password, displayName, referedBy,ip,b
 
   return redirect("/dashboard");
 };
-  export const signIn = async ({email,password}:{email:string,password:string}) => {
 
-    const supabase = createClient();
+export const signIn = async ({email,password}:{email:string,password:string}) => {
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+  const supabase = createClient();
 
-    if (error) {
-      return redirect("/?message=Could not authenticate user");
-    }
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
 
-    return redirect("/dashboard");
+  if (error) {
+    return redirect("/?message=Could not authenticate user");
+  }
+
+  return redirect("/dashboard");
 };
 
 export const signOut = async () => {
