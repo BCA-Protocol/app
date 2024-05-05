@@ -5,21 +5,22 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
 const getUserById = async (id: string) => {
-  console.log("id", id)   
+  console.log("id", Date.now(), id)   
   const origin = headers().get("origin");
   const supabase = createClient();
 
   try {
     const { data, error }  = await supabase.from('users').select().eq('id', id).single();
-    console.log("userData:---", data, error)
+    console.log("userData:---", Date.now(), data?.email, error)
     if (error) {      
       throw new Error(`Error fetching referral count for user ${id}: ${error.message}`);
     }
     if (data) {
+      console.log("userData:---returned---", Date.now(), data?.email, error)
       return data;
     }
   } catch (error) {
-    console.error("Error getting referral count:", error);
+    console.log("Error getting referral count:", error);
   }
 };
 
