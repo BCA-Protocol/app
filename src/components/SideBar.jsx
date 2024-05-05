@@ -32,11 +32,6 @@ const menuItems = [
     icon: TrophyIcon,
   },
   {
-    href: "/admin",
-    title: "Admin",
-    icon: RocketLaunchIcon,
-  },
-  {
     href: "/quest",
     title: "Quest",
     icon: RocketLaunchIcon,
@@ -93,8 +88,6 @@ export default function SideBar({ currentPath }) {
                   menuItems.length > 0 &&
                   menuItems.map((item, index) => {
                     const IconElement = item.icon || null;
-                    if(item.href==='/admin' && user?.email!=='ak.wazir96@gmail.com') return <></>
-                    else{
                       return (
                         <li key={index}>
                           <Link
@@ -122,12 +115,12 @@ export default function SideBar({ currentPath }) {
                           </Link>
                         </li>
                       );
-                    }
                   })}
               </ul>
             </div>
             <div className="p-4 lg:mt-36">
               <div className="mb-6 border-purple-900 thin-line"></div>
+              <div className="flex flex-col">
               <Link
                 target="_blank"
                 href="https://docs.bcaprotocol.org/get-started"
@@ -143,7 +136,29 @@ export default function SideBar({ currentPath }) {
                 </div>
               </Link>
             </div>
-          </div>
+            {
+              process.env.NEXT_PUBLIC_ADMIN_EMAILS.split(',')?.includes(user?.email) && (
+                <>
+              <div className="mb-2 border-purple-900"></div>
+              <Link
+                // target="_blank"
+                href="/admin"
+                className="flex items-center px-4 py-2 text-sm group rounded-xl text-fuchsia-200 hover:text-white hover:bg-purple-900 gap-x-2"
+              >
+                <RocketLaunchIcon
+                  className={classNames(
+                    currentPath === "/admin" ? "text-white" : "",
+                    "w-5 h-5 text-fuchsia-200 group-hover:text-white-400 shrink-0"
+                  )}
+                  aria-hidden="true"
+                />
+                <div className="flex flex-col">
+                  <p className="text-sm font-semibold">Admin</p>
+                </div>
+              </Link>
+              </>)}
+              </div>
+            </div>
           <div className="flex items-center justify-center w-full mt-8">
             <Image
               src={activeMascot}

@@ -104,7 +104,7 @@ export default function Page() {
   return (
     <>
       {loading && <Loader show={loading} />}
-      {user?.email === "ak.wazir96@gmail.com" && (
+      {process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(',').includes(user?.email) && (
         <div className="">
           <div className="pr-4 pb-24">
             <div className="flex items-center justify-center w-full pt-0 text-center">
