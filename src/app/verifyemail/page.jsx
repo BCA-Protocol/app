@@ -13,11 +13,11 @@ const Home = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (oobCode !== null) {
+
       const handleVerification = async () => {
         setLoading(true);
         try {
-          handleVerifyEmail();
+          await handleVerifyEmail();
           setLoading(false);
           // const response = await verifyEmail(oobCode);
           // if (response.emailVerified) {
@@ -41,8 +41,8 @@ const Home = () => {
       };
 
       handleVerification();
-    }
-  }, [oobCode]);
+    
+  }, []);
 
   return (
     <>

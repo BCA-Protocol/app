@@ -126,13 +126,18 @@ export const handleConfirmNewPassword = async (newPassword: string) => {
 }
 export const handleVerifyEmail = async () => {
   try {
-    const supabase = createClient();
-    const user = await supabase.auth.getUser();
-    console.log("user", user)
-    // const taskCOmRes = await handleTaskCompletion(
-    //   response.localId,
-    //   "verifyEmail"
-    // );
+    const supabase: any = createClient();
+    const response = await supabase.auth.getUser();
+    console.log("response",response)
+    if(response?.data?.user?.email_confirmed_at){
+      const taskCOmRes = await handleTaskCompletion(
+        response?.data?.user.id,
+      "verifyEmail"
+    );
+    console.log("taskCOmRes",taskCOmRes)
+
+    }
+    return redirect("/dashboard");
   } catch (error) {
     
   }
