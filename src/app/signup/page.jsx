@@ -10,16 +10,16 @@ import useAuth from "@/features/base/auth/hooks/use-auth";
 
 export default function Page() {
   const searchParams = useSearchParams();
-  const router = useRouter();
-  const { user } = useAuth()
+  // const router = useRouter();
+  // const { user } = useAuth()
   const [loading, setLoading] = useState(false);
   const refCode = searchParams.get("ref");
 
-  useEffect(() => {
-    if (user) {
-      router.replace("/dashboard");
-    }
-  }, [router, user]);
+  // useEffect(() => {
+  //   if (user) {
+  //     router.replace("/dashboard");
+  //   }
+  // }, [router, user]);
 
   const handleSignUp = async (formData) => {
     setLoading(true);

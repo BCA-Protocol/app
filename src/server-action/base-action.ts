@@ -31,6 +31,17 @@ const getGlobalSettings = async (id: string) => {
   // return settings;
 };
 
+const checkReference = async (referenceId: string) => {
+  const supabase = createClient();
+  const { data, error } = await supabase.functions.invoke('checkReference', {
+      body: { referenceId }
+  })
+  console.log("-----------checkReference--------",referenceId,data,error)
+
+  return data;
+};
+
 export { 
   getGlobalSettings,
+  checkReference,
 }

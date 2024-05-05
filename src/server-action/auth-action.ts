@@ -58,6 +58,7 @@ export const signIn = async ({email,password}:{email:string,password:string}) =>
   });
 console.log("error", error)
   if (error) {
+    console.log("Signin Error:",error)
     return redirect("/?message=Could not authenticate user");
   }
 

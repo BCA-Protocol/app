@@ -3,6 +3,7 @@ import { getUserById } from "@/server-action/user-action";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "/public/bca-left.png";
+import { checkReference } from "@/server-action/base-action"
 
 export default function SignUpForm({ onSignUp, refCode }) {
   const [formData, setFormData] = useState({
@@ -35,6 +36,8 @@ export default function SignUpForm({ onSignUp, refCode }) {
   }, [refCode]);
 
   const handleReferalBlur = async () => {
+
+    const data = checkReference(formData.referalCode)
     const validationErrors = {};
 
     if (!formData.referalCode) {
@@ -42,13 +45,13 @@ export default function SignUpForm({ onSignUp, refCode }) {
       return;
     }
     setSignupDisable(true);
-    const userdata = await getUserById(formData.referalCode)
-    if (userdata?.id) {
-      setSignupDisable(false);
-    } else {
-      validationErrors.referalCode =
-        "Invalid Referral Code! Add new or remove the current";
-    }
+    // const userdata = await getUserById(formData.referalCode)
+    // if (userdata?.id) {
+    //   setSignupDisable(false);
+    // } else {
+    //   validationErrors.referalCode =
+    //     "Invalid Referral Code! Add new or remove the current";
+    // }
     setErrors(validationErrors);
   };
 
@@ -189,7 +192,7 @@ export default function SignUpForm({ onSignUp, refCode }) {
                 name="referalCode"
                 value={formData.referalCode}
                 onChange={handleChange}
-                // onBlur={handleReferalBlur}
+                onBlur={handleReferalBlur}
                 className={`w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm ${
                   errors.referalCode ? "border-red-500" : ""
                 }`}

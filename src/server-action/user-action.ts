@@ -13,14 +13,14 @@ const getUserById = async (id: string) => {
     const { data, error }  = await supabase.from('users').select().eq('id', id).single();
     console.log("userData:---", Date.now(), data?.email, error)
     if (error) {      
-      throw new Error(`Error fetching referral count for user ${id}: ${error.message}`);
+      throw new Error(`Error fetching userData for user ${id}: ${error.message}`);
     }
     if (data) {
       console.log("userData:---returned---", Date.now(), data?.email, error)
       return data;
     }
   } catch (error) {
-    console.log("Error getting referral count:", error);
+    console.log("Error getting userData count:", error);
   }
 };
 
