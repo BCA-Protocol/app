@@ -29,6 +29,7 @@ import bnbLogo from "/public/chains/bnb.png";
 import optimismLogo from "/public/chains/optimism.png";
 import useAuth from "@/features/base/auth/hooks/use-auth";
 import { getUserById } from "@/server-action/user-action";
+import { resendEmailVerification } from "@/server-action/auth-action";
 
 
 export default function Page() {
@@ -76,7 +77,7 @@ export default function Page() {
   const handleTask = async (user) => {
     try {
       setLoading(true);
-      await sendEmailVerification(user);
+      await resendEmailVerification(user.email);
       setNotification({
         type: "success",
         message: "Verification email sent successfully",

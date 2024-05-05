@@ -136,6 +136,27 @@ export const handleVerifyEmail = async () => {
     
   }
 }
+export const resendEmailVerification = async (email:string) => {
+  try {
+    const supabase = createClient();
+    const origin = headers().get("origin")
+    
+    const { data, error } = await supabase.auth.resend({
+      type: 'signup',
+      email: email,
+      options: {
+        emailRedirectTo: `${origin}/verifyemail`
+      }
+    })
+    console.log("resendEmailVerification", data, error)
+    if(data){
+      return { success: true, message: "Verification email sent successfully"};
+    }
+   
+  } catch (error) {
+    
+  }
+}
 
 // if (code) {
 //   const supabase = createClient();
