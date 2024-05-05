@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { getUserByUUID } from "@/utils/utils";
 import { getUserById } from "@/server-action/user-action";
 import Link from "next/link";
 import Image from "next/image";
@@ -43,7 +42,6 @@ export default function SignUpForm({ onSignUp, refCode }) {
       return;
     }
     setSignupDisable(true);
-    // const userdata = await getUserByUUID(formData.referalCode);
     const userdata = await getUserById(formData.referalCode)
     if (userdata?.id) {
       setSignupDisable(false);

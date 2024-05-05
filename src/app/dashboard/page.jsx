@@ -1,11 +1,7 @@
 "use client";
-import { auth } from "@/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getUserByUUID, getUserActivity } from "@/utils/utils";
 import { formatLargeNumber } from "@/utils/helper";
-import { sendEmailVerification } from "firebase/auth";
 import ReferalChart from "@/components/ReferalChart";
 import TaskList from "@/components/TaskList";
 import Loader from "@/components/loader";
@@ -30,6 +26,7 @@ import optimismLogo from "/public/chains/optimism.png";
 import useAuth from "@/features/base/auth/hooks/use-auth";
 import { getUserById } from "@/server-action/user-action";
 import { resendEmailVerification } from "@/server-action/auth-action";
+import { getUserActivity } from "@/server-action/user-action";
 
 
 export default function Page() {
@@ -56,8 +53,8 @@ export default function Page() {
 
         data && setUserData(data);
 
-        // const fullUserActivity = await getUserActivity(user.uid);
-        // setUserActivity(fullUserActivity);
+        const fullUserActivity = await getUserActivity(user.id);
+        setUserActivity(fullUserActivity);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching incomplete tasks:", error);

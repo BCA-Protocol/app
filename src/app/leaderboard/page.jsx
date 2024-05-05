@@ -1,20 +1,15 @@
 "use client";
 
-import { auth } from "@/firebase";
 import { use, useEffect, useState } from "react";
 import { RocketLaunchIcon, TrophyIcon } from "@heroicons/react/24/outline";
 import { formatLargeNumber } from "@/utils/helper";
-import { getFunctions, httpsCallable } from "firebase/functions";
-import { getUserByUUID } from "@/utils/utils";
 import { useRouter } from "next/navigation";
-import { useAuthState } from "react-firebase-hooks/auth";
 import useAuth from "@/features/base/auth/hooks/use-auth";
 import { getUserById } from "@/server-action/user-action";
 import { fetchLeaderboardUsers } from "./actions";
 
 
 export default function Page() {
-  // const [user] = useAuthState(auth);
   const {user} =  useAuth()
   const [users, setUsers] = useState([]);
   const [lastUser, setLastUser] = useState(null);
@@ -31,7 +26,6 @@ export default function Page() {
         return;
       }
       try {
-        // const userDataRes = await getUserByUUID(user.uid);
         const data = await getUserById(user.id);
         data && setUserData(data);
       } catch (error) {
@@ -42,33 +36,6 @@ export default function Page() {
   }, [ user]);
 
   const fetchUsers = async () => {
-    // setUsersLoading(true);
-
-    // try {
-    //   const functions = getFunctions();
-    //   const fetchLeaderboard = httpsCallable(
-    //     functions,
-    //     "fetchPaginatedLeaderboard"
-    //   );
-
-    //   // Prepare the data object with pagination parameters
-    //   const paginationData = lastUser
-    //     ? {
-    //         lastOverallPoints: lastUser.overallPoints,
-    //         lastCreated: lastUser.created,
-    //       }
-    //     : {};
-
-    //   const result = await fetchLeaderboard(paginationData);
-    //   const { users: newUsers, lastUser: newLastUser } = result.data;
-
-    //   setUsers((prevUsers) => [...prevUsers, ...newUsers]);
-    //   setLastUser(newLastUser);
-    // } catch (error) {
-    //   console.error("Failed to fetch users:", error);
-    // } finally {
-    //   setUsersLoading(false);
-    // }
     setUsersLoading(true);
     const {users,count} = await fetchLeaderboardUsers({page})
     setCount(count)
@@ -82,10 +49,7 @@ export default function Page() {
   useEffect(() => {
     fetchUsers( )
   }, [page]);
-
-  // useEffect(() => {
-  //   fetchUsers();
-  // },[]);
+  
   const loadMoreUsers = () => {
     if(users.length < count){
       setPage((prevPage) => prevPage + 1);

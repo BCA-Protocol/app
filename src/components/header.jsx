@@ -1,15 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
 import useAuth from "@/features/base/auth/hooks/use-auth";
-import { auth } from "@/firebase";
 import { formatLargeNumber } from "@/utils/helper";
-import {
-  // getUserByUUID,
-  // getReferralCount,
-  // getGlobalSettings,
-} from "@/utils/utils";
 import SuccessMessage from "@/components/notifications/success";
 import { UserPlusIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
@@ -17,7 +10,6 @@ import { getUserById, getReferralCount } from "@/server-action/user-action";
 import { getGlobalSettings } from "@/server-action/base-action";
 
 export default function Header() {
-  // const [user] = useAuthState(auth);
   const {user} =  useAuth()
   const [userData, setUserData] = useState(null);
   const [globalSettings, setGlobalSettings] = useState(null);

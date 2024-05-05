@@ -1,7 +1,5 @@
 "use client";
 import React from "react";
-import { auth } from "@/firebase";
-import { sendPasswordResetEmail } from "firebase/auth";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import SignInForm from "@/components/SignInForm";
@@ -11,7 +9,6 @@ import useAuth from "@/features/base/auth/hooks/use-auth";
 import { handleResetPassword } from "@/server-action/auth-action"
 
 const Home = () => {
-  // const [user, loading] = useAuthState(auth);
   const { loading, user } = useAuth();
   // const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
   const [formData, setFormData] = useState({
@@ -69,6 +66,7 @@ const Home = () => {
     if (success) {
       alert(message);
     } else {
+      alert("Password reest failed");
       console.error("API call failed:", message);
       //handle error
     }

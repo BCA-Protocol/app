@@ -81,10 +81,6 @@ const addPointsToUser = async ({
   description: string;
   type: string;
 }) => {
-    console.log("addPointsToUser:userId", userId);
-    console.log("addPointsToUser:pointsToAdd", pointsToAdd);
-    console.log("addPointsToUser:description", description);
-    console.log("addPointsToUser:type", type);
 
   const newPoints: number = Math.floor(pointsToAdd);
 
@@ -98,7 +94,6 @@ const addPointsToUser = async ({
   if (!user) {
     throw new Error("User not found");
   }
-  console.log("user", user);
 
   // Update the totalPoints field by adding the specified points
   if (type == "Referral") {
@@ -109,31 +104,26 @@ const addPointsToUser = async ({
         overall_points: (user.overall_points || 0) + newPoints,
       })
       .eq("id", userId);
-    console.log("updateUserResponse1", updateUserResponse);
     updatedUser = updateUserResponse.data;
   } else {
     const updateUserResponse = await supabase
       .from("users")
       .update({ overall_points: (user.overall_points || 0) + newPoints })
       .eq("id", userId);
-    console.log("updateUserResponse2", updateUserResponse);
     updatedUser = updateUserResponse.data;
   }
   // Add a new record to the usersPoints collection
   const userPointResponse = await supabase
     .from("usersPoints")
     .insert({ userId: userId, points: newPoints, description: description });
-  console.log("userPointResponse", userPointResponse);
   // update global points here
   const generalResponse = await supabase.from("general").select().eq("id", 1).single();
-  console.log("generalResponse", generalResponse);
   const { settings }: any = generalResponse.data;
   settings.protocol_points = parseInt(settings.protocol_points) + newPoints;
   const generalDataUpdateResponse = await supabase
     .from("general")
     .update({ settings })
     .eq("id", 1);
-  console.log("generalDataUpdateResponse", generalDataUpdateResponse);
   return { success: true, user: updatedUser };
 };
 
@@ -143,9 +133,6 @@ const handleTaskCompletion = async (
   additionalUserData: any = {}
 ) => {
   try {
-    console.log("handleTaskCompletion:userId", userId);
-    console.log("handleTaskCompletion:taskId", taskId);
-    console.log("handleTaskCompletion:additionalUserData", additionalUserData);
     // Get user documents
     const supabase = createClient();
     const { data: user } = await supabase
@@ -171,7 +158,6 @@ const handleTaskCompletion = async (
       .select()
       .eq("taskId", taskId)
       .single();
-    console.log("task", task);
 
     if (!task) {
       console.log("Task document does not exist.");
@@ -194,7 +180,6 @@ const handleTaskCompletion = async (
       // ip:additionalUserData.ip,
       // browser_data:additionalUserData.browserData,
     };
-    console.log("updatedUserData",updatedUserData)
     await supabase.from("users").update(updatedUserData).eq("id", userId);
 
     await addPointsToUser({
@@ -220,10 +205,77 @@ const handleTaskCompletion = async (
   }
 };
 
+const getUserActivity = async (userId: string) => {
+  try {
+    const supabase = createClient();
+
+    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+    // console.log("---------times-1---------", thirtyDaysAgo)
+    
+    const { data: userPoints, error } = await supabase
+      .from("usersPoints")
+      .select()
+      .eq("userId", userId)
+      .gt("created_at", thirtyDaysAgo);
+    // console.log("---------userActivityData---------", userPoints,error)    
+
+    const dailySummary: {
+      [key: string]: { referral: number, points: number}
+    } = {};
+
+    (userPoints || []).forEach((data) => {
+      const { created_at, description, points } = data;
+
+      if (!created_at) return;
+
+      const activityDate = new Date(created_at);
+      const dateString = activityDate.toLocaleDateString("en-US");
+
+      if (!dailySummary[dateString]) {
+        dailySummary[dateString] = { referral: 0, points: 0 };
+      }
+
+      if (description.toLowerCase().includes("referral")) {
+        dailySummary[dateString].referral += points;
+      } else {
+        dailySummary[dateString].points += points;
+      }
+    });
+    // console.log("--------------dailySummary--------------",dailySummary)
+
+    // Initialize the result object
+    let result: {
+      days: string[];
+      totals: number[];
+      referrals: number[];
+    } = {
+      days: [],
+      totals: [],
+      referrals: [],
+    };
+
+    // Populate the result object
+    Object.keys(dailySummary).forEach((date) => {
+      result.days.push(date); // Add the date
+      const totalPoints =
+        dailySummary[date].points + dailySummary[date].referral;
+      result.totals.push(totalPoints);
+      result.referrals.push(dailySummary[date].referral);
+    });
+    // console.log("--------------result--------------",result)
+
+    return result;
+  } catch (error) {
+    console.error("Error getting activity for user:", error);
+    throw error;
+  }
+};
+
 export { 
   getUserById,
   getReferralCount,
   toggleCollecting,
   addPointsToUser,
   handleTaskCompletion,
+  getUserActivity,
 }

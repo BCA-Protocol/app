@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { handleResetPassword } from "@/utils/utils";
 import { IconFidgetSpinner } from "@tabler/icons-react";
 import mascot from "/public/m/1-small.png";
 import Image from "next/image";
@@ -49,16 +48,7 @@ const ResetPasswordForm = () => {
     // }
     if (validateForm()) {
       setLoading(true);
-      try {
-        // const result = await handleResetPassword(oobCode, formData.newPassword);
-
-        // if (result.success) {
-        //   alert(result.message);
-        //   router.replace("/");
-        // } else {
-        //   alert(result.message);
-        // }
-    
+      try {    
         const { success, message, redirectUrl } = await handleConfirmNewPassword(formData.newPassword);
         if (success) {
           alert(message);
