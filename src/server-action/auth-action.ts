@@ -56,7 +56,7 @@ export const signIn = async ({email,password}:{email:string,password:string}) =>
     email,
     password,
   });
-
+console.log("error", error)
   if (error) {
     return redirect("/?message=Could not authenticate user");
   }
@@ -140,10 +140,10 @@ export const resendEmailVerification = async (email:string) => {
   try {
     const supabase = createClient();
     const origin = headers().get("origin")
-    
+    console.log("resendEmailVerification", email)
     const { data, error } = await supabase.auth.resend({
       type: 'signup',
-      email: email,
+      email: "supun.madushanka12219@gmail.com",
       options: {
         emailRedirectTo: `${origin}/verifyemail`
       }
