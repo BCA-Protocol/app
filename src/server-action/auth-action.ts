@@ -21,26 +21,14 @@ export const signUpAction = async ({email, password, displayName, referedBy,ip,b
     },
   });
   console.log("signupUserData",error, signupUserData)
-  if(signupUserData?.user_metadata?.email_verified){
-    const { error:authError, data:authUser } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-  });
-  if (referedBy) {
-      await addPointsToUser({userId: referedBy, pointsToAdd:5000, description:"Referral SignUp", type:"Referral"});
-      const response = await supabase.from('users').update({refered_by: referedBy}).eq('id', authUser?.user?.id!);
-      console.log(response)
-  }
-  
-  console.log(authUser, authError)
-  await handleTaskCompletion(authUser?.user?.id!, "createAccount", {
-    email: email,
-    ip: ip,
-    browser_data: browserData,
-  });
-  }else {
+  // if (signupUserData?.user_metadata?.email_verified) {
+  //   const { error: authError, data: authUser } =
+  //     await supabase.auth.signInWithPassword({
+  //       email,
+  //       password,
+  //     });
+  // }
 
-  }
   if (error) {
     return redirect("/signup?message=Could not authenticate user");
   }
@@ -56,7 +44,7 @@ export const signIn = async ({email,password}:{email:string,password:string}) =>
     email,
     password,
   });
-console.log("error", error)
+  console.log("error", error)
   if (error) {
     console.log("Signin Error:",error)
     return redirect("/?message=Could not authenticate user");
@@ -124,23 +112,39 @@ export const handleConfirmNewPassword = async (newPassword: string) => {
     return { success: false, message: "Error confirming new password", redirectUrl: "/" };
   }
 }
-export const handleVerifyEmail = async () => {
+export const handleVerifyEmail = async (ip: string, browserData: any) => {
   try {
     const supabase: any = createClient();
     const response = await supabase.auth.getUser();
     console.log("response",response)
+
+    const referedBy = response?.data?.user?.user_metadata?.refered_by;
+
+    if (referedBy) {
+        await addPointsToUser({userId: referedBy, pointsToAdd:5000, description:"Referral SignUp", type:"Referral"});
+        const updatedUser = await supabase.from('users').update({refered_by: referedBy}).eq('id', response?.data?.user.id!);
+        console.log(updatedUser)
+    }
+
+    await handleTaskCompletion(response?.data?.user?.id!, "createAccount", {
+      email: response?.data?.user?.email,
+      ip: ip,
+      browser_data: browserData,
+    });
+
     if(response?.data?.user?.email_confirmed_at){
       const taskCOmRes = await handleTaskCompletion(
         response?.data?.user.id,
-      "verifyEmail"
+        "verifyEmail"
     );
     console.log("taskCOmRes",taskCOmRes)
 
     }
-    return redirect("/dashboard");
   } catch (error) {
-    
+    console.log("handleVerfyEmail Error:", error)    
   }
+
+  return redirect("/dashboard");
 }
 export const resendEmailVerification = async (email:string) => {
   try {
@@ -149,7 +153,7 @@ export const resendEmailVerification = async (email:string) => {
     console.log("resendEmailVerification", email)
     const { data, error } = await supabase.auth.resend({
       type: 'signup',
-      email: "supun.madushanka12219@gmail.com",
+      email,
       options: {
         emailRedirectTo: `${origin}/verifyemail`
       }
