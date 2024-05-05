@@ -17,11 +17,7 @@ Deno.serve(async (req) => {
     { global: { headers: { Authorization: req.headers.get('Authorization')! } } }
   )
   const { data, error }  = await supabase.from('users').select().eq('id', referenceId).single();
-  const data = {
-    message: `Hello ${name}!`,
-  }
 
-  
   if (error) {
     throw error
   }
