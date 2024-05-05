@@ -1,5 +1,4 @@
 import { abi } from "@/resources/abi";
-// import { handleTaskCompletion, toggleCollecting } from "@/utils/utils";
 import { handleTaskCompletion, toggleCollecting } from "@/server-action/user-action";
 import { ConnectKitButton } from "connectkit";
 import { ConnectKitProvider } from "connectkit";

@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-// import { handleTaskCompletion } from "@/utils/utils";
 import { handleTaskCompletion } from "@/server-action/user-action";
 import { useRouter } from "next/navigation";
 
