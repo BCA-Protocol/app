@@ -2,7 +2,7 @@
 import React from "react";
 import { auth } from "@/firebase";
 import { sendPasswordResetEmail } from "firebase/auth";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import SignInForm from "@/components/SignInForm";
 import Loader from "@/components/loader";
@@ -18,6 +18,16 @@ const Home = () => {
     email: "",
     password: "",
   });
+
+  const searchParams = useSearchParams();
+  const message = searchParams.get("message")
+
+  useEffect(() => {
+    if (message === "Could not authenticate user") {
+      alert(`Email or password is incorrect`);
+      router.replace("/");
+    }
+  }, [message]);
 
   const router = useRouter();
 

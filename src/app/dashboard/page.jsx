@@ -45,16 +45,11 @@ export default function Page() {
 
   useEffect(() => {
     const fetchIncompleteTasks = async () => {
-      // if (!user) {
-      //   router.replace("/");
-      //   return;
-      // }
       if(!user?.id){
         return
       }
       try {
         setLoading(true);
-        // const userDataRes = await getUserByUUID(user.uid);
         console.log(user.id,Date.now())
         const data = await getUserById(user.id);
         console.log("----------usedata1--0-------",user?.id,data,Date.now())

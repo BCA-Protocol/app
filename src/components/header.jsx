@@ -32,18 +32,26 @@ export default function Header() {
 
   useEffect(() => {
     const fetchUsersAndSettings = async () => {
-      if (!user?.id) {
-        return;
-      }
       const userRes = await getUserById(user.id)
+      console.log("------------header userdata response-----------",userRes,Date.now())
       setUserData(userRes);
       const refCount = await getReferralCount(user.id);
+      console.log("------------header ref-count response-----------",refCount,Date.now())
       setRefsCount(refCount);
 
       const globalSettingsData = await getGlobalSettings();
       setGlobalSettings(globalSettingsData);
     };
-    user && user.id && fetchUsersAndSettings();
+
+    let headerDatafetchTimeout;
+
+    if (user?.id) {
+      headerDatafetchTimeout = setTimeout(() => {
+        fetchUsersAndSettings();
+      }, 3000);
+    }
+
+    return () => clearTimeout(headerDatafetchTimeout);
   }, [user]);
 
   useEffect(() => {
@@ -129,7 +137,7 @@ export default function Header() {
       <div className="flex flex-col items-end justify-between w-1/4 text-center lg:flex-row">
         <div className="flex flex-col items-center justify-center w-full text-xs lg:hidden text-fuchsia-600">
           <span className="">welcome </span>
-          {userData && <span>{userData.displayName}</span>}
+          {userData && <span>{userData.display_name}</span>}
         </div>
 
         <div className="flex flex-col items-center justify-center w-full text-base text-white lg:items-end">
@@ -144,7 +152,7 @@ export default function Header() {
         <div className="flex-col items-end justify-end hidden w-full text-base text-transparent lg:flex bg-gradient-to-r from-white to-fuchsia-600 bg-clip-text">
           <span className="text-xs">Welcome </span>
           {userData && (
-            <span className="font-bold">{userData.displayName}</span>
+            <span className="font-bold">{userData.display_name}</span>
           )}
         </div>
       </div>
