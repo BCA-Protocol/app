@@ -11,6 +11,7 @@ import {
   limit,
   runTransaction,
   updateDoc,
+  deleteDoc,
   increment,
   startAfter,
 } from "firebase/firestore";
@@ -519,6 +520,46 @@ export async function verifyEmail(verificationCode) {
     return data;
   } catch (error) {
     console.error("Error updating account:", error);
+    throw error;
+  }
+}
+
+export async function getData(mycollection) {
+  try {
+    const querySnapshot = await getDocs(collection(db, mycollection));
+    const document = [];
+    querySnapshot.forEach((doc) => {
+      document.push({
+        ...doc.data(),
+        id: doc.id,
+      });
+    });
+    return document;
+  } catch (error) {
+    console.error(`Error getting ${mycollection} Collection:`, error);
+    throw error;
+  }
+}
+
+export async function editQuests(docId, data) {
+  try {
+    const questsDocRef = await updateDoc(doc(db, "quests", docId),data);
+    console.log(questsDocRef)
+    
+    return { success: true };
+  } catch (error) {
+    console.error("Error getting Quests:", error);
+    throw error;
+  }
+}
+export async function deleteData(mycollection,docId) {
+  try {
+    const questsDocRef = await deleteDoc(doc(db, mycollection, docId));
+    console.log(questsDocRef)
+    
+    return { success: true };
+  } catch (error) {
+    console.error("Error getting Quests:", error);
     throw error;
   }
 }

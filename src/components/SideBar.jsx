@@ -5,7 +5,7 @@ import logo from "/public/bca-left.png";
 import mascotHappy from "/public/m/4-small.png";
 import mascotLove from "/public/m/8-small.png";
 
-import { useSignOut } from "react-firebase-hooks/auth";
+import { useSignOut,useAuthState } from "react-firebase-hooks/auth";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import { auth } from "@/firebase";
@@ -13,6 +13,7 @@ import {
   Squares2X2Icon,
   TrophyIcon,
   ArrowRightOnRectangleIcon,
+  RocketLaunchIcon,
   BookOpenIcon,
   Bars3Icon,
 } from "@heroicons/react/24/outline";
@@ -30,11 +31,17 @@ const menuItems = [
     title: "Referral Program",
     icon: TrophyIcon,
   },
+  {
+    href: "/quest",
+    title: "Quest",
+    icon: RocketLaunchIcon,
+  },
 ];
 
 export default function SideBar({ currentPath }) {
   const router = useRouter();
   const [signOut] = useSignOut(auth);
+  const [user] = useAuthState(auth);
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [activeMascot, setActiveMascot] = useState(mascotHappy);
 
@@ -50,6 +57,7 @@ export default function SideBar({ currentPath }) {
   const toggleSidebar = () => {
     setSidebarVisible(!sidebarVisible);
   };
+  console.log('user',user?.email)
 
   return (
     <div>
@@ -80,39 +88,39 @@ export default function SideBar({ currentPath }) {
                   menuItems.length > 0 &&
                   menuItems.map((item, index) => {
                     const IconElement = item.icon || null;
-
-                    return (
-                      <li key={index}>
-                        <Link
-                          href={item.href}
-                          className={classNames(
-                            currentPath === item.href
-                              ? "bg-purple-950 text-white relative"
-                              : "",
-                            "group flex items-center rounded-xl font-normal text-sm text-fuchsia-200 hover:text-white py-3 px-3 hover:bg-purple-900 border-fuchsia-900 gap-x-2"
-                          )}
-                        >
-                          {currentPath === item.href && (
-                            <div className="absolute left-0.5 block w-0.5 py-3 bg-fuchsia-700 bca-glow-left"></div>
-                          )}
-                          {IconElement && (
-                            <IconElement
-                              className={classNames(
-                                currentPath === item.href ? "text-white" : "",
-                                "w-5 h-5 text-fuchsia-200 group-hover:text-white-400 shrink-0"
-                              )}
-                              aria-hidden="true"
-                            />
-                          )}
-                          {item.title}
-                        </Link>
-                      </li>
-                    );
+                      return (
+                        <li key={index}>
+                          <Link
+                            href={item.href}
+                            className={classNames(
+                              currentPath === item.href
+                                ? "bg-purple-950 text-white relative"
+                                : "",
+                              "group flex items-center rounded-xl font-normal text-sm text-fuchsia-200 hover:text-white py-3 px-3 hover:bg-purple-900 border-fuchsia-900 gap-x-2"
+                            )}
+                          >
+                            {currentPath === item.href && (
+                              <div className="absolute left-0.5 block w-0.5 py-3 bg-fuchsia-700 bca-glow-left"></div>
+                            )}
+                            {IconElement && (
+                              <IconElement
+                                className={classNames(
+                                  currentPath === item.href ? "text-white" : "",
+                                  "w-5 h-5 text-fuchsia-200 group-hover:text-white-400 shrink-0"
+                                )}
+                                aria-hidden="true"
+                              />
+                            )}
+                            {item.title}
+                          </Link>
+                        </li>
+                      );
                   })}
               </ul>
             </div>
             <div className="p-4 lg:mt-36">
               <div className="mb-6 border-purple-900 thin-line"></div>
+              <div className="flex flex-col">
               <Link
                 target="_blank"
                 href="https://docs.bcaprotocol.org/get-started"
@@ -128,7 +136,29 @@ export default function SideBar({ currentPath }) {
                 </div>
               </Link>
             </div>
-          </div>
+            {
+              process.env.NEXT_PUBLIC_ADMIN_EMAILS.split(',')?.includes(user?.email) && (
+                <>
+              <div className="mb-2 border-purple-900"></div>
+              <Link
+                // target="_blank"
+                href="/admin"
+                className="flex items-center px-4 py-2 text-sm group rounded-xl text-fuchsia-200 hover:text-white hover:bg-purple-900 gap-x-2"
+              >
+                <RocketLaunchIcon
+                  className={classNames(
+                    currentPath === "/admin" ? "text-white" : "",
+                    "w-5 h-5 text-fuchsia-200 group-hover:text-white-400 shrink-0"
+                  )}
+                  aria-hidden="true"
+                />
+                <div className="flex flex-col">
+                  <p className="text-sm font-semibold">Admin</p>
+                </div>
+              </Link>
+              </>)}
+              </div>
+            </div>
           <div className="flex items-center justify-center w-full mt-8">
             <Image
               src={activeMascot}
