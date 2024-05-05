@@ -108,7 +108,10 @@ const addPointsToUser = async ({
   } else {
     const updateUserResponse = await supabase
       .from("users")
-      .update({ overall_points: (user.overall_points || 0) + newPoints })
+      .update({
+        total_points: (user.total_points || 0) + newPoints,
+        overall_points: (user.overall_points || 0) + newPoints 
+      })
       .eq("id", userId);
     updatedUser = updateUserResponse.data;
   }
