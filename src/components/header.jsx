@@ -33,10 +33,8 @@ export default function Header() {
   useEffect(() => {
     const fetchUsersAndSettings = async () => {
       const userRes = await getUserById(user.id)
-      console.log("------------header userdata response-----------",userRes,Date.now())
       setUserData(userRes);
       const refCount = await getReferralCount(user.id);
-      console.log("------------header ref-count response-----------",refCount,Date.now())
       setRefsCount(refCount);
 
       const globalSettingsData = await getGlobalSettings();

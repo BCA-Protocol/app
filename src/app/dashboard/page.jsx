@@ -52,7 +52,6 @@ export default function Page() {
         setLoading(true);
         console.log(user.id,Date.now())
         const data = await getUserById(user.id);
-        console.log("----------usedata1--0-------",user?.id,data,Date.now())
         // taskData && setIncompleteTasks(taskData);
 
         data && setUserData(data);
@@ -66,7 +65,6 @@ export default function Page() {
       }
     };
     fetchIncompleteTasks();
-    console.log("----------usedata1--------",user?.id, userData,Date.now())
   }, [user?.id]);
 
   const handleTask = async (user) => {

@@ -33,9 +33,9 @@ const getReferralCount = async (id: string) => {
       .select("*", { count: "exact", head: true })
       .eq("refered_by", id);      
 
-    console.log("-----------------------refCountData------------",count,error)
     if (error) {
       // throw new Error(`Error fetching referral count for user ${id}: ${error.message}`);
+      console.error("Error fetching referral count:", error);
       return 0; // Return 0 for error handling
     }
 
@@ -57,7 +57,6 @@ const toggleCollecting = async (id: string, value: boolean) => {
       .select()
       .single();
 
-    console.log("-----------------------toggleCollectingData------------",updatedUserData,error)
     if (error) {
       // throw new Error(`Error fetching referral count for user ${id}: ${error.message}`);
       console.log("Error fetching referral count:", error)
