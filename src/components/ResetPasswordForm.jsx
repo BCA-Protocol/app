@@ -52,7 +52,7 @@ const ResetPasswordForm = () => {
         const { success, message, redirectUrl } = await handleConfirmNewPassword(formData.newPassword);
         if (success) {
           alert(message);
-          // router.replace(redirectUrl);
+          router.replace(redirectUrl);
         } else {
           alert(message);
           //handle error

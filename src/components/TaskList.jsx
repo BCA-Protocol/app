@@ -158,12 +158,12 @@ const TaskList = ({ user, userData, sendEmailVerification }) => {
         <li
           className={classNames(
             "flex flex-row items-center justify-between p-2 border border-fuchsia-600 rounded-xl",
-            user?.emailVerified
+            user?.email_confirmed_at
               ? "bg-fuchsia-950"
               : "hover:bg-fuchsia-950 hover:shadow-cyan-500/60 hover:shadow-lg"
           )}
         >
-          {user?.emailVerified ? (
+          {user?.email_confirmed_at ? (
             <>
               <div className="flex flex-col items-start justify-center">
                 <div className="font-bold">✓ Email verified ⭐</div>

@@ -5,6 +5,8 @@ import { IconFidgetSpinner } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { verifyEmail } from "@/utils/utils";
 import { handleVerifyEmail } from "@/server-action/auth-action";
+import { collectBrowserData, fetchIPAddress } from "@/utils/helper";
+
 const Home = () => {
   const searchParams = useSearchParams();
   const oobCode = searchParams.get("oobCode");
@@ -17,7 +19,11 @@ const Home = () => {
       const handleVerification = async () => {
         setLoading(true);
         try {
-          await handleVerifyEmail();
+    
+          const ip = await fetchIPAddress();
+          const browserData = collectBrowserData();
+
+          await handleVerifyEmail( ip, browserData );
           setLoading(false);
           // const response = await verifyEmail(oobCode);
           // if (response.emailVerified) {
