@@ -19,46 +19,46 @@ const Home = () => {
   useEffect(() => {
     if (socialCode !== null && socialType) {
       setLoading(true);
-        if (user?.id) {
-          const uid = user?.id;
-          const gettoken = async (code) => {
-            if (socialType == "discord") {
-              const userData = await fetch(
-                `${window.location.origin}/api/discorduser?code=${code}`
-              ).then((res) => res.json());
-              if (userData) {
-                const taskRes = await handleTaskCompletion(
-                  uid,
-                  "connectDiscord",
-                  {
-                    discord_data: userData.userData,
-                  }
-                );
-                router.replace("/");
-              }
-            } else if (socialType == "twitter") {
-              const userData = await fetch(
-                `${window.location.origin}/api/twitteruser?code=${code}`
-              ).then((res) => res.json());
-              if (userData) {
-                const taskRes = await handleTaskCompletion(
-                  uid,
-                  "connectTwitter",
-                  {
-                    twitter_data: userData.userData,
-                  }
-                );
-                router.replace("/");
-              }
+      if (user?.id) {
+        const uid = user?.id;
+        const gettoken = async (code) => {
+          if (socialType == "discord") {
+            const userData = await fetch(
+              `${window.location.origin}/api/discorduser?code=${code}`
+            ).then((res) => res.json());
+            if (userData?.id) {
+              const taskRes = await handleTaskCompletion(
+                uid,
+                "connectDiscord",
+                {
+                  discord_data: userData.userData,
+                }
+              );
+              router.replace("/");
             }
-          };
+          } else if (socialType == "twitter") {
+            const userData = await fetch(
+              `${window.location.origin}/api/twitteruser?code=${code}`
+            ).then((res) => res.json());
+            if (userData?.id) {
+              const taskRes = await handleTaskCompletion(
+                uid,
+                "connectTwitter",
+                {
+                  twitter_data: userData.userData,
+                }
+              );
+              router.replace("/");
+            }
+          }
+        };
 
-          gettoken(socialCode);
-        } else {
-          console.log("Not Redirect");
-        }
+        gettoken(socialCode);
+      } else {
+        console.log("Not Redirect");
+      }
     }
-  }, [user]);
+  }, [user?.id]);
 
   return (
     <>

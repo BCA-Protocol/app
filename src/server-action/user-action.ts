@@ -136,6 +136,7 @@ const handleTaskCompletion = async (
   additionalUserData: any = {}
 ) => {
   try {
+    console.log("--------handleTaskCompletion------------", userId,taskId,additionalUserData)
     // Get user documents
     const supabase = createClient();
     const { data: user } = await supabase
@@ -180,8 +181,6 @@ const handleTaskCompletion = async (
         },
       },
       ...additionalUserData,
-      // ip:additionalUserData.ip,
-      // browser_data:additionalUserData.browserData,
     };
     await supabase.from("users").update(updatedUserData).eq("id", userId);
 
@@ -200,7 +199,6 @@ const handleTaskCompletion = async (
         });
     }
   
-    // await addReferralPointsToUser(referedBy, taskPoints * 0.07);
     return true;
   } catch (error) {
     console.error("Error handling task completion:", error);
@@ -213,14 +211,12 @@ const getUserActivity = async (userId: string) => {
     const supabase = createClient();
 
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
-    // console.log("---------times-1---------", thirtyDaysAgo)
     
     const { data: userPoints, error } = await supabase
       .from("usersPoints")
       .select()
       .eq("userId", userId)
       .gt("created_at", thirtyDaysAgo);
-    // console.log("---------userActivityData---------", userPoints,error)    
 
     const dailySummary: {
       [key: string]: { referral: number, points: number}
@@ -244,7 +240,6 @@ const getUserActivity = async (userId: string) => {
         dailySummary[dateString].points += points;
       }
     });
-    // console.log("--------------dailySummary--------------",dailySummary)
 
     // Initialize the result object
     let result: {
@@ -265,7 +260,6 @@ const getUserActivity = async (userId: string) => {
       result.totals.push(totalPoints);
       result.referrals.push(dailySummary[date].referral);
     });
-    // console.log("--------------result--------------",result)
 
     return result;
   } catch (error) {
