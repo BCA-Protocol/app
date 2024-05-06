@@ -26,7 +26,8 @@ const Home = () => {
             const userData = await fetch(
               `${window.location.origin}/api/discorduser?code=${code}`
             ).then((res) => res.json());
-            if (userData?.id) {
+            console.log("--------userData------------",userData)
+            if (userData?.userData?.id) {
               const taskRes = await handleTaskCompletion(
                 uid,
                 "connectDiscord",
@@ -40,7 +41,8 @@ const Home = () => {
             const userData = await fetch(
               `${window.location.origin}/api/twitteruser?code=${code}`
             ).then((res) => res.json());
-            if (userData?.id) {
+            console.log("--------userData------------",userData)
+            if (userData?.userData?.id) {
               const taskRes = await handleTaskCompletion(
                 uid,
                 "connectTwitter",
@@ -56,6 +58,7 @@ const Home = () => {
         gettoken(socialCode);
       } else {
         console.log("Not Redirect");
+        setLoading(false);
       }
     }
   }, [user?.id]);

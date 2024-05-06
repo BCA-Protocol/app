@@ -20,7 +20,6 @@ export const signUpAction = async ({email, password, displayName, referedBy,ip,b
               }
     },
   });
-  console.log("signupUserData",error, signupUserData)
   // if (signupUserData?.user_metadata?.email_verified) {
   //   const { error: authError, data: authUser } =
   //     await supabase.auth.signInWithPassword({

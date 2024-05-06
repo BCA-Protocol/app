@@ -17,7 +17,6 @@ export const updateSession = async (request: NextRequest) => {
     if(type){
       return response;
     }
-    console.log("-----middleware---------",code,type)
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,

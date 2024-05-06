@@ -24,7 +24,6 @@ export default function Page() {
   const handleSignUp = async (formData) => {
     setLoading(true);
     const { email, password, displayName, referalCode } = formData;
-    console.log('formData', formData)
     const ip = await fetchIPAddress();
     const browserData = collectBrowserData();
     await signUpAction({email, password, displayName,referedBy: referalCode,ip, browserData})

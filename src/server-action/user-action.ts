@@ -5,18 +5,15 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
 const getUserById = async (id: string) => {
-  console.log("id", Date.now(), id)   
   const origin = headers().get("origin");
   const supabase = createClient();
 
   try {
     const { data, error }  = await supabase.from('users').select().eq('id', id).single();
-    console.log("userData:---", Date.now(), data?.email, error)
     if (error) {      
       throw new Error(`Error fetching userData for user ${id}: ${error.message}`);
     }
     if (data) {
-      console.log("userData:---returned---", Date.now(), data?.email, error)
       return data;
     }
   } catch (error) {
@@ -136,7 +133,6 @@ const handleTaskCompletion = async (
   additionalUserData: any = {}
 ) => {
   try {
-    console.log("--------handleTaskCompletion------------", userId,taskId,additionalUserData)
     // Get user documents
     const supabase = createClient();
     const { data: user } = await supabase
