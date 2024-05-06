@@ -8,57 +8,57 @@ import useAuth from "@/features/base/auth/hooks/use-auth";
 import { handleTaskCompletion } from "@/server-action/user-action";
 
 const Home = () => {
-  // const {user} =  useAuth()
+  const {user} =  useAuth()
   const searchParams = useSearchParams();
-  const socialCode = searchParams.get("code");
+  const socialCode = searchParams.get("social_code");
   const socialType = searchParams.get("type");
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
 
   useEffect(() => {
-    // if (socialCode !== null && socialType) {
-    //   setLoading(true);
-    //     if (user?.id) {
-    //       const uid = user?.id;
-    //       const gettoken = async (code) => {
-    //         if (socialType == "discord") {
-    //           const userData = await fetch(
-    //             `${window.location.origin}/api/discorduser?code=${code}`
-    //           ).then((res) => res.json());
-    //           if (userData) {
-    //             const taskRes = await handleTaskCompletion(
-    //               uid,
-    //               "connectDiscord",
-    //               {
-    //                 discord_data: userData.userData,
-    //               }
-    //             );
-    //             router.replace("/");
-    //           }
-    //         } else if (socialType == "twitter") {
-    //           const userData = await fetch(
-    //             `${window.location.origin}/api/twitteruser?code=${code}`
-    //           ).then((res) => res.json());
-    //           if (userData) {
-    //             const taskRes = await handleTaskCompletion(
-    //               uid,
-    //               "connectTwitter",
-    //               {
-    //                 twitter_data: userData.userData,
-    //               }
-    //             );
-    //             router.replace("/");
-    //           }
-    //         }
-    //       };
+    if (socialCode !== null && socialType) {
+      setLoading(true);
+        if (user?.id) {
+          const uid = user?.id;
+          const gettoken = async (code) => {
+            if (socialType == "discord") {
+              const userData = await fetch(
+                `${window.location.origin}/api/discorduser?code=${code}`
+              ).then((res) => res.json());
+              if (userData) {
+                const taskRes = await handleTaskCompletion(
+                  uid,
+                  "connectDiscord",
+                  {
+                    discord_data: userData.userData,
+                  }
+                );
+                router.replace("/");
+              }
+            } else if (socialType == "twitter") {
+              const userData = await fetch(
+                `${window.location.origin}/api/twitteruser?code=${code}`
+              ).then((res) => res.json());
+              if (userData) {
+                const taskRes = await handleTaskCompletion(
+                  uid,
+                  "connectTwitter",
+                  {
+                    twitter_data: userData.userData,
+                  }
+                );
+                router.replace("/");
+              }
+            }
+          };
 
-    //       gettoken(socialCode);
-    //     } else {
-    //       console.log("Not Redirect");
-    //     }
-    // }
-  }, []);
+          gettoken(socialCode);
+        } else {
+          console.log("Not Redirect");
+        }
+    }
+  }, [user]);
 
   return (
     <>
