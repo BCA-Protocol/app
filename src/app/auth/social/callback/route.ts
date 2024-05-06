@@ -6,6 +6,5 @@ export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
   const type = searchParams.get('type')
-  console.log("-----callback---------",code )
   return NextResponse.redirect(`${origin}/withsocial?type=${type}&social_code=${code}`)
 }

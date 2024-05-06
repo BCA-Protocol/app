@@ -13,7 +13,6 @@ const useAuth = () => {
   useEffect(() => {
 
     supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log("getSession",session)
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
@@ -23,7 +22,6 @@ const useAuth = () => {
     });
 
     supabase.auth.onAuthStateChange((_event, session) => {
-      console.log("onAuthStateChange",_event, session)
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
