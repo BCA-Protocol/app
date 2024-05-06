@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
+import {getAuthUser} from '@/server-action/auth-action';
 
 const useAuth = () => {
   const supabase = createClient();
@@ -10,7 +11,9 @@ const useAuth = () => {
 
   const router = useRouter();
   useEffect(() => {
+
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log("getSession",session)
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
@@ -20,6 +23,7 @@ const useAuth = () => {
     });
 
     supabase.auth.onAuthStateChange((_event, session) => {
+      console.log("onAuthStateChange",_event, session)
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);

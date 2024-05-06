@@ -163,6 +163,22 @@ export const resendEmailVerification = async (email:string) => {
     
   }
 }
+export const loginWithTwitter = async () => {
+  
+    const supabase = createClient();
+    const origin = headers().get("origin")
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'twitter',
+      options: {
+				redirectTo: `${origin}/withsocial?type=twitter`
+			}
+    })
+  
+}
+export const getAuthUser = async () => {
+  const supabase = createClient();
+  return await supabase.auth.getUser();
+}
 
 // if (code) {
 //   const supabase = createClient();

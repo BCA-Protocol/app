@@ -13,6 +13,11 @@ export const updateSession = async (request: NextRequest) => {
     });
     const requestUrl = new URL(request.url);
     const code = requestUrl.searchParams.get('code');
+    const type = requestUrl.searchParams.get('type');
+    if(type){
+      return response;
+    }
+    console.log("-----middleware---------",code,type)
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -63,9 +68,11 @@ export const updateSession = async (request: NextRequest) => {
 
     // This will refresh session if expired - required for Server Components
     // https://supabase.com/docs/guides/auth/server-side/nextjs
-    await supabase.auth.getUser();
+   
     if(code){
       await supabase.auth.exchangeCodeForSession(code);
+    } else {
+      await supabase.auth.getUser();
     }
 
     return response;
