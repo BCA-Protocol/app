@@ -37,7 +37,6 @@ export default function SignUpForm({ onSignUp, refCode }) {
 
   const handleReferalBlur = async () => {
 
-    const data = checkReference(formData.referalCode)
     const validationErrors = {};
 
     if (!formData.referalCode) {
@@ -45,13 +44,16 @@ export default function SignUpForm({ onSignUp, refCode }) {
       return;
     }
     setSignupDisable(true);
-    // const userdata = await getUserById(formData.referalCode)
-    // if (userdata?.id) {
-    //   setSignupDisable(false);
-    // } else {
-    //   validationErrors.referalCode =
-    //     "Invalid Referral Code! Add new or remove the current";
-    // }
+
+    const response = await checkReference(formData.referalCode)
+    console.log("-----------userData--------",response)
+    
+    if (response?.data?.id) {
+      setSignupDisable(false);
+    } else {
+      validationErrors.referalCode =
+        "Invalid Referral Code! Add new or remove the current";
+    }
     setErrors(validationErrors);
   };
 

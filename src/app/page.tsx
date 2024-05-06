@@ -23,6 +23,9 @@ const Home = () => {
     if (message === "Could not authenticate user") {
       alert(`Email or password is incorrect`);
       router.replace("/");
+    } else if (message === "Email not confirmed") {
+      alert(`Email not confirmed. Please check your emails.`);
+      router.replace("/");
     }
   }, [message]);
 

@@ -33,7 +33,7 @@ export const signUpAction = async ({email, password, displayName, referedBy,ip,b
     return redirect("/signup?message=Could not authenticate user");
   }
 
-  return redirect("/dashboard");
+  return redirect("/");
 };
 
 export const signIn = async ({email,password}:{email:string,password:string}) => {
@@ -46,7 +46,9 @@ export const signIn = async ({email,password}:{email:string,password:string}) =>
   });
   console.log("error", error)
   if (error) {
-    console.log("Signin Error:",error)
+    console.log("Signin Error:",error.message)
+    if (error.message === "Email not confirmed")
+      return redirect("/?message=Email not confirmed");
     return redirect("/?message=Could not authenticate user");
   }
 
