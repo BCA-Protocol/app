@@ -3,7 +3,6 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IconFidgetSpinner } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
-import { verifyEmail } from "@/utils/utils";
 import { handleVerifyEmail } from "@/server-action/auth-action";
 import { collectBrowserData, fetchIPAddress } from "@/utils/helper";
 
