@@ -31,11 +31,11 @@ const menuItems = [
     title: "Referral Program",
     icon: TrophyIcon,
   },
-  {
-    href: "/quest",
-    title: "Quest",
-    icon: RocketLaunchIcon,
-  },
+  // {
+  //   href: "/quest",
+  //   title: "Quest",
+  //   icon: RocketLaunchIcon,
+  // },
 ];
 
 export default function SideBar({ currentPath }) {
