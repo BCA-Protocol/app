@@ -10,7 +10,7 @@ import useAuth from "@/features/base/auth/hooks/use-auth";
 
 export default function Page() {
   const searchParams = useSearchParams();
-  // const router = useRouter();
+  const router = useRouter();
   // const { user } = useAuth()
   const [loading, setLoading] = useState(false);
   const refCode = searchParams.get("ref");
@@ -20,6 +20,15 @@ export default function Page() {
   //     router.replace("/dashboard");
   //   }
   // }, [router, user]);
+
+  const message = searchParams.get("message")
+
+  useEffect(() => {
+    if (message === "Could not authenticate user") {
+      alert(`Signup failed`);
+      router.replace("/signup");
+    }
+  }, [message]);
 
   const handleSignUp = async (formData) => {
     setLoading(true);

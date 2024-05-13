@@ -16,6 +16,8 @@ const Home = () => {
     password: "",
   });
 
+  const router = useRouter();
+
   const searchParams = useSearchParams();
   const message = searchParams.get("message")
 
@@ -28,8 +30,6 @@ const Home = () => {
       router.replace("/");
     }
   }, [message]);
-
-  const router = useRouter();
 
   useEffect(() => {
     if (user?.id) {

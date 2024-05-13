@@ -69,6 +69,8 @@ export default function SignUpForm({ onSignUp, refCode }) {
     }
     if (!formData.password.trim()) {
       validationErrors.password = "Password is required";
+    } else if (formData.password.length < 6) {
+      validationErrors.password = "Password should have at least six characters";
     }
     if (formData.password !== formData.confirmPassword) {
       validationErrors.confirmPassword = "Passwords do not match";

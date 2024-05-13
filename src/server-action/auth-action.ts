@@ -29,6 +29,7 @@ export const signUpAction = async ({email, password, displayName, referedBy,ip,b
   // }
 
   if (error) {
+    console.log("----------signup action error------",error)
     return redirect("/signup?message=Could not authenticate user");
   }
 
