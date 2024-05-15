@@ -199,8 +199,8 @@ const ConnectAndCollectButton = ({ userData }) => {
       <div className="p-1 text-base font-light text-center text-white">
         {isConnected && userCollecting ? (
           <>🎉 You are earning</>
-        ) : (
-          <span className="text-lg font-bold">Connect and earn</span>
+        ) : (<></>
+          // <span className="text-lg font-bold">Connect and earn</span>
         )}{" "}
       </div>
       {blockPoints > 0 && userCollecting && (
@@ -253,7 +253,7 @@ const ConnectAndCollectButton = ({ userData }) => {
                     />
                   </ConnectKitProvider>
                 </div>
-                {!isConnected && (
+                {/* {!isConnected && (
                   <div className="flex flex-col pt-4">
                     <span className="text-xs text-gray-300">
                       * when you connect your wallet no transaction is executed
@@ -262,7 +262,7 @@ const ConnectAndCollectButton = ({ userData }) => {
                       You can disconnect at any time
                     </span>
                   </div>
-                )}
+                )} */}
 
                 {isConnected && userCollecting && (
                   <div className="cursor-pointer group">

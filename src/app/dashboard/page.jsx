@@ -135,7 +135,7 @@ export default function Page() {
                       <div className="flex w-full">
                         <div className="flex flex-col items-start justify-center w-1/2 pr-8 font-semibold text-white">
                           <div className="flex flex-col w-1/2 text-base leading-5 text-purple-300">
-                            Total Earnings
+                            Total Protocol Points
                           </div>
                           <div className="text-3xl font-bold tracking-wide">
                             {formatLargeNumber(
@@ -183,9 +183,9 @@ export default function Page() {
                     </div>
                   </div>
                 </div>
-                <div className="mt-2 ml-2 text-xs text-center text-gray-400">
+                {/* <div className="mt-2 ml-2 text-xs text-center text-gray-400">
                   * points will be converted into BCA tokens
-                </div>
+                </div> */}
               </div>
               <div className="">
                 <div className="relative flex flex-col items-center justify-center object-cover font-bold text-center text-white lg:h-16 lg:px-32 lg:py-32">
@@ -196,9 +196,9 @@ export default function Page() {
                   />
                 </div>
                 <div className="">
-                  <div className="flex flex-col items-center justify-end h-8 py-2 -mt-8 text-sm font-normal text-center text-fuchsia-300/80">
+                  {/* <div className="flex flex-col items-center justify-end h-8 py-2 -mt-8 text-sm font-normal text-center text-fuchsia-300/80">
                     <span>Audited by SecuryX 🔐</span>
-                  </div>
+                  </div> */}
                   <div className="relative flex flex-col h-48 px-4 shadow-sm align-items-center rounded-xl bg-[#250C3D] border-purple-950 border z-30 overflow-hidden bg-[url('/splash-outline.svg')] bg-right bg-no-repeat">
                     <div className="flex items-center justify-center w-full pt-0 text-center">
                       <div class="w-2/5 relative pt-0 z-10">
@@ -206,28 +206,12 @@ export default function Page() {
                       </div>
                     </div>
 
-                    <div className="absolute inset-0 top-8 left-12">
-                      <Image
-                        src={lockImage}
-                        alt="Lock"
-                        width={42}
-                        className="opacity-80"
-                      />
+                    <div className="w-full flex flex-col items-center justify-center text-white mt-10">
+                      <span>Available Data Sources To Monetize</span>
+                      <span className="mt-10">Connect and Earn</span> {/* Added margin-top for separation */}
                     </div>
-                    <div className="absolute inset-0 top-10 left-16">
-                      <Image
-                        src={cookieImage}
-                        alt="Cookie"
-                        width={42}
-                        className="opacity-80"
-                      />
-                    </div>
-
-                    <Web3Provider className="w-full cursor-pointer hover:-translate-y-1">
-                      <ConnectAndCollectButton userData={userData} />
-                    </Web3Provider>
                   </div>
-
+{/* 
                   <div className="inline-flex items-center justify-center w-full pt-2 space-x-2">
                     <p className="text-xs text-gray-300">Supported on:</p>
                     <Image
@@ -242,7 +226,7 @@ export default function Page() {
                       alt="Optimism"
                       className="max-w-4"
                     />
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
