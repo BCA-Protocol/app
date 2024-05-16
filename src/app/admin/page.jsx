@@ -8,7 +8,7 @@ import { Transition, Dialog, Menu } from "@headlessui/react";
 import Loader from "@/components/loader";
 import { ChevronDownIcon, EllipsisHorizontalIcon } from '@heroicons/react/20/solid';
 import useAuth from "@/features/base/auth/hooks/use-auth";
-import { addQuests, editQuests, getQuests } from "@/server-action/quest-actions";
+import { addQuests, editQuests, getQuests, deleteQuests } from "@/server-action/quest-actions";
 
 export default function Page() {
   const {user} =  useAuth()
@@ -96,7 +96,7 @@ export default function Page() {
   };
 
   const handleDelete = async () => {
-    // if (questToBeDeleted?.id) await deleteData("quests", questToBeDeleted.id);
+    if (questToBeDeleted?.id) await deleteQuests(questToBeDeleted.id);
     setQuestUpdated(true);
     setIsDeleteModalOpen(false);
   };

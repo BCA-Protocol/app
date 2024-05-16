@@ -79,3 +79,15 @@ export const getQuests = async () => {
         console.log("Error getQuests", error);
     }
 }
+export const deleteQuests = async (id: string) => {
+    try {
+        const supabase = createClient();
+        const { data, error } = await supabase
+        .from("quests")
+        .delete()
+        .eq("id", id)
+        return { success: true };
+    } catch (error) {
+        console.log("Error deleteQuests", error);
+    }
+}
