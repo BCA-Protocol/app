@@ -128,14 +128,14 @@ export default function Page() {
                 </div>
                 <div className="flex flex-col p-4 bg-[#250C3D] border-purple-950 border lg:h-48 align-items-center rounded-xl">
                   <div className="mb-2 text-lg font-semibold text-white">
-                    Earnings
+                    Points
                   </div>
                   <div className="gap-6 lg:grid lg:grid-cols-2">
                     <div className="relative overflow-hidden flex items-center justify-start w-full px-6 py-4 mb-4 bg-purple-900 rounded-xl lg:mb-0 bca-purple-glow-inside bg-[url('/splash-pink.svg')] bg-right bg-no-repeat">
                       <div className="flex w-full">
                         <div className="flex flex-col items-start justify-center w-1/2 pr-8 font-semibold text-white">
                           <div className="flex flex-col w-1/2 text-base leading-5 text-purple-300">
-                            Total Protocol Points
+                            Your Points
                           </div>
                           <div className="text-3xl font-bold tracking-wide">
                             {formatLargeNumber(
@@ -157,7 +157,7 @@ export default function Page() {
                       <div className="flex w-full">
                         <div className="flex flex-col items-start justify-center w-1/2 pr-8 font-semibold text-white">
                           <div className="flex flex-col w-1/2 text-base leading-5 text-purple-300">
-                            Referral Earnings
+                            Referral Points
                           </div>
                           <div className="text-3xl font-bold tracking-wide">
                             {formatLargeNumber(
@@ -195,14 +195,16 @@ export default function Page() {
                     className="absolute inset-0 max-h-[240px]"
                   />
                 </div>
-                <div className="relative flex flex-col items-center justify-center border-2 border-b rounded-xl border-fuchsia-900 shrink-0 bg-fuchsia-900 text-white overflow-hidden bg-[url('/splash-outline.svg')] bg-right bg-no-repeat">   
-                  <div className="font-bold">Available Data Sources To Monetize</div>
-                  <div className="font-bold">Connect and Earn</div>
-                </div>
+                {/* <div className="relative flex flex-col items-center justify-center border-2 border-b rounded-xl border-fuchsia-900 shrink-0 bg-fuchsia-900 text-white overflow-hidden bg-[url('/splash-outline.svg')] bg-right bg-no-repeat">    */}
+                  <div className="flex flex-col items-center justify-end h-8 py-2 -mt-4 text-sm font-normal text-center text-fuchsia-300/80">
+                    <span>Audited by SecuryX 🔐</span>
+                  </div>
+                  {/* <div className="font-bold">Connect and Earn</div> */}
+                {/* </div> */}
               </div>
             </div>
             <div className="gap-4 lg:grid lg:grid-cols-12">
-              <div className="col-span-4 relative flex flex-col justify-center lg:h-[17rem] lg:w-full">
+              <div className="col-span-4 relative flex flex-col justify-center lg:h-[13.5rem] lg:w-full">
                 <div className="mt-4">
                   <TaskList
                     sendEmailVerification={handleTask}
