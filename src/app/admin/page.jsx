@@ -1,15 +1,17 @@
 'use client';
 import React, { Fragment, useEffect, useState } from "react";
-import { auth } from "@/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
+// import { auth } from "@/firebase";
+// import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Transition, Dialog, Menu } from "@headlessui/react";
-import { getData, addData, editQuests, deleteData } from "@/utils/utils";
+// import { getData, addData, editQuests, deleteData } from "@/utils/utils";
 import Loader from "@/components/loader";
 import { ChevronDownIcon, EllipsisHorizontalIcon } from '@heroicons/react/20/solid';
+import useAuth from "@/features/base/auth/hooks/use-auth";
+import { addQuests, editQuests, getQuests } from "@/server-action/quest-actions";
 
 export default function Page() {
-  const [user] = useAuthState(auth);
+  const {user} =  useAuth()
   const [questData, setQuestData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -33,13 +35,13 @@ export default function Page() {
 
   useEffect(() => {
     const fetchQuests = async () => {
-      if (!user) {
-        router.replace("/");
-        return;
-      }
+      // if (!user) {
+      //   router.replace("/");
+      //   return;
+      // }
       try {
         setLoading(true);
-        const questsDataRes = await getData("quests");
+        const questsDataRes = await getQuests();
         questsDataRes && setQuestData(questsDataRes);
         setLoading(false);
         setQuestUpdated(false);
@@ -48,7 +50,9 @@ export default function Page() {
         setLoading(false);
       }
     };
-    fetchQuests();
+    if(user?.id){
+      fetchQuests();
+    }
   }, [router, user, questUpdated]);
 
   const handleInputChange = (e) => {
@@ -83,15 +87,16 @@ export default function Page() {
     delete dataToSave.created;
     const response =
       questForm.mode === "add"
-        ? await addData("quests", questForm.data)
+        ? await addQuests(questForm.data)
         : await editQuests(questForm.data.id, dataToSave);
 
+        console.log(response)
     if (response.success) setQuestUpdated(true);
     setIsModalOpen(false);
   };
 
   const handleDelete = async () => {
-    if (questToBeDeleted?.id) await deleteData("quests", questToBeDeleted.id);
+    // if (questToBeDeleted?.id) await deleteData("quests", questToBeDeleted.id);
     setQuestUpdated(true);
     setIsDeleteModalOpen(false);
   };
