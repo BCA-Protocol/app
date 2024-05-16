@@ -195,48 +195,21 @@ export default function Page() {
                     className="absolute inset-0 max-h-[240px]"
                   />
                 </div>
-                <div className="">
-                  {/* <div className="flex flex-col items-center justify-end h-8 py-2 -mt-8 text-sm font-normal text-center text-fuchsia-300/80">
-                    <span>Audited by SecuryX 🔐</span>
-                  </div> */}
-                  <div className="relative flex flex-col h-48 px-4 shadow-sm align-items-center rounded-xl bg-[#250C3D] border-purple-950 border z-30 overflow-hidden bg-[url('/splash-outline.svg')] bg-right bg-no-repeat">
-                    <div className="flex items-center justify-center w-full pt-0 text-center">
-                      <div class="w-2/5 relative pt-0 z-10">
-                        <div className="absolute block w-full border-2 border-b rounded-xl border-fuchsia-700 shrink-0 bg-fuchsia-700 bca-glow-top-small"></div>
-                      </div>
-                    </div>
-
-                    <div className="w-full flex flex-col items-center justify-center text-white mt-10">
-                      <span>Available Data Sources To Monetize</span>
-                      <span className="mt-10">Connect and Earn</span> {/* Added margin-top for separation */}
-                    </div>
-                  </div>
-{/* 
-                  <div className="inline-flex items-center justify-center w-full pt-2 space-x-2">
-                    <p className="text-xs text-gray-300">Supported on:</p>
-                    <Image
-                      src={arbitrumLogo}
-                      alt="Arbitrum"
-                      className="max-w-4"
-                    />
-                    <Image src={baseLogo} alt="Base" className="max-w-4" />
-                    <Image src={bnbLogo} alt="BNB" className="max-w-4" />
-                    <Image
-                      src={optimismLogo}
-                      alt="Optimism"
-                      className="max-w-4"
-                    />
-                  </div> */}
+                <div className="relative flex flex-col items-center justify-center border-2 border-b rounded-xl border-fuchsia-900 shrink-0 bg-fuchsia-900 text-white overflow-hidden bg-[url('/splash-outline.svg')] bg-right bg-no-repeat">   
+                  <div className="font-bold">Available Data Sources To Monetize</div>
+                  <div className="font-bold">Connect and Earn</div>
                 </div>
               </div>
             </div>
             <div className="gap-4 lg:grid lg:grid-cols-12">
-              <div className="mt-4 col-span-4 min-h-[250] h-[250]">
-                <TaskList
-                  sendEmailVerification={handleTask}
-                  user={user}
-                  userData={userData}
-                />
+              <div className="col-span-4 relative flex flex-col justify-center lg:h-[17rem] lg:w-full">
+                <div className="mt-4">
+                  <TaskList
+                    sendEmailVerification={handleTask}
+                    user={user}
+                    userData={userData}
+                  />
+                </div>
               </div>
 
               <div className="order-first col-span-8 mt-4">
