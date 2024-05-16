@@ -1,25 +1,21 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "@/firebase";
+import useAuth from "@/features/base/auth/hooks/use-auth";
 import { formatLargeNumber } from "@/utils/helper";
-import {
-  getUserByUUID,
-  getReferralCount,
-  getGlobalSettings,
-} from "@/utils/utils";
 import SuccessMessage from "@/components/notifications/success";
 import { UserPlusIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
+import { getUserById, getReferralCount } from "@/server-action/user-action";
+import { getGlobalSettings } from "@/server-action/base-action";
 
 export default function Header() {
-  const [user] = useAuthState(auth);
-  const [userData, setUserData] = useState([]);
+  const {user} =  useAuth()
+  const [userData, setUserData] = useState(null);
   const [globalSettings, setGlobalSettings] = useState(null);
   const [copiedRefCode, setCopiedRefLink] = useState(null);
   const [refsCount, setRefsCount] = useState(null);
-  const actualNumber = globalSettings?.protocolPoints || 1234567;
+  const actualNumber = globalSettings?.settings?.protocol_points || 1234567;
   const startNumber = Math.max(actualNumber - 100000, 0);
   const [displayNumber, setDisplayNumber] = useState(startNumber);
   const displayNumberRef = useRef(startNumber);
@@ -28,15 +24,24 @@ export default function Header() {
 
   useEffect(() => {
     const fetchUsersAndSettings = async () => {
-      const userRes = await getUserByUUID(user.uid);
+      const userRes = await getUserById(user.id)
       setUserData(userRes);
-      const refCount = await getReferralCount(user.uid);
+      const refCount = await getReferralCount(user.id);
       setRefsCount(refCount);
 
       const globalSettingsData = await getGlobalSettings();
       setGlobalSettings(globalSettingsData);
     };
-    user && user.uid && fetchUsersAndSettings();
+
+    let headerDatafetchTimeout;
+
+    if (user?.id) {
+      headerDatafetchTimeout = setTimeout(() => {
+        fetchUsersAndSettings();
+      }, 3000);
+    }
+
+    return () => clearTimeout(headerDatafetchTimeout);
   }, [user]);
 
   useEffect(() => {
@@ -75,7 +80,7 @@ export default function Header() {
 
   const handleCopy = () => {
     const inputElement = document.createElement("input");
-    const referralCode = userData?.userId;
+    const referralCode = userData?.id;
     const urlToCopy = `${window.location.origin}/signup?ref=${referralCode}`;
 
     inputElement.value = urlToCopy;
@@ -122,7 +127,7 @@ export default function Header() {
       <div className="flex flex-col items-end justify-between w-1/4 text-center lg:flex-row">
         <div className="flex flex-col items-center justify-center w-full text-xs lg:hidden text-fuchsia-600">
           <span className="">welcome </span>
-          {userData && <span>{userData.displayName}</span>}
+          {userData && <span>{userData.display_name}</span>}
         </div>
 
         <div className="flex flex-col items-center justify-center w-full text-base text-white lg:items-end">
@@ -137,7 +142,7 @@ export default function Header() {
         <div className="flex-col items-end justify-end hidden w-full text-base text-transparent lg:flex bg-gradient-to-r from-white to-fuchsia-600 bg-clip-text">
           <span className="text-xs">Welcome </span>
           {userData && (
-            <span className="font-bold">{userData.displayName}</span>
+            <span className="font-bold">{userData.display_name}</span>
           )}
         </div>
       </div>

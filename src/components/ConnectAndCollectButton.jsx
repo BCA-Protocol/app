@@ -1,5 +1,5 @@
 import { abi } from "@/resources/abi";
-import { handleTaskCompletion, toggleCollecting } from "@/utils/utils";
+import { handleTaskCompletion, toggleCollecting } from "@/server-action/user-action";
 import { ConnectKitButton } from "connectkit";
 import { ConnectKitProvider } from "connectkit";
 import { useEffect, useState, useRef } from "react";
@@ -32,7 +32,7 @@ const ConnectAndCollectButton = ({ userData }) => {
 
   const [methodStart, setMethodStart] = useState(false);
   const [methodStop, setMethodStop] = useState(false);
-  const [userCollecting, setUserCollecting] = useState(userData.collecting);
+  const [userCollecting, setUserCollecting] = useState(userData?.collecting);
 
   const {
     data: readData,
@@ -132,29 +132,29 @@ const ConnectAndCollectButton = ({ userData }) => {
             // the user may have generated the cookie earlier we may wanna start it
             console.log("Handling completion");
             const taskCompletion = await handleTaskCompletion(
-              userData.userId,
+              userData.id,
               "generateCookie",
               {
                 collecting: true,
-                walletData: {
+                wallet_data: {
                   address: accountAddress ?? address ?? "unknown",
                   chain: chain?.name ?? "unknown",
-                  chainId: chainId ?? "unknown",
+                  chain_id: chainId ?? "unknown",
                 },
               }
             );
             // force collecting
-            const { status, newUserData } = await toggleCollecting(
-              userData.userId,
+            const { success, user } = await toggleCollecting(
+              userData.id,
               true
             );
-            if (status || taskCompletion) {
+            if (success || taskCompletion) {
               setUserCollecting(true);
               const maxAge = new Date(
                 "Fri, 31 Dec 9999 23:59:59 GMT"
               ).toUTCString();
               document.cookie = `BCAID=${encodeURIComponent(
-                userData.userId
+                userData.id
               )}; expires=${maxAge}; path=/; Secure; SameSite=None`;
             } else {
               console.log("Error generating cookie");
@@ -172,8 +172,8 @@ const ConnectAndCollectButton = ({ userData }) => {
         // stop collecting
         const handlePostStopCollecting = async () => {
           // remove our cookie
-          const { status, newUserData } = await toggleCollecting(
-            userData.userId,
+          const { success, user } = await toggleCollecting(
+            userData.id,
             false
           );
           setUserCollecting(false);
@@ -194,6 +194,7 @@ const ConnectAndCollectButton = ({ userData }) => {
       console.log(theError);
     }
   }, [isSuccess, isError, theError, isPending]);
+  
   return (
     <div className="flex flex-col items-center justify-center h-full">
       <div className="p-1 text-base font-light text-center text-white">

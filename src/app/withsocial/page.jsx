@@ -4,15 +4,15 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IconFidgetSpinner } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
-import { handleTaskCompletion } from "@/utils/utils";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { ContrastOutlined } from "@mui/icons-material";
+import useAuth from "@/features/base/auth/hooks/use-auth";
+import { handleTaskCompletion } from "@/server-action/user-action";
 
-const auth = getAuth();
 const Home = () => {
+  const {user} =  useAuth()
   const searchParams = useSearchParams();
-  const socialCode = searchParams.get("code");
   const errorCode = searchParams.get("error");
+  const socialCode = searchParams.get("social_code");
   const socialType = searchParams.get("type");
   const [loading, setLoading] = useState(false);
   const [errorSocial, setErrorSocial] = useState("");
@@ -21,50 +21,50 @@ const Home = () => {
   useEffect(() => {
     if (socialCode !== null && socialType) {
       setLoading(true);
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          const uid = user.uid;
-          const gettoken = async (code) => {
-            if (socialType == "discord") {
-              const discordResponse = await fetch(
-                `${window.location.origin}/api/discorduser?code=${code}`
-              ).then((res) => res.json());
-              if(discordResponse.error) setErrorSocial(discordResponse.error)
-              if (discordResponse.userData) {
-                const taskRes = await handleTaskCompletion(
-                  uid,
-                  "connectDiscord",
-                  {
-                    discordData: discordResponse.userData,
-                  }
-                );
-                router.replace("/dashboard");
-              }
-            } else if (socialType == "twitter") {
-              const twitterResponse = await fetch(
-                `${window.location.origin}/api/twitteruser?code=${code}`
-              ).then((res) => res.json());
-              if(twitterResponse.error) setErrorSocial(twitterResponse.error)
-              if (twitterResponse.userData) {
-                const taskRes = await handleTaskCompletion(
-                  uid,
-                  "connectTwitter",
-                  {
-                    twitterData: twitterResponse.userData,
-                  }
-                );
-                router.replace('/dashboard');
-              }
+      if (user?.id) {
+        const uid = user?.id;
+        const gettoken = async (code) => {
+          if (socialType == "discord") {
+            const userData = await fetch(
+              `${window.location.origin}/api/discorduser?code=${code}`
+            ).then((res) => res.json());
+            if(userData.error) setErrorSocial(userData.error)
+            if (userData?.userData?.id) {
+              const taskRes = await handleTaskCompletion(
+                uid,
+                "connectDiscord",
+                {
+                  discord_data: userData.userData,
+                }
+              );
+              router.replace("/");
             }
-          };
+          } else if (socialType == "twitter") {
+            const userData = await fetch(
+              `${window.location.origin}/api/twitteruser?code=${code}`
+            ).then((res) => res.json());
+            if(userData.error) setErrorSocial(userData.error)
+            if (userData?.userData?.id) {
+              const taskRes = await handleTaskCompletion(
+                uid,
+                "connectTwitter",
+                {
+                  twitter_data: userData.userData,
+                }
+              );
+              router.replace("/");
+            }
+          }
+        };
 
-          gettoken(socialCode);
-        } else {
-          console.log("Not Redirect");
-        }
-      });
-    } else if (errorCode!==null || socialType==="twitter?error=access_denied") setErrorSocial(errorCode==='access_denied' || socialType==="twitter?error=access_denied"? "Connection rejected by the user": "An unknown error has occured")
-  }, []);
+        gettoken(socialCode);
+      } else {
+        console.log("Not Redirect");
+        setLoading(false);
+      }
+    }
+    else if (errorCode!==null || socialType==="twitter?error=access_denied") setErrorSocial(errorCode==='access_denied' || socialType==="twitter?error=access_denied"? "Connection rejected by the user": "An unknown error has occured")
+  }, [user?.id]);
 
   useEffect(() => {
     if (errorSocial !== "") {
