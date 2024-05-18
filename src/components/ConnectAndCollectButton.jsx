@@ -200,7 +200,7 @@ const ConnectAndCollectButton = ({ userData }) => {
         {isConnected && userCollecting ? (
           <>🎉 You are earning</>
         ) : (
-          <span className="text-lg font-bold">Connect and earn</span>
+          <span className="text-lg font-bold">Connect Browser and Earn</span>
         )}{" "}
       </div>
       {blockPoints > 0 && userCollecting && (

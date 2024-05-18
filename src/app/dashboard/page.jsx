@@ -128,14 +128,14 @@ export default function Page() {
                 </div>
                 <div className="flex flex-col p-4 bg-[#250C3D] border-purple-950 border lg:h-48 align-items-center rounded-xl">
                   <div className="mb-2 text-lg font-semibold text-white">
-                    Earnings
+                    Points
                   </div>
                   <div className="gap-6 lg:grid lg:grid-cols-2">
                     <div className="relative overflow-hidden flex items-center justify-start w-full px-6 py-4 mb-4 bg-purple-900 rounded-xl lg:mb-0 bca-purple-glow-inside bg-[url('/splash-pink.svg')] bg-right bg-no-repeat">
                       <div className="flex w-full">
                         <div className="flex flex-col items-start justify-center w-1/2 pr-8 font-semibold text-white">
                           <div className="flex flex-col w-1/2 text-base leading-5 text-purple-300">
-                            Total Earnings
+                            Your Points
                           </div>
                           <div className="text-3xl font-bold tracking-wide">
                             {formatLargeNumber(
@@ -157,7 +157,7 @@ export default function Page() {
                       <div className="flex w-full">
                         <div className="flex flex-col items-start justify-center w-1/2 pr-8 font-semibold text-white">
                           <div className="flex flex-col w-1/2 text-base leading-5 text-purple-300">
-                            Referral Earnings
+                            Referral Points
                           </div>
                           <div className="text-3xl font-bold tracking-wide">
                             {formatLargeNumber(
@@ -183,9 +183,9 @@ export default function Page() {
                     </div>
                   </div>
                 </div>
-                <div className="mt-2 ml-2 text-xs text-center text-gray-400">
+                {/* <div className="mt-2 ml-2 text-xs text-center text-gray-400">
                   * points will be converted into BCA tokens
-                </div>
+                </div> */}
               </div>
               <div className="">
                 <div className="relative flex flex-col items-center justify-center object-cover font-bold text-center text-white lg:h-16 lg:px-32 lg:py-32">
@@ -195,64 +195,23 @@ export default function Page() {
                     className="absolute inset-0 max-h-[240px]"
                   />
                 </div>
-                <div className="">
-                  <div className="flex flex-col items-center justify-end h-8 py-2 -mt-8 text-sm font-normal text-center text-fuchsia-300/80">
+                {/* <div className="relative flex flex-col items-center justify-center border-2 border-b rounded-xl border-fuchsia-900 shrink-0 bg-fuchsia-900 text-white overflow-hidden bg-[url('/splash-outline.svg')] bg-right bg-no-repeat">    */}
+                  <div className="flex flex-col items-center justify-end h-8 py-2 -mt-4 text-sm font-normal text-center text-fuchsia-300/80">
                     <span>Audited by SecuryX 🔐</span>
                   </div>
-                  <div className="relative flex flex-col h-48 px-4 shadow-sm align-items-center rounded-xl bg-[#250C3D] border-purple-950 border z-30 overflow-hidden bg-[url('/splash-outline.svg')] bg-right bg-no-repeat">
-                    <div className="flex items-center justify-center w-full pt-0 text-center">
-                      <div class="w-2/5 relative pt-0 z-10">
-                        <div className="absolute block w-full border-2 border-b rounded-xl border-fuchsia-700 shrink-0 bg-fuchsia-700 bca-glow-top-small"></div>
-                      </div>
-                    </div>
-
-                    <div className="absolute inset-0 top-8 left-12">
-                      <Image
-                        src={lockImage}
-                        alt="Lock"
-                        width={42}
-                        className="opacity-80"
-                      />
-                    </div>
-                    <div className="absolute inset-0 top-10 left-16">
-                      <Image
-                        src={cookieImage}
-                        alt="Cookie"
-                        width={42}
-                        className="opacity-80"
-                      />
-                    </div>
-
-                    <Web3Provider className="w-full cursor-pointer hover:-translate-y-1">
-                      <ConnectAndCollectButton userData={userData} />
-                    </Web3Provider>
-                  </div>
-
-                  <div className="inline-flex items-center justify-center w-full pt-2 space-x-2">
-                    <p className="text-xs text-gray-300">Supported on:</p>
-                    <Image
-                      src={arbitrumLogo}
-                      alt="Arbitrum"
-                      className="max-w-4"
-                    />
-                    <Image src={baseLogo} alt="Base" className="max-w-4" />
-                    <Image src={bnbLogo} alt="BNB" className="max-w-4" />
-                    <Image
-                      src={optimismLogo}
-                      alt="Optimism"
-                      className="max-w-4"
-                    />
-                  </div>
-                </div>
+                  {/* <div className="font-bold">Connect and Earn</div> */}
+                {/* </div> */}
               </div>
             </div>
             <div className="gap-4 lg:grid lg:grid-cols-12">
-              <div className="mt-4 col-span-4 min-h-[250] h-[250]">
-                <TaskList
-                  sendEmailVerification={handleTask}
-                  user={user}
-                  userData={userData}
-                />
+              <div className="col-span-4 relative flex flex-col justify-center lg:h-[13.5rem] lg:w-full">
+                <div className="mt-4">
+                  <TaskList
+                    sendEmailVerification={handleTask}
+                    user={user}
+                    userData={userData}
+                  />
+                </div>
               </div>
 
               <div className="order-first col-span-8 mt-4">

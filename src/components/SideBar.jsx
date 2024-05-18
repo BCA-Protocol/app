@@ -28,7 +28,7 @@ const menuItems = [
   },
   {
     href: "/leaderboard",
-    title: "Referral Program",
+    title: "Leaderboard",
     icon: TrophyIcon,
   },
   // {
