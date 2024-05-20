@@ -206,7 +206,7 @@ const ConnectAndCollectButton = ({ userData }) => {
       {blockPoints > 0 && userCollecting && (
         <div className="pb-2 text-lg font-light text-center text-white">
           You have <strong>{formatLargeNumber(blockPoints.toString())}</strong>{" "}
-          smart cookie points
+          Browsing points
         </div>
       )}
       <div className="items-center justify-center text-center">
