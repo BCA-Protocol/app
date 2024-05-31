@@ -16,7 +16,7 @@ export const signUpAction = async ({email, password, displayName, referedBy,ip,b
       emailRedirectTo: `${origin}/verifyemail`,
               data: {
                   display_name:displayName,
-                  refered_by: referedBy
+                  refered_by: referedBy || null
               }
     },
   });
