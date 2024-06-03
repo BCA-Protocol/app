@@ -27,6 +27,7 @@ export default function SignUpForm({ onSignUp, refCode }) {
       ...prevErrors,
       [name]: "",
     }));
+    setSignupDisable(false);
   };
 
   useEffect(() => {
@@ -36,7 +37,6 @@ export default function SignUpForm({ onSignUp, refCode }) {
   }, [refCode]);
 
   const handleReferalBlur = async () => {
-
     const validationErrors = {};
 
     if (!formData.referalCode) {
@@ -46,18 +46,26 @@ export default function SignUpForm({ onSignUp, refCode }) {
     setSignupDisable(true);
 
     const response = await checkReference(formData.referalCode)
-    console.log("-----------userData--------",response)
+    console.log("-----------userData--------",response?.data?.id)
     
     if (response?.data?.id) {
+      validationErrors.referalCode = "";
       setSignupDisable(false);
     } else {
       validationErrors.referalCode =
         "Invalid Referral Code! Add new or remove the current";
     }
-    setErrors(validationErrors);
+
+    const combinedError = { ...errors, ...validationErrors };
+    setErrors(combinedError);
+    return combinedError;
   };
 
-  const handleSubmit = (e) => {
+  const hasErrors = (errors) => {
+    return Object.values(errors).some((error) => error);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const validationErrors = {};
@@ -78,12 +86,22 @@ export default function SignUpForm({ onSignUp, refCode }) {
 
     setErrors(validationErrors);
 
-    if (Object.keys(validationErrors).length === 0) {
-      onSignUp(formData);
-      formData.displayName = "";
-      formData.email = "";
-      formData.password = "";
-      formData.paconfirmPasswordssword = "";
+    if (!hasErrors(validationErrors)) {
+      try {
+        const combinedError = await handleReferalBlur();
+        if (!hasErrors(combinedError)) {
+          onSignUp(formData);
+          setFormData({
+            displayName: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+            referalCode: "",
+          });
+        }
+      } catch (error) {
+        console.error("Error during sign up:", error);
+      }
     }
   };
 
@@ -196,7 +214,7 @@ export default function SignUpForm({ onSignUp, refCode }) {
                 name="referalCode"
                 value={formData.referalCode}
                 onChange={handleChange}
-                onBlur={handleReferalBlur}
+                // onBlur={handleReferalBlur}
                 className={`w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm ${
                   errors.referalCode ? "border-red-500" : ""
                 }`}

@@ -28,6 +28,9 @@ const Home = () => {
     } else if (message === "Email not confirmed") {
       alert(`Email not confirmed. Please check your emails.`);
       router.replace("/");
+    } else if (message === "signup successfull") {
+      alert(`Signup successfull. Please check your emails and confirmed before signing in.`);
+      router.replace("/");
     }
   }, [message]);
 

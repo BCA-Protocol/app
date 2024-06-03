@@ -33,7 +33,7 @@ export const signUpAction = async ({email, password, displayName, referedBy,ip,b
     return redirect("/signup?message=Could not authenticate user");
   }
 
-  return redirect("/");
+  return redirect("/?message=signup successfull");
 };
 
 export const signIn = async ({email,password}:{email:string,password:string}) => {
