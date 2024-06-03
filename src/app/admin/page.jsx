@@ -1,15 +1,14 @@
 'use client';
 import React, { Fragment, useEffect, useState } from "react";
-import { auth } from "@/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Transition, Dialog, Menu } from "@headlessui/react";
-import { getData, addData, editQuests, deleteData } from "@/utils/utils";
+import { getData, addData, editQuests, deleteData } from "@/server-action/base-action";
 import Loader from "@/components/loader";
 import { ChevronDownIcon, EllipsisHorizontalIcon } from '@heroicons/react/20/solid';
+import useAuth from "@/features/base/auth/hooks/use-auth";
 
 export default function Page() {
-  const [user] = useAuthState(auth);
+  const {user} =  useAuth()
   const [questData, setQuestData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -40,6 +39,7 @@ export default function Page() {
       try {
         setLoading(true);
         const questsDataRes = await getData("quests");
+        console.log("Quest Data:", questsDataRes, user);
         questsDataRes && setQuestData(questsDataRes);
         setLoading(false);
         setQuestUpdated(false);
@@ -48,8 +48,8 @@ export default function Page() {
         setLoading(false);
       }
     };
-    fetchQuests();
-  }, [router, user, questUpdated]);
+    user && fetchQuests();
+  }, [user, questUpdated]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

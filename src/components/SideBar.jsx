@@ -17,6 +17,7 @@ import {
 import { classNames } from "@/utils/css-utils";
 import { useRouter } from "next/navigation";
 import {signOut} from '@/server-action/auth-action'
+import useAuth from "@/features/base/auth/hooks/use-auth";
 
 const menuItems = [
   {
@@ -38,6 +39,7 @@ const menuItems = [
 
 export default function SideBar({ currentPath }) {
   const router = useRouter();
+  const { user } = useAuth();
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [activeMascot, setActiveMascot] = useState(mascotHappy);
 

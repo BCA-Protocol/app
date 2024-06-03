@@ -1,6 +1,4 @@
 "use client";
-import { auth } from "@/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { formatLargeNumber } from "@/utils/helper";
