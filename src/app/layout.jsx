@@ -22,7 +22,7 @@ const roboto_mono = Roboto_Mono({
 
 export default function RootLayout({ children }) {
   const pathname = usePathname();
-  const publicPages = ["/signup", "/", "/reset-password"];
+  const publicPages = ["/signup", "/", "/reset-password","/verifyemail"];
   const isPublicPage = publicPages.includes(pathname);
 
   return (

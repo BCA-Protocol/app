@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { getUserByUUID } from "@/utils/utils";
+import { getUserById } from "@/server-action/user-action";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "/public/bca-left.png";
+import { checkReference } from "@/server-action/base-action"
 
 export default function SignUpForm({ onSignUp, refCode }) {
   const [formData, setFormData] = useState({
@@ -35,6 +36,7 @@ export default function SignUpForm({ onSignUp, refCode }) {
   }, [refCode]);
 
   const handleReferalBlur = async () => {
+
     const validationErrors = {};
 
     if (!formData.referalCode) {
@@ -42,8 +44,11 @@ export default function SignUpForm({ onSignUp, refCode }) {
       return;
     }
     setSignupDisable(true);
-    const userdata = await getUserByUUID(formData.referalCode);
-    if (userdata?.userId) {
+
+    const response = await checkReference(formData.referalCode)
+    console.log("-----------userData--------",response)
+    
+    if (response?.data?.id) {
       setSignupDisable(false);
     } else {
       validationErrors.referalCode =
@@ -64,6 +69,8 @@ export default function SignUpForm({ onSignUp, refCode }) {
     }
     if (!formData.password.trim()) {
       validationErrors.password = "Password is required";
+    } else if (formData.password.length < 6) {
+      validationErrors.password = "Password should have at least six characters";
     }
     if (formData.password !== formData.confirmPassword) {
       validationErrors.confirmPassword = "Passwords do not match";

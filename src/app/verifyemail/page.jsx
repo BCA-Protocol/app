@@ -3,7 +3,9 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IconFidgetSpinner } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
-import { verifyEmail, handleTaskCompletion } from "@/utils/utils";
+import { handleVerifyEmail } from "@/server-action/auth-action";
+import { collectBrowserData, fetchIPAddress } from "@/utils/helper";
+
 const Home = () => {
   const searchParams = useSearchParams();
   const oobCode = searchParams.get("oobCode");
@@ -12,34 +14,40 @@ const Home = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (oobCode !== null) {
+
       const handleVerification = async () => {
         setLoading(true);
         try {
-          const response = await verifyEmail(oobCode);
-          if (response.emailVerified) {
-            const taskCOmRes = await handleTaskCompletion(
-              response.localId,
-              "verifyEmail"
-            );
-            if (taskCOmRes) {
-              setLoading(false);
-              router.replace("/dashboard");
-              window.location.reload();
-            } else {
-              setLoading(false);
-            }
-          } else {
-            setLoading(false);
-          }
+    
+          const ip = await fetchIPAddress();
+          const browserData = collectBrowserData();
+
+          await handleVerifyEmail( ip, browserData );
+          setLoading(false);
+          // const response = await verifyEmail(oobCode);
+          // if (response.emailVerified) {
+          //   const taskCOmRes = await handleTaskCompletion(
+          //     response.localId,
+          //     "verifyEmail"
+          //   );
+          //   if (taskCOmRes) {
+          //     setLoading(false);
+          //     router.replace("/dashboard");
+          //     window.location.reload();
+          //   } else {
+          //     setLoading(false);
+          //   }
+          // } else {
+          //   setLoading(false);
+          // }
         } catch (error) {
           console.error("Error verifying email:", error);
         }
       };
 
       handleVerification();
-    }
-  }, [oobCode]);
+    
+  }, []);
 
   return (
     <>

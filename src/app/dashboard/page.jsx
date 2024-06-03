@@ -3,9 +3,7 @@ import { auth } from "@/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getUserByUUID, getUserActivity } from "@/utils/utils";
 import { formatLargeNumber } from "@/utils/helper";
-import { sendEmailVerification } from "firebase/auth";
 import ReferalChart from "@/components/ReferalChart";
 import TaskList from "@/components/TaskList";
 import Loader from "@/components/loader";
@@ -27,9 +25,16 @@ import baseLogo from "/public/chains/base.png";
 import arbitrumLogo from "/public/chains/arbitrum.png";
 import bnbLogo from "/public/chains/bnb.png";
 import optimismLogo from "/public/chains/optimism.png";
+import useAuth from "@/features/base/auth/hooks/use-auth";
+import { getUserById } from "@/server-action/user-action";
+import { resendEmailVerification } from "@/server-action/auth-action";
+import { getUserActivity } from "@/server-action/user-action";
+
 
 export default function Page() {
-  const [user] = useAuthState(auth);
+ 
+  // const [user] = useAuthState(auth);
+  const {user} =  useAuth()
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [notification, setNotification] = useState(null);
@@ -40,17 +45,18 @@ export default function Page() {
   const errorSocial = params.get("error_message");
   useEffect(() => {
     const fetchIncompleteTasks = async () => {
-      if (!user) {
-        router.replace("/");
-        return;
+      if(!user?.id){
+        return
       }
       try {
         setLoading(true);
-        const userDataRes = await getUserByUUID(user.uid);
+        console.log(user.id,Date.now())
+        const data = await getUserById(user.id);
         // taskData && setIncompleteTasks(taskData);
-        userDataRes && setUserData(userDataRes);
 
-        const fullUserActivity = await getUserActivity(user.uid);
+        data && setUserData(data);
+
+        const fullUserActivity = await getUserActivity(user.id);
         setUserActivity(fullUserActivity);
         setLoading(false);
         // Check if error_message exists in params
@@ -70,12 +76,12 @@ export default function Page() {
       }
     };
     fetchIncompleteTasks();
-  }, [router, user]);
+  }, [user?.id]);
 
   const handleTask = async (user) => {
     try {
       setLoading(true);
-      await sendEmailVerification(user);
+      await resendEmailVerification(user.email);
       setNotification({
         type: "success",
         message: "Verification email sent successfully",
@@ -139,9 +145,9 @@ export default function Page() {
                           </div>
                           <div className="text-3xl font-bold tracking-wide">
                             {formatLargeNumber(
-                              (userData.totalPoints || 1) -
+                              (userData.total_points || 1) -
                                 1 +
-                                ((userData.referralPoints || 1) - 1)
+                                ((userData.referral_points || 1) - 1)
                             )}{" "}
                           </div>
                         </div>
@@ -161,13 +167,13 @@ export default function Page() {
                           </div>
                           <div className="text-3xl font-bold tracking-wide">
                             {formatLargeNumber(
-                              (userData.referralPoints || 1) - 1
+                              (userData.referral_points || 1) - 1
                             )}{" "}
                           </div>
                         </div>
 
                         <div className="absolute right-0 flex items-center justify-center object-contain w-1/2 space-x-2 text-3xl font-bold text-white -bottom-4 shrink-0">
-                          {(userData.referralPoints || 1) - 1 > 0 ? (
+                          {(userData.referral_points || 1) - 1 > 0 ? (
                             <Image src={mascotHappy} alt="Logo" height={128} />
                           ) : (
                             <Image
