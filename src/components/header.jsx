@@ -120,7 +120,7 @@ export default function Header() {
           </div>
         </div>
         <p className="hidden text-[#D2BAD6] lg:inline-block">
-          Refer your friends and earn 10% compounded interest
+          Refer to supercharge you points
         </p>
       </div>
 
@@ -131,7 +131,7 @@ export default function Header() {
         </div>
 
         <div className="flex flex-col items-center justify-center w-full text-base text-white lg:items-end">
-          <span className="text-xs">Protocol Growth </span>
+          <span className="text-xs">Total Protocol Points </span>
           {displayNumber && (
             <span className="font-bold text-fuchsia-600">
               {formatLargeNumber(displayNumber)}

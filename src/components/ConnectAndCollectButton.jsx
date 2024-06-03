@@ -201,13 +201,13 @@ const ConnectAndCollectButton = ({ userData }) => {
         {isConnected && userCollecting ? (
           <>🎉 You are earning</>
         ) : (
-          <span className="text-lg font-bold">Connect and earn</span>
+          <span className="text-lg font-bold">Connect Browser and Earn</span>
         )}{" "}
       </div>
       {blockPoints > 0 && userCollecting && (
         <div className="pb-2 text-lg font-light text-center text-white">
           You have <strong>{formatLargeNumber(blockPoints.toString())}</strong>{" "}
-          smart cookie points
+          Browsing points
         </div>
       )}
       <div className="items-center justify-center text-center">
