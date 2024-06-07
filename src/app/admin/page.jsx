@@ -35,6 +35,8 @@ export default function Page() {
       if (!user) {
         router.replace("/");
         return;
+      } else if (!process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(',').includes(user?.email)) {
+        return;
       }
       try {
         setLoading(true);

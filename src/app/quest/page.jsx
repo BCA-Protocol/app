@@ -1,17 +1,16 @@
 "use client";
 
-import { auth } from "@/firebase";
 import { useEffect, useState } from "react";
 // import { RocketLaunchIcon, TrophyIcon, Bol } from "@heroicons/react/24/outline";
 import { BoltIcon, UserIcon } from "@heroicons/react/24/solid";
-import { getData } from "@/utils/utils";
+import { getData, addData, editQuests, deleteData } from "@/server-action/base-action";
 import { useRouter } from "next/navigation";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { IconLink,IconCoinBitcoinFilled, IconBrandTwitterFilled, IconBrandDiscordFilled } from "@tabler/icons-react";
 import QuestPopUp from "@/components/QuestPopUp";
+import useAuth from "@/features/base/auth/hooks/use-auth";
 
 export default function Page() {
-  const [user] = useAuthState(auth);
+  const {user} =  useAuth()
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedQuest, setSelectedQuest] = useState(null);
   const [questData, setQuestData] = useState(null);
@@ -19,20 +18,25 @@ export default function Page() {
   const router = useRouter();
 
   useEffect(() => {
-    const fetchQuestData = async () => {
+    const fetchQuests = async () => {
       if (!user) {
         router.replace("/");
         return;
       }
       try {
+        // setLoading(true);
         const questsDataRes = await getData("quests");
+        console.log("Quest Data:", questsDataRes, user);
         questsDataRes && setQuestData(questsDataRes);
+        // setLoading(false);
+        // setQuestUpdated(false);
       } catch (error) {
-        console.error("Error fetching Quests data:", error);
+        console.error("Error fetching Quest Data:", error);
+        // setLoading(false);
       }
     };
-    fetchQuestData();
-  }, [router, user]);
+    user && fetchQuests();
+  }, [user]);
 
 
   return (
