@@ -3,6 +3,7 @@ import Image from "next/image";
 import logo from "/public/bca-left.png";
 import mascotHappy from "/public/m/4-small.png";
 import mascotLove from "/public/m/8-small.png";
+import QuestCheckBalance from "@/components/Quest/QuestCheckBalance";
 
 import { LockClosedIcon } from '@heroicons/react/24/solid';
 
@@ -38,10 +39,7 @@ export default function QuestPopUp({ isOpen, onClose, selectedQuest }) {
     switch (activeButton) {
       case 'Tokens':
         return (
-          <div className='text-white'>
-            <p>This is content for Token</p>
-            <p>Additional details can go here...</p>
-          </div>
+            <QuestCheckBalance/>
         );
       case 'Supply':
         return (

@@ -7,6 +7,7 @@ import { getDefaultConfig } from "connectkit";
 const config = createConfig(
   getDefaultConfig({
     chains: [arbitrum, base, bsc, optimism],
+    ssr: true, 
     transports: {
       [arbitrum.id]: http(),
       [base.id]: http(),
