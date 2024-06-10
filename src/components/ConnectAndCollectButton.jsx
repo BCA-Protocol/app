@@ -69,7 +69,7 @@ const ConnectAndCollectButton = ({ userData }) => {
       console.log('test 2',isConnected, userCollecting)
       if (isConnected && userCollecting) {
         readRefetch();
-        await addPointsToUser(userData.userId, "1", "Smart Cookie Connection")
+        await addPointsToUser(userData.userId, "0.1", "Smart Cookie Connection", "cookiePoints")
         console.log('points added')
       }
     }, 20000);
