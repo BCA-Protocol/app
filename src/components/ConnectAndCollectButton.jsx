@@ -65,6 +65,7 @@ const ConnectAndCollectButton = ({ userData }) => {
 
   useEffect(() => {
     const intervalId = setInterval(async () => {
+      console.log('test',isConnected, userCollecting)
       if (isConnected && userCollecting) {
         readRefetch();
         await addPointsToUser(userData.userId, "1", "Smart Cookie Connection")
