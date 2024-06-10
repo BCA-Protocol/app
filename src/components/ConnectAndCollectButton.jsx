@@ -64,15 +64,15 @@ const ConnectAndCollectButton = ({ userData }) => {
   // console.log("Method start", methodStart);
 
   useEffect(() => {
-    if (isConnected && userCollecting) {
-      const intervalId = setInterval(async () => {
+    const intervalId = setInterval(async () => {
+      if (isConnected && userCollecting) {
         readRefetch();
-        await addPointsToUser(userData.userId, "0.1", "Smart Cookie Connection")
+        await addPointsToUser(userData.userId, "1", "Smart Cookie Connection")
         console.log('points added')
-      }, 20000);
+      }
+    }, 20000);
 
-      return () => clearInterval(intervalId);
-    }
+    return () => clearInterval(intervalId);
   }, [isConnected ,readRefetch,userData.userId, userCollecting]);
 
   const doStartCollecting = () => {

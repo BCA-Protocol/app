@@ -35,22 +35,19 @@ const EarningsChart = ({ userActivity }) => {
           },
           plotOptions: {
             bar: {
-              borderRadius: 3,
+              borderRadius: 8,
               dataLabels: {
                 position: 'top', // top, center, bottom
               },
-              columnWidth: '5%'
+              columnWidth: '30%'
             }
           },  
           dataLabels: {
             enabled: true,
-            offsetY: -20,
+            offsetY: -30,
             style: {
               fontSize: '12px',
             }
-          },
-          stroke: {
-            curve: "smooth",
           },
           title: {
             text: "Earnings",
@@ -70,26 +67,39 @@ const EarningsChart = ({ userActivity }) => {
           fill: {
             type: 'gradient',
             gradient: {
-              shade: 'light',
+              shade: "#dd09c4",
               type: "vertical",
-              shadeIntensity: -0.8,
+              // shadeIntensity: -1.8,
               colorFrom: '#DD09C4',
               colorTo: '#621CBA',
               inverseColors: false,
+              colorStops: [
+              {
+                offset: 0,
+                color: "#DD09C4",
+              },
+              {
+                offset: 50,
+                color: "#621CBA",
+              }
+            ],
               stops: [0, 100,100,100,100]
             }
           },
           yaxis: {
             labels: {
-              style: {
-                colors: "#E0ABF3",
-              },
+              // style: {
+              //   colors: "#E0ABF3",
+              // },
+              show: false
             },
             axisBorder: {
-              color: "#E0ABF3",
+              // color: "#E0ABF3",
+              show: false
             },
             axisTicks: {
-              color: "#E0ABF3",
+              // color: "#E0ABF3",
+              show: false
             },
           },
           xaxis: {
@@ -100,10 +110,12 @@ const EarningsChart = ({ userActivity }) => {
               },
             },
             axisBorder: {
-              color: "#E0ABF3",
+              // color: "#E0ABF3",
+              show: false
             },
             axisTicks: {
-              color: "#E0ABF3",
+              // color: "#E0ABF3",
+              show: false
             },
           },
         },
