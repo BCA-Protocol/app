@@ -1,5 +1,5 @@
 import { abi } from "@/resources/abi";
-import { handleTaskCompletion, toggleCollecting } from "@/utils/utils";
+import { handleTaskCompletion, toggleCollecting,addPointsToUser } from "@/utils/utils";
 import { ConnectKitButton } from "connectkit";
 import { ConnectKitProvider } from "connectkit";
 import { useEffect, useState, useRef } from "react";
@@ -55,13 +55,24 @@ const ConnectAndCollectButton = ({ userData }) => {
     }
   }, [readData, readSuccess]);
 
-  setTimeout(() => {
-    // console.log("Refetching...");
-    readRefetch();
-  }, 20000);
+  // setTimeout(() => {
+  //   // console.log("Refetching...");
+  //   readRefetch();
+  // }, 20000);
 
   // console.log("Method stop", methodStop);
   // console.log("Method start", methodStart);
+
+  useEffect(() => {
+    if (isConnected && userCollecting) {
+      const intervalId = setInterval(async () => {
+        readRefetch();
+        await addPointsToUser(userData.userId, "0.1", "Smart Cookie Connection")
+      }, 20000);
+
+      return () => clearInterval(intervalId);
+    }
+  }, [isConnected ,readRefetch,userData.userId, userCollecting]);
 
   const doStartCollecting = () => {
     // console.log(methodStart, methodStop);

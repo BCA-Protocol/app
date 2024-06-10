@@ -363,7 +363,7 @@ export async function getUserActivity(userId) {
     let result = {
       days: [],
       totals: [],
-      referrals: [],
+      // referrals: [],
     };
 
     // Populate the result object
@@ -371,8 +371,8 @@ export async function getUserActivity(userId) {
       result.days.push(date); // Add the date
       const totalPoints =
         dailySummary[date].points + dailySummary[date].referral;
-      result.totals.push(totalPoints);
-      result.referrals.push(dailySummary[date].referral);
+      result.totals.push(totalPoints.toFixed(2));
+      // result.referrals.push(dailySummary[date].referral);
     });
 
     return result;
