@@ -68,6 +68,7 @@ const ConnectAndCollectButton = ({ userData }) => {
       const intervalId = setInterval(async () => {
         readRefetch();
         await addPointsToUser(userData.userId, "0.1", "Smart Cookie Connection")
+        console.log('points added')
       }, 20000);
 
       return () => clearInterval(intervalId);
