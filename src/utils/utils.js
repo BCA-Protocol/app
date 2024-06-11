@@ -220,8 +220,7 @@ export async function addPointsToUser(uuid, pointsToAdd, description, type) {
     }
 
     const userDoc = userSnapshot.docs[0].ref;
-    const newPoints = parseInt(Math.floor(pointsToAdd));
-
+    let newPoints = parseFloat(pointsToAdd.toFixed(2));
     // Update the totalPoints field by adding the specified points
     if (type == "Referral") {
       await updateDoc(userDoc, {
@@ -239,6 +238,7 @@ export async function addPointsToUser(uuid, pointsToAdd, description, type) {
     }
 
     // Add a new record to the usersPoints collection
+    console.log("newPoints", newPoints);
     await addDoc(usersPointsCollection, {
       userId: uuid,
       points: newPoints,
@@ -326,8 +326,7 @@ export async function calculateTotalProtocolPoints() {
 export async function getUserActivity(userId) {
   try {
     const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30); // 30 days from today
-
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 14); // 30 days from today
     // Query for activities in the last 30 days for the given userId
     const theQuery = query(
       collection(db, "usersPoints"),
@@ -338,24 +337,26 @@ export async function getUserActivity(userId) {
 
     const theSnapshot = await getDocs(theQuery);
     const dailySummary = {};
-
     theSnapshot.forEach((doc) => {
       const data = doc.data();
 
       if (!data.created) return;
-
       const { created, description, points } = data;
       const activityDate = created.toDate();
-      const dateString = activityDate.toLocaleDateString("en-US");
-
+      // const dateString = activityDate.toLocaleDateString("en-US");
+      const dateString = activityDate.toLocaleDateString("en-US", {
+        day: "2-digit",
+        month: "short",
+      });
       if (!dailySummary[dateString]) {
         dailySummary[dateString] = { referral: 0, points: 0 };
       }
 
       if (description.toLowerCase().includes("referral")) {
-        dailySummary[dateString].referral += points;
-      } else {
-        dailySummary[dateString].points += points;
+        dailySummary[dateString].referral += parseFloat(points);
+      }
+      else {
+        dailySummary[dateString].points += parseFloat(points);
       }
     });
 
@@ -363,25 +364,36 @@ export async function getUserActivity(userId) {
     let result = {
       days: [],
       totals: [],
-      referrals: [],
+      // referrals: [],
     };
-
-    // Populate the result object
-    Object.keys(dailySummary).forEach((date) => {
-      result.days.push(date); // Add the date
-      const totalPoints =
-        dailySummary[date].points + dailySummary[date].referral;
-      result.totals.push(totalPoints);
-      result.referrals.push(dailySummary[date].referral);
-    });
-
+    let number= 0.1
+    for (let i = 0; i < 14; i++) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      // const dateString = date.toLocaleDateString("en-US");
+      const dateString = date.toLocaleDateString("en-US", {
+        day: "2-digit",
+        month: "short",
+      });
+      result.days.unshift(dateString); // Add the date at the beginning
+      if (!dailySummary[dateString]) {
+        result.totals.unshift(0); // Add zero for missing data
+        // result.referrals.unshift("0.00"); // Add zero for missing data
+      } else {
+        const totalPoints =
+          dailySummary[dateString].points + dailySummary[dateString].referral;
+        console.log(totalPoints, typeof(totalPoints))
+        result.totals.unshift(totalPoints.toFixed(2));
+        // result.referrals.unshift(dailySummary[dateString].referral.toFixed(2));
+      }
+      number+=0.1
+    }
     return result;
   } catch (error) {
     console.error("Error getting activity for user:", error);
     throw error;
   }
 }
-
 export async function getUserIncompleteTasksv2(userId) {
   try {
     // Leverage a subquery to filter tasks based on userTasks existence

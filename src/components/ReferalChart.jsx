@@ -19,25 +19,35 @@ const EarningsChart = ({ userActivity }) => {
             data: userActivity.totals,
             color: "#a21caf",
           },
-          {
-            name: "Referrals",
-            data: userActivity.referrals,
-            color: "#ffcc00",
-          },
+          // {
+          //   name: "Referrals",
+          //   data: userActivity.referrals,
+          //   color: "#ffcc00",
+          // },
         ],
         options: {
           chart: {
             height: 350,
-            type: "line",
+            type: "bar",
             zoom: {
               enabled: false,
             },
           },
+          plotOptions: {
+            bar: {
+              borderRadius: 8,
+              dataLabels: {
+                position: 'top', // top, center, bottom
+              },
+              columnWidth: '30%'
+            }
+          },  
           dataLabels: {
-            enabled: false,
-          },
-          stroke: {
-            curve: "smooth",
+            enabled: true,
+            offsetY: -30,
+            style: {
+              fontSize: '12px',
+            }
           },
           title: {
             text: "Earnings",
@@ -54,17 +64,42 @@ const EarningsChart = ({ userActivity }) => {
               colors: ["#a21caf", "#ffcc00"],
             },
           },
+          fill: {
+            type: 'gradient',
+            gradient: {
+              shade: "#dd09c4",
+              type: "vertical",
+              // shadeIntensity: -1.8,
+              colorFrom: '#DD09C4',
+              colorTo: '#621CBA',
+              inverseColors: false,
+              colorStops: [
+              {
+                offset: 0,
+                color: "#DD09C4",
+              },
+              {
+                offset: 50,
+                color: "#621CBA",
+              }
+            ],
+              stops: [0, 100,100,100,100]
+            }
+          },
           yaxis: {
             labels: {
-              style: {
-                colors: "#E0ABF3",
-              },
+              // style: {
+              //   colors: "#E0ABF3",
+              // },
+              show: false
             },
             axisBorder: {
-              color: "#E0ABF3",
+              // color: "#E0ABF3",
+              show: false
             },
             axisTicks: {
-              color: "#E0ABF3",
+              // color: "#E0ABF3",
+              show: false
             },
           },
           xaxis: {
@@ -75,10 +110,12 @@ const EarningsChart = ({ userActivity }) => {
               },
             },
             axisBorder: {
-              color: "#E0ABF3",
+              // color: "#E0ABF3",
+              show: false
             },
             axisTicks: {
-              color: "#E0ABF3",
+              // color: "#E0ABF3",
+              show: false
             },
           },
         },
@@ -93,7 +130,7 @@ const EarningsChart = ({ userActivity }) => {
           className="py-6 bg-[#250C3D] rounded-xl"
           options={chartData.options}
           series={chartData.series}
-          type="line"
+          type="bar"
           height={"350"}
           width={"100%"}
         />
