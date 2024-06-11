@@ -3,7 +3,11 @@ export const changeTheme = (theme) => {
 };
 
 export function formatLargeNumber(theNumber) {
-  return new Intl.NumberFormat("en-US").format(theNumber);
+  return new Intl.NumberFormat("en-US",{
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+    trailingZeroDisplay: "stripIfInteger",
+  }).format(theNumber);
 }
 
 export function collectBrowserData() {
