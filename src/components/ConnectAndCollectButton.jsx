@@ -277,7 +277,7 @@ const ConnectAndCollectButton = ({ userData }) => {
                 )}
 
                 {isConnected && userCollecting && (
-                  <div className="cursor-pointer group">
+                  <div className="cursor-pointer group z-10">
                     <button
                       disabled={pendingTransaction === true}
                       className="px-2 pt-2 text-sm text-purple-600 underline cursor-pointer group-hover:text-white"

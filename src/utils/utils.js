@@ -238,7 +238,6 @@ export async function addPointsToUser(uuid, pointsToAdd, description, type) {
     }
 
     // Add a new record to the usersPoints collection
-    console.log("newPoints", newPoints);
     await addDoc(usersPointsCollection, {
       userId: uuid,
       points: newPoints,
