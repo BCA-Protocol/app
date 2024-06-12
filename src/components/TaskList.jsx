@@ -164,7 +164,7 @@ const TaskList = ({ user, userData, sendEmailVerification }) => {
                 "hover:bg-fuchsia-950 hover:shadow-cyan-500/60 hover:shadow-lg cursor-pointer hover:-translate-y-1"
               )}>
               <div className="w-2/3 ml-2 text-white cursor-pointer hover:-translate-y-1">
-                <TelegramLogin uid={user.uid} />
+                <TelegramLogin uid={user?.uid} />
               </div>
             </div>
           )}
