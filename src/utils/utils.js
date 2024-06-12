@@ -220,7 +220,7 @@ export async function addPointsToUser(uuid, pointsToAdd, description, type) {
     }
 
     const userDoc = userSnapshot.docs[0].ref;
-    let newPoints = parseFloat(pointsToAdd.toFixed(2));
+    let newPoints = parseFloat(pointsToAdd);
     // Update the totalPoints field by adding the specified points
     if (type == "Referral") {
       await updateDoc(userDoc, {

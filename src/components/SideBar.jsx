@@ -71,7 +71,7 @@ export default function SideBar({ currentPath }) {
           sidebarVisible ? "" : "hidden"
         )}
       >
-        <div className="flex flex-col justify-between h-full">
+        <div className="flex flex-col justify-between h-full overflow-y-auto md:overflow-hidden lg:overflow-hidden">
           <CloseIcon
             onClick={toggleSidebar}
             className="absolute z-40 w-10 h-10 border cursor-pointer rounded-xl right-1 top-10 ml-28 border-fuchsia-700 text-fuchsia-700 lg:hidden"
