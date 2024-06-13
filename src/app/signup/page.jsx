@@ -1,6 +1,7 @@
 "use client";
 import { auth, db } from "../../firebase";
 import { IconFidgetSpinner } from "@tabler/icons-react";
+import Loader from "@/components/loader";
 import { useRouter } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useEffect, useState } from "react";
@@ -9,7 +10,6 @@ import { addData, handleTaskCompletion } from "@/utils/utils";
 import SignUpForm from "@/components/SignUpForm";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { addPointsToUser, getReferralIdsList} from "@/utils/utils";
-import { Timestamp } from "firebase/firestore";
 import { collectBrowserData, fetchIPAddress } from "@/utils/helper";
 
 export default function Page() {
@@ -69,10 +69,8 @@ export default function Page() {
   return (
     <>
       {loading ? (
-        <div className="flex flex-col items-center justify-center">
-          <IconFidgetSpinner className="w-8 h-8 animate-spin" />
-        </div>
-      ) : (
+        <Loader show={loading} />
+      )  : (
         <SignUpForm refCode={refCode} onSignUp={handleSignUp} />
       )}
     </>
