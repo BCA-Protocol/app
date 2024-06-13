@@ -8,7 +8,7 @@ import { useSearchParams } from "next/navigation";
 import { addData, handleTaskCompletion } from "@/utils/utils";
 import SignUpForm from "@/components/SignUpForm";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
-import { addPointsToUser } from "@/utils/utils";
+import { addPointsToUser, getReferralIdsList} from "@/utils/utils";
 import { Timestamp } from "firebase/firestore";
 import { collectBrowserData, fetchIPAddress } from "@/utils/helper";
 
@@ -33,6 +33,10 @@ export default function Page() {
     const { email, password, displayName, referalCode } = formData;
     let res = await createUser(email, password);
     if (res && res.user) {
+      let referrals = [];
+      if (referalCode) {
+        referrals = await getReferralIdsList(referalCode);
+      }
       const userRes = await addData("users", {
         userId: res.user.uid,
         displayName: displayName,
@@ -40,6 +44,7 @@ export default function Page() {
         referralPoints: 1,
         overallPoints: 2,
         referedBy: referalCode,
+        referrals: referrals,
         completedTasks: {},
       });
       if (referalCode) {

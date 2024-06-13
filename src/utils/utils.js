@@ -14,6 +14,7 @@ import {
   deleteDoc,
   increment,
   startAfter,
+  writeBatch
 } from "firebase/firestore";
 import { Timestamp } from "firebase/firestore";
 import { confirmPasswordReset } from "firebase/auth";
@@ -205,7 +206,68 @@ export async function getGlobalSettings() {
   }
 }
 
-export async function addPointsToUser(uuid, pointsToAdd, description, type) {
+// export async function addPointsToUser(uuid, pointsToAdd, description, type) {
+//   try {
+//     const usersCollection = collection(db, "users");
+//     const usersPointsCollection = collection(db, "usersPoints");
+//     const settingsDocRef = doc(db, "general", "settings"); // Reference to the settings document
+
+//     // Get the user document reference
+//     const userQuery = query(usersCollection, where("userId", "==", uuid));
+//     const userSnapshot = await getDocs(userQuery);
+
+//     if (userSnapshot.docs.length === 0) {
+//       throw new Error("User not found");
+//     }
+
+//     const userDoc = userSnapshot.docs[0].ref;
+//     let newPoints = parseFloat(pointsToAdd);
+//     // Update the totalPoints field by adding the specified points
+//     if (type == "Referral") {
+//       await updateDoc(userDoc, {
+//         referralPoints:
+//           (userSnapshot.docs[0].data().referralPoints || 0) + newPoints,
+//         overallPoints:
+//           (userSnapshot.docs[0].data().overallPoints || 0) + newPoints,
+//       });
+//     } else {
+//       await updateDoc(userDoc, {
+//         totalPoints: (userSnapshot.docs[0].data().totalPoints || 0) + newPoints,
+//         overallPoints:
+//           (userSnapshot.docs[0].data().overallPoints || 0) + newPoints,
+//       });
+//     }
+
+//     // Add a new record to the usersPoints collection
+//     await addDoc(usersPointsCollection, {
+//       userId: uuid,
+//       points: newPoints,
+//       description: description,
+//       created: Timestamp.now(),
+//     });
+
+//     // update global points here
+//     updateDoc(settingsDocRef, {
+//       protocolPoints: increment(newPoints),
+//     });
+
+//     // Optionally, you can fetch and return the updated user data
+//     const updatedUserSnapshot = await getDocs(userQuery);
+//     const updatedUser = updatedUserSnapshot.docs[0].data();
+
+//     return { success: true, user: updatedUser };
+//   } catch (error) {
+//     console.error("Error adding points to user:", error);
+//     return { success: false, error: error.message };
+//   }
+// }
+
+export async function addPointsToUser(
+  uuid,
+  pointsToAdd,
+  description,
+  type = "Task"
+) {
   try {
     const usersCollection = collection(db, "users");
     const usersPointsCollection = collection(db, "usersPoints");
@@ -246,7 +308,7 @@ export async function addPointsToUser(uuid, pointsToAdd, description, type) {
     });
 
     // update global points here
-    updateDoc(settingsDocRef, {
+    await updateDoc(settingsDocRef, {
       protocolPoints: increment(newPoints),
     });
 
@@ -365,7 +427,6 @@ export async function getUserActivity(userId) {
       totals: [],
       // referrals: [],
     };
-    let number= 0.1
     for (let i = 0; i < 14; i++) {
       const date = new Date();
       date.setDate(date.getDate() - i);
@@ -381,11 +442,9 @@ export async function getUserActivity(userId) {
       } else {
         const totalPoints =
           dailySummary[dateString].points + dailySummary[dateString].referral;
-        console.log(totalPoints, typeof(totalPoints))
         result.totals.unshift(totalPoints.toFixed(2));
         // result.referrals.unshift(dailySummary[dateString].referral.toFixed(2));
       }
-      number+=0.1
     }
     return result;
   } catch (error) {
@@ -433,6 +492,80 @@ export async function getUserIncompleteTasksv2(userId) {
   }
 }
 
+// export const handleTaskCompletion = async (
+//   userId,
+//   taskId,
+//   additionalUserData = {}
+// ) => {
+//   try {
+//     const usersCollection = collection(db, "users");
+//     const userQuery = query(usersCollection, where("userId", "==", userId));
+
+//     // Get user documents
+//     const userSnapshot = await getDocs(userQuery);
+
+//     if (userSnapshot.empty) {
+//       console.log("User document does not exist.");
+//       return;
+//     }
+
+//     // Assume there is only one user with a specific localId (or handle multiple results as needed)
+//     const userDoc = userSnapshot.docs[0];
+//     const userRef = userDoc.ref;
+//     const completedTasks = userDoc.data().completedTasks;
+//     const referedBy = userDoc.data().referedBy;
+
+//     const tasksCollection = collection(db, "tasks");
+//     const taskQuery = query(tasksCollection, where("taskId", "==", taskId));
+//     const taskSnapshot = await getDocs(taskQuery);
+
+//     if (taskSnapshot.empty) {
+//       console.log("Task document does not exist.");
+//       return;
+//     }
+
+//     // Assuming there's only one task document with the specified taskId
+//     const taskDoc = taskSnapshot.docs[0];
+//     const taskData = taskDoc.data();
+//     const taskPoints = taskData.points;
+
+//     await runTransaction(db, async (transaction) => {
+//       // Check if the task has already been completed
+//       if (!completedTasks?.hasOwnProperty(taskId)) {
+//         // Update user document
+//         transaction.update(userRef, {
+//           completedTasks: {
+//             ...completedTasks,
+//             [taskId]: {
+//               taskId: taskId,
+//               created: Timestamp.now(),
+//             },
+//           }, // Add the completed task to the list
+//           ...additionalUserData,
+//         });
+//         await addPointsToUser(userId, taskPoints, taskData.name);
+//         if(referedBy){
+//           await addPointsToUser(
+//             referedBy,
+//             taskPoints * 0.07,
+//             taskData.name + " (Referral)",
+//             "Referral"
+//           );
+//         }
+//         // await addReferralPointsToUser(referedBy, taskPoints * 0.07);
+//         console.log("Task completed. Points added.");
+//       } else {
+//         console.log("Task has already been completed.");
+//       }
+//     });
+//     return true;
+//   } catch (error) {
+//     console.error("Error handling task completion:", error);
+//     return false;
+//   }
+// };
+
+
 export const handleTaskCompletion = async (
   userId,
   taskId,
@@ -450,11 +583,12 @@ export const handleTaskCompletion = async (
       return;
     }
 
-    // Assume there is only one user with a specific localId (or handle multiple results as needed)
+    // Assume there is only one user with a specific userId
     const userDoc = userSnapshot.docs[0];
     const userRef = userDoc.ref;
     const completedTasks = userDoc.data().completedTasks;
-    const referedBy = userDoc.data().referedBy;
+    const referredBy = userDoc.data().referedBy;
+    const referrals = userDoc.data().referrals || [];
 
     const tasksCollection = collection(db, "tasks");
     const taskQuery = query(tasksCollection, where("taskId", "==", taskId));
@@ -485,15 +619,9 @@ export const handleTaskCompletion = async (
           ...additionalUserData,
         });
         await addPointsToUser(userId, taskPoints, taskData.name);
-        if(referedBy){
-          await addPointsToUser(
-            referedBy,
-            taskPoints * 0.07,
-            taskData.name + " (Referral)",
-            "Referral"
-          );
+        if (referredBy) {
+          await distributeReferralPoints(referrals, taskPoints, taskData.name);
         }
-        // await addReferralPointsToUser(referedBy, taskPoints * 0.07);
         console.log("Task completed. Points added.");
       } else {
         console.log("Task has already been completed.");
@@ -574,3 +702,74 @@ export async function deleteData(mycollection,docId) {
     throw error;
   }
 }
+
+export const distributeReferralPoints = async ( referrals, taskPoints, taskName ) => {
+  const batch = writeBatch(db);
+
+  for (let i = 0; i < referrals.length; i++) {
+    const settingsDocRef = doc(db, "general", "settings");
+    const referrerId = referrals[i];
+    const usersCollection = collection(db, "users");
+    const referrerQuery = query(usersCollection, where("userId", "==", referrerId));
+    const referrerSnap = await getDocs(referrerQuery);
+    const referrerDoc = referrerSnap.docs[0];
+    const referrerRef = referrerDoc.ref;
+    const newPoints = taskPoints * 0.1; // 10% of points for each level up
+
+    // Update the user's points in the batch
+    batch.update(referrerRef, {
+      referralPoints: increment(newPoints),
+      overallPoints: increment(newPoints),
+    });
+    batch.update(settingsDocRef, {
+      protocolPoints: increment(newPoints),
+    });
+
+    // Add records to a usersPoints collection
+    const usersPointsCollection = collection(db, "usersPoints");
+    batch.set(doc(usersPointsCollection), {
+      userId: referrerId,
+      points: newPoints,
+      description: `${taskName} (Referral)`,
+      created: Timestamp.now(),
+    });
+  }
+
+  await batch.commit();
+};
+// export async function updateReferrerPoints(userId, taskPoints) {
+//   let currentReferrerId = userId;
+//   let currentPoints = taskPoints;
+
+//   while (currentReferrerId) {
+//     const userRef = doc(db, "users", currentReferrerId);
+//     const userSnap = await getDoc(userRef);
+
+//     if (!userSnap.exists()) break;
+//     const userData = userSnap.data();
+//     currentReferrerId = userData.referedBy;
+
+//     if (!currentReferrerId) break;
+//     const referrerRef = doc(db, "users", currentReferrerId);
+//     const referrerSnap = await getDoc(referrerRef);
+
+//     if (!referrerSnap.exists()) break;
+//     const referrerPoints = referrerSnap.data().referralPoints + currentPoints * 0.1;
+
+//     await updateDoc(referrerRef, {
+//       referralPoints: referrerPoints,
+//     });
+//   }
+// };
+
+export const getReferralIdsList = async (referrerId) => {
+  const usersCollection = collection(db, "users");
+  const referrerQuery = query(usersCollection, where("userId", "==", referrerId));
+  const referrerSnap = await getDocs(referrerQuery);
+  const referrerDoc = referrerSnap.docs[0];
+  const referrerData = referrerDoc.data();
+  const referrals = referrerData.referrals || [];
+  referrals.push(referrerId);
+
+  return referrals;
+};
