@@ -5,7 +5,7 @@ import mascotHappy from "/public/m/4-small.png";
 import mascotLove from "/public/m/8-small.png";
 import CheckBalance from "@/components/Quest/CheckBalance.tsx";
 import SupplyToken from "@/components/Quest/SupplyToken.tsx";
-
+import BorrowToken from "@/components/Quest/BorrowToken.tsx";
 
 import { LockClosedIcon } from '@heroicons/react/24/solid';
 
@@ -45,14 +45,11 @@ export default function QuestPopUp({ isOpen, onClose, selectedQuest }) {
         );
       case 'Supply':
         return (
-            <SupplyToken/>
+            <SupplyToken minimumBalance={1000000n}/>
         );
       case 'Borrow':
         return (
-          <div className='text-white'>
-            <p>This is content for Borrow</p>
-            <p>Additional info for Borrow...</p>
-          </div>
+          <BorrowToken minimumBalance={1000000n}/>
         );
       case 'Repost':
         return (

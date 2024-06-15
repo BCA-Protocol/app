@@ -38,8 +38,6 @@ export default function SupplyToken({
     // blockNumber: QUEST_START_BLOCK,
   });
   useEffect(() => {
-    // balanceOfSupplied.data is the balance of the supplied token plus interest
-    // so it may be higher than the initial balance
     if (balanceOfSupplied.isFetched && !!balanceOfSupplied.data) {
       setIsMinimalSupplyMet(balanceOfSupplied.data > minimumBalance);
       console.log(
@@ -79,7 +77,7 @@ export default function SupplyToken({
         {!isMinimalSupplyMet && (
             <button className="text-warning-red text-sm text-center rounded-full border h-11 border-warning-red">
               <div className="flex flex-row justify-center">
-                <Warning /> Supply minimum not met !
+                <Warning /> You don&apos;t have enough supply!
               </div>
             </button>
           )}

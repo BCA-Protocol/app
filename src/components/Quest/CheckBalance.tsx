@@ -12,7 +12,6 @@ export default function CheckBalance({
   minimumBalance: bigint;
 }) {
   const { address: myAddress0, isConnected } = useAccount();
-  const [ethBalance, setEthBalance] = useState("");
   const balanceInfo = useBalance({
     address: myAddress0,
   });
@@ -21,9 +20,6 @@ export default function CheckBalance({
   useEffect(() => {
     if (balanceInfo.isFetched && !!balanceInfo.data) {
       setIsMinimalMet(balanceInfo.data.value > minimumBalance);
-      setEthBalance(
-        formatUnits(balanceInfo.data.value, balanceInfo.data.decimals)
-      );
     }
   }, [balanceInfo]);
 
@@ -44,9 +40,13 @@ export default function CheckBalance({
           </p>
 
           <div className="flex flex-row w-full justify-center mt-8">
-            <button className="w-36 py-2 px-4 rounded-md border border-border-button bg-button-bg text-sm">
-              Open the bridge
-            </button>
+          <a
+              href="https://app.layer3.xyz/bridge?toChainId=10&toTokenAddress=0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+              target="_blank"
+              className="w-fit py-2 px-4 rounded-md border border-border-button bg-button-bg text-sm"
+            >
+              Open Compound
+            </a>
           </div>
         </div>
         <div className="flex flex-col justify-center text-lg">
