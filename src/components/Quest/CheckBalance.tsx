@@ -1,17 +1,21 @@
 import { useState, useEffect } from "react";
 import { useBalance } from "wagmi";
 import { useAccount } from "wagmi";
-import { formatUnits } from "viem";
+import { formatUnits, Address } from "viem";
 import Image from "next/image";
 import logo from "/public/chains/optimism.png";
 import { Warning } from "@/components/Svg.tsx";
 
 export default function CheckBalance({
   minimumBalance,
+  myAddress0,
+  isConnected,
 }: {
   minimumBalance: bigint;
+  myAddress0: Address;
+  isConnected: boolean;
 }) {
-  const { address: myAddress0, isConnected } = useAccount();
+  console.log("🚀 ~ isConnected:", isConnected);
   const balanceInfo = useBalance({
     address: myAddress0,
   });
@@ -40,7 +44,7 @@ export default function CheckBalance({
           </p>
 
           <div className="flex flex-row w-full justify-center mt-8">
-          <a
+            <a
               href="https://app.layer3.xyz/bridge?toChainId=10&toTokenAddress=0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
               target="_blank"
               className="w-fit py-2 px-4 rounded-md border border-border-button bg-button-bg text-sm"

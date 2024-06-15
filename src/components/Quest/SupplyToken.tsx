@@ -5,9 +5,10 @@ import Image from "next/image";
 import logo from "/public/chains/optimism.png";
 import { Warning } from "@/components/Svg.tsx";
 import { formatUnits } from "viem";
+import { cUSDCv3Abi } from "./abi";
+
 
 const MY_ADDRESS = "0x01F0831120AB81F91109e099afB551A091c4c05A";
-const USDC_CONTRACT_ADDRESS_V3 = "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85";
 const COMPOUND_USDC_CONTRACT_ADDRESS_V3 =
   "0x2e44e174f7D53F0212823acC11C01A11d58c5bCB";
 const QUEST_START_BLOCK = 121106130n;
@@ -21,17 +22,9 @@ export default function SupplyToken({
   const { address: myAddress0, isConnected } = useAccount();
   const [isMinimalSupplyMet, setIsMinimalSupplyMet] = useState(false);
   // https://api.coinbase.com/v2/exchange-rates?currency=ETH
-  const abi = [
-    {
-      type: "function",
-      name: "balanceOf", // https://docs.compound.finance/helper-functions/#supplied-base-balance
-      stateMutability: "view",
-      inputs: [{ name: "account", type: "address" }],
-      outputs: [{ type: "uint256" }],
-    },
-  ] as const;
+
   const balanceOfSupplied = useReadContract({
-    abi,
+    abi:cUSDCv3Abi,
     address: COMPOUND_USDC_CONTRACT_ADDRESS_V3,
     args: [MY_ADDRESS],
     functionName: "balanceOf",
@@ -40,16 +33,8 @@ export default function SupplyToken({
   useEffect(() => {
     // balanceOfSupplied.data is the balance of the supplied token plus interest
     // so it may be higher than the initial balance
-    if (balanceOfSupplied.isFetched && !!balanceOfSupplied.data) {
+    if (balanceOfSupplied.isFetched && balanceOfSupplied.data != undefined) {
       setIsMinimalSupplyMet(balanceOfSupplied.data > minimumBalance);
-      console.log(
-        "🚀 ~ balanceOfSupplied.data:",
-        formatUnits(balanceOfSupplied.data ?? 0, 6)
-      );
-      console.log(
-        "🚀 ~ Info ~ is more balance:",
-        balanceOfSupplied.data > minimumBalance
-      );
     }
   }, [balanceOfSupplied]);
 
@@ -77,17 +62,17 @@ export default function SupplyToken({
           </div>
         </div>
         {!isMinimalSupplyMet && (
-            <button className="text-warning-red text-sm text-center rounded-full border h-11 border-warning-red">
-              <div className="flex flex-row justify-center">
-                <Warning /> Supply minimum not met !
-              </div>
-            </button>
-          )}
+          <button className="text-warning-red text-sm text-center rounded-full border h-11 border-warning-red">
+            <div className="flex flex-row justify-center">
+              <Warning /> Supply minimum not met !
+            </div>
+          </button>
+        )}
         <div className="flex flex-col justify-center text-lg">
           <div className="flex flex-row w-full justify-center mt-7">
             <button
               className="bg-continue-button w-40 rounded-md disabled:opacity-25"
-              disabled={!balanceOfSupplied}
+              disabled={!isMinimalSupplyMet}
             >
               continue
             </button>

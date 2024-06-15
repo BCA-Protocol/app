@@ -9,7 +9,7 @@ import BorrowToken from "@/components/Quest/BorrowToken.tsx";
 
 import { LockClosedIcon } from '@heroicons/react/24/solid';
 
-export default function QuestPopUp({ isOpen, onClose, selectedQuest }) {
+export default function QuestPopUp({ isOpen, onClose, selectedQuest, myAddress0 ,isConnected }) {
   const [activeButton, setActiveButton] = useState('Tokens');
   console.log('temp',selectedQuest)
 
@@ -41,7 +41,7 @@ export default function QuestPopUp({ isOpen, onClose, selectedQuest }) {
     switch (activeButton) {
       case 'Tokens':
         return (
-            <CheckBalance minimumBalance={5000000000000000n}/>
+            <CheckBalance minimumBalance={5000000000000000n} myAddress0={myAddress0} isConnected={isConnected}/>
         );
       case 'Supply':
         return (
@@ -49,7 +49,7 @@ export default function QuestPopUp({ isOpen, onClose, selectedQuest }) {
         );
       case 'Borrow':
         return (
-          <BorrowToken minimumBalance={1000000n}/>
+          <BorrowToken minimumBalance={1n}/>
         );
       case 'Repost':
         return (

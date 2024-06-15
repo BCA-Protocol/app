@@ -8,12 +8,15 @@ import { useRouter } from "next/navigation";
 import { IconLink,IconCoinBitcoinFilled, IconBrandTwitterFilled, IconBrandDiscordFilled } from "@tabler/icons-react";
 import QuestPopUp from "@/components/QuestPopUp";
 import useAuth from "@/features/base/auth/hooks/use-auth";
+import { useAccount } from "wagmi";
 
 export default function Page() {
   const {user} =  useAuth()
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedQuest, setSelectedQuest] = useState(null);
   const [questData, setQuestData] = useState(null);
+  const { address: myAddress0, isConnected } = useAccount();
+
 
   const router = useRouter();
 
@@ -41,7 +44,7 @@ export default function Page() {
 
   return (
     <>
-    {modalOpen && <QuestPopUp isOpen={modalOpen} onClose={() => setModalOpen(false)} selectedQuest={selectedQuest}/>}
+    {modalOpen && <QuestPopUp isOpen={modalOpen} onClose={() => setModalOpen(false)} selectedQuest={selectedQuest} myAddress0={myAddress0} isConnected={isConnected}/>}
       <div className="px-4 pb-24">
         <div className="flex items-center justify-center w-full pt-0 text-center">
           <div class="w-2/5 relative pt-0 z-10">
