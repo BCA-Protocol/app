@@ -11,11 +11,11 @@ const MY_ADDRESS = "0x030B3cAF855D1A9496937Fa015ED17Cb5827413E";
 // get blcok by timestamp https://coins.llama.fi/block/optimism/1718032312
 
 export default function BorrowToken({
-  minimumBalanceUsd,
+  minimumBorrowUsd,
   questStartBlock,
   compoundUsdcContractAddress,
 }: {
-  minimumBalanceUsd: bigint;
+  minimumBorrowUsd: bigint;
   questStartBlock: bigint;
   compoundUsdcContractAddress: Address;
 }) {
@@ -64,14 +64,14 @@ export default function BorrowToken({
       decimals.data != undefined &&
       tokenPrice.data != undefined
     ) {
-      setIsMinimalBorrowMet(balanceOfSupplied.data > minimumBalanceUsd);
+      setIsMinimalBorrowMet(balanceOfSupplied.data > minimumBorrowUsd);
       const baseDecimals = +decimals.data.toString();
       const price = +tokenPrice.data.toString();
       const borrowedInUsd: number =
         +formatUnits(balanceOfSupplied.data, baseDecimals) * price;
 
       console.log("🚀 ~ borrowedInUsd:", borrowedInUsd);
-      setIsMinimalBorrowMet(balanceOfSupplied.data > minimumBalanceUsd);
+      setIsMinimalBorrowMet(borrowedInUsd > minimumBorrowUsd);
     }
   }, [balanceOfSupplied, decimals, tokenPrice]);
 

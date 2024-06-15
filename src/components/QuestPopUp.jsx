@@ -53,7 +53,7 @@ export default function QuestPopUp({ isOpen, onClose, selectedQuest, myAddress0 
         );
       case 'Borrow':
         return (
-          <BorrowToken compoundUsdcContractAddress={COMPOUND_USDC_CONTRACT_ADDRESS} questStartBlock={QUEST_START_BLOCK} minimumBalance={1n}/>
+          <BorrowToken compoundUsdcContractAddress={COMPOUND_USDC_CONTRACT_ADDRESS} questStartBlock={QUEST_START_BLOCK} minimumBorrowUsd={1}/>
         );
       case 'Repost':
         return (
