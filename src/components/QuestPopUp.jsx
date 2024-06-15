@@ -11,6 +11,10 @@ import { LockClosedIcon } from '@heroicons/react/24/solid';
 
 export default function QuestPopUp({ isOpen, onClose, selectedQuest, myAddress0 ,isConnected }) {
   const [activeButton, setActiveButton] = useState('Tokens');
+  const QUEST_START_BLOCK = 121106130n;
+  const COMPOUND_USDC_CONTRACT_ADDRESS =
+  "0x2e44e174f7D53F0212823acC11C01A11d58c5bCB";
+
   console.log('temp',selectedQuest)
 
   useEffect(() => {
@@ -45,11 +49,11 @@ export default function QuestPopUp({ isOpen, onClose, selectedQuest, myAddress0 
         );
       case 'Supply':
         return (
-            <SupplyToken minimumBalance={1000000n}/>
+            <SupplyToken compoundUsdcContractAddress={COMPOUND_USDC_CONTRACT_ADDRESS} questStartBlock={QUEST_START_BLOCK} minimumSupply={1000000n}/>
         );
       case 'Borrow':
         return (
-          <BorrowToken minimumBalance={1n}/>
+          <BorrowToken compoundUsdcContractAddress={COMPOUND_USDC_CONTRACT_ADDRESS} questStartBlock={QUEST_START_BLOCK} minimumBalance={1n}/>
         );
       case 'Repost':
         return (

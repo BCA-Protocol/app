@@ -3,20 +3,21 @@ import { useReadContract } from "wagmi";
 import { useAccount, useBlockNumber } from "wagmi";
 import Image from "next/image";
 import logo from "/public/chains/optimism.png";
-import { Warning } from "@/components/Svg.tsx";
+import { Warning } from "@/components/Svg";
 import { formatUnits, Address } from "viem";
 import { cUSDCv3Abi } from "./abi";
 
 const MY_ADDRESS = "0x030B3cAF855D1A9496937Fa015ED17Cb5827413E";
-const COMPOUND_USDC_CONTRACT_ADDRESS_V3 =
-  "0x2e44e174f7D53F0212823acC11C01A11d58c5bCB";
-const QUEST_START_BLOCK = 121106130n;
 // get blcok by timestamp https://coins.llama.fi/block/optimism/1718032312
 
 export default function BorrowToken({
   minimumBalanceUsd,
+  questStartBlock,
+  compoundUsdcContractAddress,
 }: {
   minimumBalanceUsd: bigint;
+  questStartBlock: bigint;
+  compoundUsdcContractAddress: Address;
 }) {
   const { address: myAddress0, isConnected } = useAccount();
   const [isMinimalBorrowMet, setIsMinimalBorrowMet] = useState(false);
@@ -27,31 +28,31 @@ export default function BorrowToken({
 
   const balanceOfSupplied = useReadContract({
     abi: cUSDCv3Abi,
-    address: COMPOUND_USDC_CONTRACT_ADDRESS_V3,
+    address: compoundUsdcContractAddress,
     args: [MY_ADDRESS],
     functionName: "borrowBalanceOf",
-    // blockNumber: QUEST_START_BLOCK,
+    // blockNumber: questStartBlock,
   });
   const decimals = useReadContract({
     abi: cUSDCv3Abi,
-    address: COMPOUND_USDC_CONTRACT_ADDRESS_V3,
+    address: compoundUsdcContractAddress,
     args: [],
     functionName: "decimals",
-    // blockNumber: QUEST_START_BLOCK,
+    // blockNumber: questStartBlock,
   });
   const priceFeedContractAddressDep = useReadContract({
     abi: cUSDCv3Abi,
-    address: COMPOUND_USDC_CONTRACT_ADDRESS_V3,
+    address: compoundUsdcContractAddress,
     args: [],
     functionName: "baseTokenPriceFeed",
-    // blockNumber: QUEST_START_BLOCK,
+    // blockNumber: questStartBlock,
   });
   const tokenPrice = useReadContract({
     abi: cUSDCv3Abi,
-    address: COMPOUND_USDC_CONTRACT_ADDRESS_V3,
+    address: compoundUsdcContractAddress,
     args: [priceFeedContractAddress],
     functionName: "getPrice",
-    // blockNumber: QUEST_START_BLOCK,
+    // blockNumber: questStartBlock,
   });
 
   useEffect(() => {
