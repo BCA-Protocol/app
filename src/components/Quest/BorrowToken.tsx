@@ -61,13 +61,14 @@ export default function BorrowToken({
       decimals.data != undefined &&
       tokenPrice.data != undefined
     ) {
+      const minimumBorrowUsd = questTemplate.steps[1].minimumBorrowUsd ?? 0;
       setIsMinimalBorrowMet(balanceOfSupplied.data > minimumBorrowUsd);
       const baseDecimals = +decimals.data.toString();
       const price = +tokenPrice.data.toString();
       const borrowedInUsd: number =
         +formatUnits(balanceOfSupplied.data, baseDecimals) * price;
 
-      console.log("🚀 ~ borrowedInUsd:", borrowedInUsd);
+      console.log("🚀 ~ borrowedInUsd:", minimumBorrowUsd);
       setIsMinimalBorrowMet(borrowedInUsd > minimumBorrowUsd);
     }
   }, [balanceOfSupplied, decimals, tokenPrice]);

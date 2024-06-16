@@ -22,6 +22,9 @@ export type QuestTemplate = {
     id: string;
     minimumBalance?: bigint | undefined;
     minimumBorrowUsd?: number | undefined;
+    minimumSupplyUSD?: number | undefined;
+    description?: string | undefined;
+    title?: string | undefined;
   }[];
 };
 export default function QuestPopUp({
@@ -52,7 +55,7 @@ export default function QuestPopUp({
           minimumBalance: 5000000000000000n,
         },
         { label: "Supply ETH on Compound", id: "Supply" },
-        { label: "Borrow USDC on Compound", id: "Borrow" },
+        { label: "Borrow USDC on Compound", id: "Borrow", minimumBorrowUsd: 1 },
         { label: "Repost the announcement", id: "Repost" },
         { label: "Claim the rewards", id: "Claim" },
       ],
@@ -64,8 +67,17 @@ export default function QuestPopUp({
       contractAddress: "0x2e44e174f7D53F0212823acC11C01A11d58c5bCB",
       questStartBlock: 121106130n,
       steps: [
-        { label: "Reward for this quest", id: "Reward description" },
-        { label: "Borrow USDC on Compound", id: "Borrow", minimumBorrowUsd: 1 },
+        {
+          label: "Reward for this quest",
+          id: "Reward description",
+          description:
+            "Supply USDC on the Arbitrum market through Compound to earn daily points based on your total value locked (TVL). The more USD you supply, the more points you'll earn Each point will be worth a set amount of ARB, which will be distributed by Layer3 at the end of the campaign.",
+        },
+        {
+          label: "Supply USDC via Compound",
+          id: "Supply",
+          minimumSupplyUSD: 1,
+        },
         { label: "Claim the rewards", id: "Claim" },
       ],
     },
