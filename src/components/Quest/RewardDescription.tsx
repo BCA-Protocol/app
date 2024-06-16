@@ -23,9 +23,9 @@ export default function RewardDescription({
           <p className="text-sm">
             Supply USDC on the Arbitrum market through Compound to earn daily
             points based on your total value locked (TVL). The more USD you
-            supply, the more points you'll earn Each point will be worth a set
-            amount of ARB, which will be distributed by Layer3 at the end of the
-            campaign.
+            supply, the more points you&apos;ll earn Each point will be worth a
+            set amount of ARB, which will be distributed by Layer3 at the end of
+            the campaign.
           </p>
         </div>
         <div className="flex flex-col justify-center text-lg">

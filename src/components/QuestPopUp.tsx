@@ -107,7 +107,7 @@ export default function QuestPopUp({
   console.log("temp", selectedQuest);
 
   useEffect(() => {
-    const handleOutsideClick = (e) => {
+    const handleOutsideClick = (e: any) => {
       if (!e.target.closest(".modal-content")) {
         onClose();
       }
