@@ -89,7 +89,7 @@ export default function QuestPopUp({
           id: "Supply",
           minimumSupplyUSD: 1,
           affiliateLink:
-            "https://app.compound.finance/?market=usdc-op&utm_source=blockchain-ads&utm_medium=quest&utm_campaign=blockchain-ads-quest-usdc-arb-mainnet",
+            "https://app.compound.finance/?market=usdc-arb&utm_source=blockchain-ads&utm_medium=quest&utm_campaign=blockchain-ads-quest-usdc-arb-mainnet",
           description:
             "Supply USDC via Compound on the Arbitrum network. The more USDC you supply, the more points you'll earn",
         },
