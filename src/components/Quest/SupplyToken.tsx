@@ -17,11 +17,13 @@ export default function SupplyToken({
   myAddress0,
   isConnected,
   setUnlockQuests,
+  setActiveButton,
 }: {
   questTemplate: QuestTemplate;
   myAddress0: Address;
   isConnected: boolean;
   setUnlockQuests: React.Dispatch<React.SetStateAction<string[]>>;
+  setActiveButton: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const [isMinimalSupplyMet, setIsMinimalSupplyMet] = useState(false);
   const [currentBlockNumber, setCurrentBlockNumber] = useState(0n);
@@ -112,6 +114,10 @@ export default function SupplyToken({
             <button
               className="bg-continue-button w-40 rounded-md disabled:opacity-25"
               disabled={!isMinimalSupplyMet}
+              onClick={() => {
+                setUnlockQuests((previousArray) => [...previousArray, "Claim"]);
+                setActiveButton("Claim");
+              }}
             >
               continue
             </button>

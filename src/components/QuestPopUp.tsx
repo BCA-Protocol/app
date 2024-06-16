@@ -149,6 +149,7 @@ export default function QuestPopUp({
             myAddress0={myAddress0}
             isConnected={isConnected}
             setUnlockQuests={setUnlockQuests}
+            setActiveButton={setActiveButton}
           />
         );
       case "Borrow":
