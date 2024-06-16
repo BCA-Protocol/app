@@ -2,7 +2,15 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import logo from "/public/chains/arbitrum.png";
 
-export default function RewardDescription() {
+export default function RewardDescription({
+  setUnlockQuests,
+  unlockQuests,
+  setActiveButton,
+}: {
+  setUnlockQuests: React.Dispatch<React.SetStateAction<string[]>>;
+  unlockQuests: string[];
+  setActiveButton: React.Dispatch<React.SetStateAction<string>>;
+}) {
   return (
     <>
       <div className="flex flex-col h-full justify-between text-white">
@@ -22,7 +30,16 @@ export default function RewardDescription() {
         </div>
         <div className="flex flex-col justify-center text-lg">
           <div className="flex flex-row w-full justify-end mt-7">
-            <button className="bg-continue-button w-40 rounded-md disabled:opacity-25">
+            <button
+              className="bg-continue-button w-40 rounded-md disabled:opacity-25"
+              onClick={() => {
+                setUnlockQuests((previousArray) => [
+                  ...previousArray,
+                  "Supply",
+                ]);
+                setActiveButton("Supply");
+              }}
+            >
               continue
             </button>
           </div>

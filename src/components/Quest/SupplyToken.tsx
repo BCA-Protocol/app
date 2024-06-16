@@ -9,36 +9,38 @@ import { cUSDCv3Abi } from "./abi";
 import { QuestTemplate } from "../QuestPopUp";
 
 // const MY_ADDRESS = "0x01F0831120AB81F91109e099afB551A091c4c05A"; // optimism test address
-const MY_ADDRESS = "0x7277e1fde9ceaf97bc5960f0aee96038f39a70d8"; // arbitrum test address
+// const MY_ADDRESS = "0x1f8700d3a9659c00c504fef25922a1be378949f2"; // arbitrum test address
 // get blcok by timestamp https://coins.llama.fi/block/optimism/1718032312
 
 export default function SupplyToken({
   questTemplate,
   myAddress0,
   isConnected,
+  setUnlockQuests,
 }: {
   questTemplate: QuestTemplate;
   myAddress0: Address;
   isConnected: boolean;
+  setUnlockQuests: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
   const [isMinimalSupplyMet, setIsMinimalSupplyMet] = useState(false);
-  const [blockNumber, setBlockNumber] = useState(0n);
+  const [currentBlockNumber, setCurrentBlockNumber] = useState(0n);
 
   // https://api.coinbase.com/v2/exchange-rates?currency=ETH
   const blockNumberDep = useBlockNumber();
   const balanceOfSuppliedBefore = useReadContract({
     abi: cUSDCv3Abi,
     address: questTemplate.contractAddress,
-    args: [MY_ADDRESS],
+    args: [myAddress0],
     functionName: "balanceOf",
     blockNumber: questTemplate.questStartBlock,
   });
   const balanceOfSuppliedAfter = useReadContract({
     abi: cUSDCv3Abi,
     address: questTemplate.contractAddress,
-    args: [MY_ADDRESS],
+    args: [myAddress0],
     functionName: "balanceOf",
-    blockNumber: blockNumber,
+    blockNumber: currentBlockNumber,
   });
   useEffect(() => {
     // balanceOfSupplied.data is the balance of the supplied token plus interest
@@ -63,7 +65,7 @@ export default function SupplyToken({
 
   useEffect(() => {
     if (blockNumberDep.isFetched && blockNumberDep.data != undefined) {
-      setBlockNumber(blockNumberDep.data);
+      setCurrentBlockNumber(blockNumberDep.data);
     }
   }, [blockNumberDep]);
 
@@ -83,7 +85,7 @@ export default function SupplyToken({
 
           <div className="flex flex-row w-full justify-center mt-8">
             <a
-              href="https://app.compound.finance/?market=usdc-op&utm_source=blockchain-ads&utm_medium=quest&utm_campaign=blockchain-ads-quest-op-mainnet"
+              href={questTemplate.steps[1].affiliateLink}
               target="_blank"
               className="w-fit py-2 px-4 rounded-md border border-border-button bg-button-bg text-sm"
             >

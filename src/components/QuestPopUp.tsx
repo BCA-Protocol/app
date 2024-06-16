@@ -100,6 +100,9 @@ export default function QuestPopUp({
   const [activeButton, setActiveButton] = useState(
     questTemplate[questId].steps[0].id
   );
+  const [unlockQuests, setUnlockQuests] = useState<string[]>([
+    "Reward description",
+  ]);
 
   console.log("temp", selectedQuest);
 
@@ -124,7 +127,13 @@ export default function QuestPopUp({
   const renderContent = () => {
     switch (activeButton) {
       case "Reward description":
-        return <RewardDescription />;
+        return (
+          <RewardDescription
+            unlockQuests={unlockQuests}
+            setUnlockQuests={setUnlockQuests}
+            setActiveButton={setActiveButton}
+          />
+        );
       case "Tokens":
         return (
           <CheckBalance
@@ -139,6 +148,7 @@ export default function QuestPopUp({
             questTemplate={questTemplate[questId]}
             myAddress0={myAddress0}
             isConnected={isConnected}
+            setUnlockQuests={setUnlockQuests}
           />
         );
       case "Borrow":
@@ -190,10 +200,14 @@ export default function QuestPopUp({
                 {buttons.map((button, index) => (
                   <button
                     key={button.id}
-                    className={`text-white bg-[#260C44] hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-3xl text-sm py-2.5 text-center dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800 ${
+                    className={`text-white bg-[#260C44] ${
+                      !!unlockQuests.includes(button.id) &&
+                      "hover:bg-purple-800"
+                    } focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-3xl text-sm py-2.5 text-center dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800 ${
                       activeButton === button.id && "bg-purple-900"
                     }`}
                     onClick={() => setActiveButton(button.id)}
+                    disabled={!unlockQuests.includes(button.id)}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
@@ -211,7 +225,9 @@ export default function QuestPopUp({
                         </div>
                         {button.label}
                       </div>
-                      <LockClosedIcon className="w-4 h-4 ml-2 mr-4" />
+                      {!unlockQuests.includes(button.id) && (
+                        <LockClosedIcon className="w-4 h-4 ml-2 mr-4" />
+                      )}
                     </div>
                   </button>
                 ))}

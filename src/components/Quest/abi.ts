@@ -34,4 +34,11 @@ export const cUSDCv3Abi = [
    inputs: [{ name: "priceFeed", type: "address" }],
    outputs: [{ type: "uint128" }],
  },
+ {
+  type: "function",
+  name: "collateralBalanceOf", // get the price of the token
+  stateMutability: "view",
+  inputs: [{ name: "account", type: "address" },{ name: "asset", type: "address" }],
+  outputs: [{ type: "uint128" }],
+},
 ] as const;
