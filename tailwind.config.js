@@ -42,6 +42,10 @@ module.exports = {
         bgGray: "var(--bg-grey)",
         backgroundBoxColor: "var(--background-box-color)",
         borderprimary: "var(--border-primary)",
+        "border-button": "#361063",
+        "button-bg": "#220B3B",
+        "continue-button":"#621CBA",
+        "warning-red":"#F54747"
       },
       fontFamily: {
         sans: ["var(--font-open-sans)"],

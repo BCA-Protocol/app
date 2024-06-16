@@ -25,7 +25,7 @@
     ],
     "paths": {
       "@/*": [
-        "src/*"
+        "./src/*"
       ]
     }
   },
@@ -38,6 +38,6 @@
     "**/*.jsx"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules","supabase"
   ]
 }

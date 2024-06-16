@@ -6,7 +6,7 @@ import SignInForm from "@/components/SignInForm";
 import Loader from "@/components/loader";
 import { signIn } from "@/server-action/auth-action";
 import useAuth from "@/features/base/auth/hooks/use-auth";
-import { handleResetPassword } from "@/server-action/auth-action"
+import { handleResetPassword } from "@/server-action/auth-action";
 
 const Home = () => {
   const { loading, user } = useAuth();
@@ -19,7 +19,7 @@ const Home = () => {
   const router = useRouter();
 
   const searchParams = useSearchParams();
-  const message = searchParams.get("message")
+  const message = searchParams.get("message");
 
   useEffect(() => {
     if (message === "Could not authenticate user") {
@@ -29,7 +29,9 @@ const Home = () => {
       alert(`Email not confirmed. Please check your emails.`);
       router.replace("/");
     } else if (message === "signup successfull") {
-      alert(`Signup successfull. Please check your emails and confirmed before signing in.`);
+      alert(
+        `Signup successfull. Please check your emails and confirmed before signing in.`
+      );
       router.replace("/");
     }
   }, [message]);
@@ -40,12 +42,10 @@ const Home = () => {
     }
   }, [router, user]);
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
-
-  
 
   const handleSubmit = async () => {
     try {
@@ -65,9 +65,9 @@ const Home = () => {
   //   alert(`Password Rest Link Send To ${formData.email}`);
   // };
 
-  const handleForgotPasswordSubmit = async (e) => {
+  const handleForgotPasswordSubmit = async (e: any) => {
     e.preventDefault();
-    
+
     const { success, message } = await handleResetPassword(formData.email);
     if (success) {
       alert(message);
@@ -77,7 +77,6 @@ const Home = () => {
       //handle error
     }
   };
-  
 
   return (
     <div className="">

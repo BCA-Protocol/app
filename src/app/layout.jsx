@@ -6,6 +6,7 @@ import "./globals.css";
 import { Open_Sans, Roboto_Mono } from "next/font/google";
 import clsx from "clsx";
 import Script from "next/script";
+import { Web3Provider } from "@/providers/Web3Provider";
 
 const open_sans = Open_Sans({
   subsets: ["latin"],
@@ -68,11 +69,14 @@ export default function RootLayout({ children }) {
         </noscript>
         {!isPublicPage && (
           <>
-            <Header />
-            <SideBar currentPath={pathname} />
-            <main className="lg:pl-64">
-              <div>{children}</div>
-            </main>
+            <Web3Provider>
+              <Header />
+              <SideBar currentPath={pathname} />
+              <main className="lg:pl-64">
+                <div>{children}</div>
+              </main>
+            </Web3Provider>
+
           </>
         )}
         {isPublicPage && (

@@ -4,7 +4,6 @@ import { formatTimestamp } from "@/utils/datetime";
 import { getTwitterOauthUrl } from "@/providers/TwitterOauthUrl";
 import { getDiscordOauthUrl } from "@/providers/DiscordOauthUrl";
 import TelegramLogin from "@/providers/TelegramProvider";
-import { Web3Provider } from "@/providers/Web3Provider";
 import ConnectAndCollectButton from "@/components/ConnectAndCollectButton";
 import Image from "next/image";
 
@@ -75,10 +74,9 @@ const TaskList = ({ user, userData, sendEmailVerification }) => {
                         className="opacity-80"
                       />
                     </div>
-
-                    <Web3Provider className="w-full cursor-pointer hover:-translate-y-1">
+                    <div className="w-full cursor-pointer hover:-translate-y-1">
                       <ConnectAndCollectButton userData={userData} />
-                    </Web3Provider>
+                    </div>
                   </div>
                 </div>
           )}
