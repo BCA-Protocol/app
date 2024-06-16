@@ -9,7 +9,7 @@ import { cUSDCv3Abi } from "./abi";
 import { QuestTemplate } from "../QuestPopUp";
 
 // const MY_ADDRESS = "0x01F0831120AB81F91109e099afB551A091c4c05A"; // optimism test address
-const MY_ADDRESS = "0x1f8700d3a9659c00c504fef25922a1be378949f2"; // arbitrum test address
+// const MY_ADDRESS = "0x1f8700d3a9659c00c504fef25922a1be378949f2"; // arbitrum test address
 // get blcok by timestamp https://coins.llama.fi/block/optimism/1718032312
 
 export default function SupplyToken({
@@ -33,14 +33,14 @@ export default function SupplyToken({
   const balanceOfSuppliedBefore = useReadContract({
     abi: cUSDCv3Abi,
     address: questTemplate.contractAddress,
-    args: [MY_ADDRESS],
+    args: [myAddress0],
     functionName: "balanceOf",
     blockNumber: questTemplate.questStartBlock,
   });
   const balanceOfSuppliedAfter = useReadContract({
     abi: cUSDCv3Abi,
     address: questTemplate.contractAddress,
-    args: [MY_ADDRESS],
+    args: [myAddress0],
     functionName: "balanceOf",
     blockNumber: currentBlockNumber,
   });
