@@ -49,12 +49,12 @@ export default function QuestPopUp({
       name: "Optimism Borrow",
       description: "Quest Borrow",
       contractAddress: "0x2e44e174f7D53F0212823acC11C01A11d58c5bCB", // https://optimistic.etherscan.io/token/0x2e44e174f7D53F0212823acC11C01A11d58c5bCB
-      questStartBlock: 121106130n,
+      questStartBlock: BigInt(121106130),
       steps: [
         {
           label: "Ensure you have tokens",
           id: "Tokens",
-          minimumBalance: 5000000000000000n,
+          minimumBalance: BigInt(5000000000000000),
         },
         {
           label: "Supply ETH on Compound",
@@ -75,7 +75,7 @@ export default function QuestPopUp({
       name: "Arbitrum Borrow",
       description: "Quest Borrow",
       contractAddress: "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf", // https://arbiscan.io/address/0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf
-      questStartBlock: 121106130n,
+      questStartBlock: BigInt(121106130),
       //  222434456
       steps: [
         {
@@ -137,7 +137,7 @@ export default function QuestPopUp({
       case "Tokens":
         return (
           <CheckBalance
-            minimumBalance={5000000000000000n}
+            minimumBalance={BigInt(5000000000000000)}
             myAddress0={myAddress0}
             isConnected={isConnected}
           />

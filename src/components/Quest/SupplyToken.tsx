@@ -9,7 +9,7 @@ import { cUSDCv3Abi } from "./abi";
 import { QuestTemplate } from "../QuestPopUp";
 
 // const MY_ADDRESS = "0x01F0831120AB81F91109e099afB551A091c4c05A"; // optimism test address
-// const MY_ADDRESS = "0x1f8700d3a9659c00c504fef25922a1be378949f2"; // arbitrum test address
+const MY_ADDRESS = "0x1f8700d3a9659c00c504fef25922a1be378949f2"; // arbitrum test address
 // get blcok by timestamp https://coins.llama.fi/block/optimism/1718032312
 
 export default function SupplyToken({
@@ -26,21 +26,21 @@ export default function SupplyToken({
   setActiveButton: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const [isMinimalSupplyMet, setIsMinimalSupplyMet] = useState(false);
-  const [currentBlockNumber, setCurrentBlockNumber] = useState(0n);
+  const [currentBlockNumber, setCurrentBlockNumber] = useState(BigInt(0));
 
   // https://api.coinbase.com/v2/exchange-rates?currency=ETH
   const blockNumberDep = useBlockNumber();
   const balanceOfSuppliedBefore = useReadContract({
     abi: cUSDCv3Abi,
     address: questTemplate.contractAddress,
-    args: [myAddress0],
+    args: [MY_ADDRESS],
     functionName: "balanceOf",
     blockNumber: questTemplate.questStartBlock,
   });
   const balanceOfSuppliedAfter = useReadContract({
     abi: cUSDCv3Abi,
     address: questTemplate.contractAddress,
-    args: [myAddress0],
+    args: [MY_ADDRESS],
     functionName: "balanceOf",
     blockNumber: currentBlockNumber,
   });
@@ -56,8 +56,8 @@ export default function SupplyToken({
       balanceOfSuppliedAfter.data
     );
     if (balanceOfSuppliedBefore.isFetched || balanceOfSuppliedAfter.isFetched) {
-      const balanceBefore = balanceOfSuppliedBefore.data ?? 0n;
-      const balanceAfter = balanceOfSuppliedAfter.data ?? 0n;
+      const balanceBefore = balanceOfSuppliedBefore.data ?? BigInt(0);
+      const balanceAfter = balanceOfSuppliedAfter.data ?? BigInt(0);
 
       const minimumSupplyUSD = questTemplate.steps[1].minimumSupplyUSD ?? 0;
       const balanceAddedAfterQuestStart = balanceAfter - balanceBefore;
