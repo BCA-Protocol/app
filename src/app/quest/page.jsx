@@ -6,7 +6,7 @@ import { BoltIcon, UserIcon } from "@heroicons/react/24/solid";
 import { getData, addData, editQuests, deleteData } from "@/server-action/base-action";
 import { useRouter } from "next/navigation";
 import { IconLink,IconCoinBitcoinFilled, IconBrandTwitterFilled, IconBrandDiscordFilled } from "@tabler/icons-react";
-import QuestPopUp from "@/components/QuestPopUp";
+import QuestPopUp from "@/components/QuestPopUp.tsx";
 import useAuth from "@/features/base/auth/hooks/use-auth";
 import { useAccount } from "wagmi";
 

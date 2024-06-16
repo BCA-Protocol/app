@@ -6,18 +6,15 @@ import logo from "/public/chains/optimism.png";
 import { Warning } from "@/components/Svg";
 import { formatUnits, Address } from "viem";
 import { cUSDCv3Abi } from "./abi";
+import { QuestTemplate } from "../QuestPopUp";
 
 const MY_ADDRESS = "0x030B3cAF855D1A9496937Fa015ED17Cb5827413E";
 // get blcok by timestamp https://coins.llama.fi/block/optimism/1718032312
 
 export default function BorrowToken({
-  minimumBorrowUsd,
-  questStartBlock,
-  compoundUsdcContractAddress,
+  questTemplate,
 }: {
-  minimumBorrowUsd: bigint;
-  questStartBlock: bigint;
-  compoundUsdcContractAddress: Address;
+  questTemplate: QuestTemplate;
 }) {
   const blockNumber = useBlockNumber();
   const [isMinimalBorrowMet, setIsMinimalBorrowMet] = useState(false);
@@ -28,28 +25,28 @@ export default function BorrowToken({
 
   const balanceOfSupplied = useReadContract({
     abi: cUSDCv3Abi,
-    address: compoundUsdcContractAddress,
+    address: questTemplate.contractAddress,
     args: [MY_ADDRESS],
     functionName: "borrowBalanceOf",
     // blockNumber: questStartBlock,
   });
   const decimals = useReadContract({
     abi: cUSDCv3Abi,
-    address: compoundUsdcContractAddress,
+    address: questTemplate.contractAddress,
     args: [],
     functionName: "decimals",
     // blockNumber: questStartBlock,
   });
   const priceFeedContractAddressDep = useReadContract({
     abi: cUSDCv3Abi,
-    address: compoundUsdcContractAddress,
+    address: questTemplate.contractAddress,
     args: [],
     functionName: "baseTokenPriceFeed",
     // blockNumber: questStartBlock,
   });
   const tokenPrice = useReadContract({
     abi: cUSDCv3Abi,
-    address: compoundUsdcContractAddress,
+    address: questTemplate.contractAddress,
     args: [priceFeedContractAddress],
     functionName: "getPrice",
     // blockNumber: questStartBlock,
