@@ -19,7 +19,7 @@ export default function BorrowToken({
   questStartBlock: bigint;
   compoundUsdcContractAddress: Address;
 }) {
-  const { address: myAddress0, isConnected } = useAccount();
+  const blockNumber = useBlockNumber();
   const [isMinimalBorrowMet, setIsMinimalBorrowMet] = useState(false);
   const [priceFeedContractAddress, setPriceFeedContractAddress] =
     useState<Address>("" as Address);
@@ -99,7 +99,8 @@ export default function BorrowToken({
 
           <div className="flex flex-row w-full justify-center mt-8">
             <a
-              href="https://app.compound.finance/?market=usdc-op&utm_source=blockchain-ads&utm_medium=quest&utm_campaign=blockchain-ads-quest-op-mainnet"
+              href="https://app.compound.finance/?market=usdc-op&utm_source=blockchain-ads&utm_medium=quest&utm_campaign=blockchain-ads-quest-usdc-arb-mainnet"
+              // href="https://app.compound.finance/?market=usdc-op&utm_source=blockchain-ads&utm_medium=quest&utm_campaign=blockchain-ads-quest-op-mainnet"
               target="_blank"
               className="w-fit py-2 px-4 rounded-md border border-border-button bg-button-bg text-sm"
             >

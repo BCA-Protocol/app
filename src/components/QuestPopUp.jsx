@@ -6,16 +6,38 @@ import mascotLove from "/public/m/8-small.png";
 import CheckBalance from "@/components/Quest/CheckBalance.tsx";
 import SupplyToken from "@/components/Quest/SupplyToken.tsx";
 import BorrowToken from "@/components/Quest/BorrowToken.tsx";
+import RewardDescription from "@/components/Quest/RewardDescription.tsx";
+import { arbitrum, base, bsc, optimism } from "wagmi/chains";
 
 import { LockClosedIcon } from '@heroicons/react/24/solid';
 
-export default function QuestPopUp({ isOpen, onClose, selectedQuest, myAddress0 ,isConnected }) {
+export default function QuestPopUp({ isOpen, onClose, selectedQuest, myAddress0, isConnected }) {
   const [activeButton, setActiveButton] = useState('Tokens');
-  const QUEST_START_BLOCK = 121106130n;
-  const COMPOUND_USDC_CONTRACT_ADDRESS =
-  "0x2e44e174f7D53F0212823acC11C01A11d58c5bCB";
 
-  console.log('temp',selectedQuest)
+  const questId = 1;
+  const questTemplate = [{
+    chainId: optimism.id, name: "Optimism Borrow", description: "Quest Borrow", 
+    contractAddress: "0x2e44e174f7D53F0212823acC11C01A11d58c5bCB",
+    questStartBlock:121106130n,
+    steps: [
+      { label: 'Ensure you have tokens', id: 'Tokens', minimumBalance: 5000000000000000n },
+      { label: 'Supply ETH on Compound', id: 'Supply' },
+      { label: 'Borrow USDC on Compound', id: 'Borrow' },
+      { label: 'Repost the announcement', id: 'Repost' },
+      { label: 'Claim the rewards', id: 'Claim' },
+    ]
+  },{
+    chainId: arbitrum.id, name: "Arbitrum Borrow", description: "Quest Borrow", 
+    contractAddress: "0x2e44e174f7D53F0212823acC11C01A11d58c5bCB",
+    questStartBlock:121106130n,
+    steps: [
+      { label: 'Reward for this quest', id: 'Reward description' },
+      { label: 'Borrow USDC on Compound', id: 'Borrow', minimumBorrowUsd: 1 },
+      { label: 'Claim the rewards', id: 'Claim' },
+    ]
+  }]
+
+  console.log('temp', selectedQuest)
 
   useEffect(() => {
     const handleOutsideClick = (e) => {
@@ -33,27 +55,25 @@ export default function QuestPopUp({ isOpen, onClose, selectedQuest, myAddress0 
     };
   }, [isOpen, onClose]);
 
-  const buttons = [
-    { label: 'Ensure you have tokens', id: 'Tokens' },
-    { label: 'Supply ETH on Compound', id: 'Supply' },
-    { label: 'Borrow USDC on Compound', id: 'Borrow' },
-    { label: 'Repost the announcement', id: 'Repost' },
-    { label: 'Claim the rewards', id: 'Claim' },
-  ];
+  const buttons = questTemplate[questId].steps
 
   const renderContent = () => {
     switch (activeButton) {
+      case 'Reward description':
+        return (
+          <RewardDescription />
+        );
       case 'Tokens':
         return (
-            <CheckBalance minimumBalance={5000000000000000n} myAddress0={myAddress0} isConnected={isConnected}/>
+          <CheckBalance minimumBalance={5000000000000000n} myAddress0={myAddress0} isConnected={isConnected} />
         );
       case 'Supply':
         return (
-            <SupplyToken compoundUsdcContractAddress={COMPOUND_USDC_CONTRACT_ADDRESS} questStartBlock={QUEST_START_BLOCK} minimumSupply={1000000n}/>
+          <SupplyToken compoundUsdcContractAddress={questTemplate[questId].contractAddress} questStartBlock={QUEST_START_BLOCK} minimumSupply={1000000n} />
         );
       case 'Borrow':
         return (
-          <BorrowToken compoundUsdcContractAddress={COMPOUND_USDC_CONTRACT_ADDRESS} questStartBlock={QUEST_START_BLOCK} minimumBorrowUsd={1}/>
+          <BorrowToken compoundUsdcContractAddress={questTemplate[questId].contractAddress} questStartBlock={QUEST_START_BLOCK} minimumBorrowUsd={1} />
         );
       case 'Repost':
         return (
@@ -97,20 +117,19 @@ export default function QuestPopUp({ isOpen, onClose, selectedQuest, myAddress0 
                 {buttons.map((button, index) => (
                   <button
                     key={button.id}
-                    className={`text-white bg-[#260C44] hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-3xl text-sm py-2.5 text-center dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800 ${
-                      activeButton === button.id && 'bg-purple-900'
-                    }`}
+                    className={`text-white bg-[#260C44] hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-3xl text-sm py-2.5 text-center dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800 ${activeButton === button.id && 'bg-purple-900'
+                      }`}
                     onClick={() => setActiveButton(button.id)}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
                         <div className="w-7 h-7 flex items-center justify-center bg-[#180924] text-white rounded-3xl ml-2 mr-2">
-                          {index===4?<Image
-                                        src={mascotLove}
-                                        alt="Mascot"
-                                        width={40}
-                                        className="opacity-100"
-                                      />: index + 1}
+                          {index === 4 ? <Image
+                            src={mascotLove}
+                            alt="Mascot"
+                            width={40}
+                            className="opacity-100"
+                          /> : index + 1}
                         </div>
                         {button.label}
                       </div>

@@ -4,7 +4,7 @@ import { useAccount } from "wagmi";
 import { formatUnits, Address } from "viem";
 import Image from "next/image";
 import logo from "/public/chains/optimism.png";
-import { Warning } from "@/components/Svg.tsx";
+import { Warning } from "@/components/Svg";
 
 export default function CheckBalance({
   minimumBalance,
