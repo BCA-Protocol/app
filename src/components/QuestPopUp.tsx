@@ -25,6 +25,7 @@ export type QuestTemplate = {
     minimumSupplyUSD?: number | undefined;
     description?: string | undefined;
     title?: string | undefined;
+    affiliateLink?: string | undefined;
   }[];
 };
 export default function QuestPopUp({
@@ -46,7 +47,7 @@ export default function QuestPopUp({
       chainId: optimism.id,
       name: "Optimism Borrow",
       description: "Quest Borrow",
-      contractAddress: "0x2e44e174f7D53F0212823acC11C01A11d58c5bCB",
+      contractAddress: "0x2e44e174f7D53F0212823acC11C01A11d58c5bCB", // https://optimistic.etherscan.io/token/0x2e44e174f7D53F0212823acC11C01A11d58c5bCB
       questStartBlock: 121106130n,
       steps: [
         {
@@ -54,7 +55,15 @@ export default function QuestPopUp({
           id: "Tokens",
           minimumBalance: 5000000000000000n,
         },
-        { label: "Supply ETH on Compound", id: "Supply" },
+        {
+          label: "Supply ETH on Compound",
+          id: "Supply",
+          minimumSupplyUSD: 1,
+          affiliateLink:
+            "https://app.compound.finance/?market=usdc-op&utm_source=blockchain-ads&utm_medium=quest&utm_campaign=blockchain-ads-quest-usdc-arb-mainnet",
+          description:
+            "Supply USDC via Compound on the Arbitrum network. The more USDC you supply, the more points you'll earn",
+        },
         { label: "Borrow USDC on Compound", id: "Borrow", minimumBorrowUsd: 1 },
         { label: "Repost the announcement", id: "Repost" },
         { label: "Claim the rewards", id: "Claim" },
@@ -64,7 +73,7 @@ export default function QuestPopUp({
       chainId: arbitrum.id,
       name: "Arbitrum Borrow",
       description: "Quest Borrow",
-      contractAddress: "0x2e44e174f7D53F0212823acC11C01A11d58c5bCB",
+      contractAddress: "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf", // https://arbiscan.io/address/0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf
       questStartBlock: 121106130n,
       steps: [
         {
@@ -77,6 +86,10 @@ export default function QuestPopUp({
           label: "Supply USDC via Compound",
           id: "Supply",
           minimumSupplyUSD: 1,
+          affiliateLink:
+            "https://app.compound.finance/?market=usdc-op&utm_source=blockchain-ads&utm_medium=quest&utm_campaign=blockchain-ads-quest-usdc-arb-mainnet",
+          description:
+            "Supply USDC via Compound on the Arbitrum network. The more USDC you supply, the more points you'll earn",
         },
         { label: "Claim the rewards", id: "Claim" },
       ],
@@ -121,13 +134,18 @@ export default function QuestPopUp({
       case "Supply":
         return (
           <SupplyToken
-            compoundUsdcContractAddress={questTemplate[questId].contractAddress}
-            questStartBlock={questTemplate[questId].questStartBlock}
-            minimumSupply={1000000n}
+            questTemplate={questTemplate[questId]}
+            myAddress0={myAddress0}
           />
         );
       case "Borrow":
-        return <BorrowToken questTemplate={questTemplate[questId]} />;
+        return (
+          <BorrowToken
+            questTemplate={questTemplate[questId]}
+            myAddress0={myAddress0}
+            isConnected={isConnected}
+          />
+        );
       case "Repost":
         return (
           <div className="text-white">

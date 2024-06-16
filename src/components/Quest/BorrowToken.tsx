@@ -13,8 +13,12 @@ const MY_ADDRESS = "0x030B3cAF855D1A9496937Fa015ED17Cb5827413E";
 
 export default function BorrowToken({
   questTemplate,
+  myAddress0,
+  isConnected,
 }: {
   questTemplate: QuestTemplate;
+  myAddress0: Address;
+  isConnected: boolean;
 }) {
   const blockNumber = useBlockNumber();
   const [isMinimalBorrowMet, setIsMinimalBorrowMet] = useState(false);
