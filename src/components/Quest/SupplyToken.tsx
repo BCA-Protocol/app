@@ -15,33 +15,57 @@ const MY_ADDRESS = "0x7277e1fde9ceaf97bc5960f0aee96038f39a70d8"; // arbitrum tes
 export default function SupplyToken({
   questTemplate,
   myAddress0,
+  isConnected,
 }: {
   questTemplate: QuestTemplate;
   myAddress0: Address;
+  isConnected: boolean;
 }) {
   const [isMinimalSupplyMet, setIsMinimalSupplyMet] = useState(false);
-  // https://api.coinbase.com/v2/exchange-rates?currency=ETH
+  const [blockNumber, setBlockNumber] = useState(0n);
 
-  const balanceOfSupplied = useReadContract({
+  // https://api.coinbase.com/v2/exchange-rates?currency=ETH
+  const blockNumberDep = useBlockNumber();
+  const balanceOfSuppliedBefore = useReadContract({
     abi: cUSDCv3Abi,
     address: questTemplate.contractAddress,
     args: [MY_ADDRESS],
     functionName: "balanceOf",
-    // blockNumber: questStartBlock,
+    blockNumber: questTemplate.questStartBlock,
+  });
+  const balanceOfSuppliedAfter = useReadContract({
+    abi: cUSDCv3Abi,
+    address: questTemplate.contractAddress,
+    args: [MY_ADDRESS],
+    functionName: "balanceOf",
+    blockNumber: blockNumber,
   });
   useEffect(() => {
     // balanceOfSupplied.data is the balance of the supplied token plus interest
     // so it may be higher than the initial balance
-    if (balanceOfSupplied.isFetched && balanceOfSupplied.data != undefined) {
-      const minimumSupplyUSD = questTemplate.steps[1].minimumSupplyUSD ?? 0;
+    console.log(
+      "🚀 ~ useEffect ~ balanceOfSuppliedBefore.data:",
+      balanceOfSuppliedBefore.data
+    );
+    console.log(
+      "🚀 ~ useEffect ~ balanceOfSuppliedAfter.data:",
+      balanceOfSuppliedAfter.data
+    );
+    if (balanceOfSuppliedBefore.isFetched || balanceOfSuppliedAfter.isFetched) {
+      const balanceBefore = balanceOfSuppliedBefore.data ?? 0n;
+      const balanceAfter = balanceOfSuppliedAfter.data ?? 0n;
 
-      setIsMinimalSupplyMet(balanceOfSupplied.data > minimumSupplyUSD);
-      console.log(
-        "🚀 ~ useEffect ~ balanceOfSupplied.data > minimumSupply:",
-        balanceOfSupplied.data > minimumSupplyUSD
-      );
+      const minimumSupplyUSD = questTemplate.steps[1].minimumSupplyUSD ?? 0;
+      const balanceAddedAfterQuestStart = balanceAfter - balanceBefore;
+      setIsMinimalSupplyMet(balanceAddedAfterQuestStart > minimumSupplyUSD);
     }
-  }, [balanceOfSupplied]);
+  }, [balanceOfSuppliedBefore, balanceOfSuppliedAfter]);
+
+  useEffect(() => {
+    if (blockNumberDep.isFetched && blockNumberDep.data != undefined) {
+      setBlockNumber(blockNumberDep.data);
+    }
+  }, [blockNumberDep]);
 
   return (
     <>
@@ -67,6 +91,13 @@ export default function SupplyToken({
             </a>
           </div>
         </div>
+        {!isConnected && (
+          <button className="text-warning-red text-sm text-center rounded-full border h-11 border-warning-red ">
+            <div className="flex flex-row justify-center">
+              <Warning /> You are not authenticated!
+            </div>
+          </button>
+        )}
         {!isMinimalSupplyMet && (
           <button className="text-warning-red text-sm text-center rounded-full border h-11 border-warning-red">
             <div className="flex flex-row justify-center">

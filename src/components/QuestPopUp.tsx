@@ -3,14 +3,14 @@ import Image from "next/image";
 import logo from "/public/bca-left.png";
 import mascotHappy from "/public/m/4-small.png";
 import mascotLove from "/public/m/8-small.png";
-import CheckBalance from "@/components/Quest/CheckBalance.tsx";
-import SupplyToken from "@/components/Quest/SupplyToken.tsx";
-import BorrowToken from "@/components/Quest/BorrowToken.tsx";
-import RewardDescription from "@/components/Quest/RewardDescription.tsx";
+import CheckBalance from "@/components/Quest/CheckBalance";
+import SupplyToken from "@/components/Quest/SupplyToken";
+import BorrowToken from "@/components/Quest/BorrowToken";
+import RewardDescription from "@/components/Quest/RewardDescription";
 import { arbitrum, optimism } from "wagmi/chains";
 import { Address } from "viem";
-
 import { LockClosedIcon } from "@heroicons/react/24/solid";
+
 export type QuestTemplate = {
   chainId: number;
   name: string;
@@ -28,6 +28,7 @@ export type QuestTemplate = {
     affiliateLink?: string | undefined;
   }[];
 };
+
 export default function QuestPopUp({
   isOpen,
   onClose,
@@ -75,6 +76,7 @@ export default function QuestPopUp({
       description: "Quest Borrow",
       contractAddress: "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf", // https://arbiscan.io/address/0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf
       questStartBlock: 121106130n,
+      //  222434456
       steps: [
         {
           label: "Reward for this quest",
@@ -136,6 +138,7 @@ export default function QuestPopUp({
           <SupplyToken
             questTemplate={questTemplate[questId]}
             myAddress0={myAddress0}
+            isConnected={isConnected}
           />
         );
       case "Borrow":
